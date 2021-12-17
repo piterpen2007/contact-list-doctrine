@@ -2,21 +2,24 @@
 namespace EfTech\ContactList\Controller;
 use EfTech\ContactList\Entity\Recipient;
 use EfTech\ContactList\Infrastructure\AppConfig;
+use EfTech\ContactList\Infrastructure\http\httpResponse;
+use EfTech\ContactList\Infrastructure\http\ServerRequest;
+use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use function EfTech\ContactList\Infrastructure\loadData;
 use function EfTech\ContactList\Infrastructure\paramTypeValidation;
 
-require_once __DIR__ . '/../Entity/Recipient.php';
-require_once __DIR__ . '/../Infrastructure/AppConfig.php';
+
 require_once __DIR__ . '/../Infrastructure/app.function.php';
-require_once __DIR__ . '/../Infrastructure/Logger/LoggerInterface.php';
+
 /**
  * Функция поиска знакомых по id или full_name
  * @param $request array - параметры которые передаёт пользователь
- * @param $logger callable - параметр инкапсулирующий логгирование
+ * @param $logger LoggerInterface - параметр инкапсулирующий логгирование
  * @return array - возвращает результат поиска по знакомым
+ * @throws \Exception
  */
-return static function (array $request, LoggerInterface $logger, AppConfig $appConfig):array
+return static function (ServerRequest $request, LoggerInterface $logger, AppConfig $appConfig):httpResponse
 {
     $recipients = loadData($appConfig->getPathToRecipients());
     $logger->log('dispatch "recipient" url');
@@ -27,18 +30,18 @@ return static function (array $request, LoggerInterface $logger, AppConfig $appC
         'birthday' => 'incorrect birthday',
         'profession' => 'incorrect profession'
     ];
-
-    if(null === ($result = paramTypeValidation($paramValidations, $request))) {
+    $requestParams = $request->getQueryParams();
+    if(null === ($result = paramTypeValidation($paramValidations, $requestParams))) {
         $foundRecipients = [];
         foreach ($recipients as $recipient) {
-            if (array_key_exists('id_recipient', $request)) {
-                $recipientMeetSearchCriteria = $request['id_recipient'] === (string)$recipient['id_recipient'];
-            } elseif (array_key_exists('full_name', $request)) {
-                $recipientMeetSearchCriteria = $request['full_name'] === $recipient['full_name'];
-            } elseif (array_key_exists('birthday', $request)) {
-                $recipientMeetSearchCriteria = $request['birthday'] === $recipient['birthday'];
-            } elseif (array_key_exists('profession', $request)) {
-                $recipientMeetSearchCriteria = $request['profession'] === $recipient['profession'];
+            if (array_key_exists('id_recipient', $requestParams)) {
+                $recipientMeetSearchCriteria = $requestParams['id_recipient'] === (string)$recipient['id_recipient'];
+            } elseif (array_key_exists('full_name', $requestParams)) {
+                $recipientMeetSearchCriteria = $requestParams['full_name'] === $recipient['full_name'];
+            } elseif (array_key_exists('birthday', $requestParams)) {
+                $recipientMeetSearchCriteria = $requestParams['birthday'] === $recipient['birthday'];
+            } elseif (array_key_exists('profession', $requestParams)) {
+                $recipientMeetSearchCriteria = $requestParams['profession'] === $recipient['profession'];
             } else {
                 $recipientMeetSearchCriteria = true;
             }
@@ -47,10 +50,10 @@ return static function (array $request, LoggerInterface $logger, AppConfig $appC
             }
         }
         $logger->log('found recipients not category: ' . count($foundRecipients));
-        return [
+        $result = [
             'httpCode' => 200,
             'result' => $foundRecipients
         ];
     }
-    return $result;
+    return ServerResponseFactory::createJsonResponse($result['httpCode'],$result['result']);
 };

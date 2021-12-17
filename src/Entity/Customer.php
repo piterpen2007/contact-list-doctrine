@@ -1,10 +1,8 @@
 <?php
 namespace EfTech\ContactList\Entity;
-use Exception;
-use EfTech\ContactList\Infrastructure\invalidDataStructureException;
-use JsonSerializable;
-require_once __DIR__ . '/Recipient.php';
-require_once __DIR__ . '/../Infrastructure/invalidDataStructureException.php';
+use EfTech\ContactList\Exception;
+
+
 final class Customer extends Recipient
 {
     /**
@@ -138,7 +136,7 @@ final class Customer extends Recipient
 
         if (count($missingFields) > 0) {
             $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
-            throw new invalidDataStructureException($errMsg);
+            throw new Exception\invalidDataStructureException($errMsg);
         }
         return new Customer(
             $data['id_recipient'],

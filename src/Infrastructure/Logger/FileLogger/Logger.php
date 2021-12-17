@@ -1,7 +1,6 @@
 <?php
 namespace EfTech\ContactList\Infrastructure\Logger\FileLogger;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
-require_once __DIR__ . '/../LoggerInterface.php';
 
 /**
  *  Логирует в файл

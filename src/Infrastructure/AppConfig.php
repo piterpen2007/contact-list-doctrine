@@ -1,11 +1,31 @@
 <?php
 namespace EfTech\ContactList\Infrastructure;
-use Exception;
+use EfTech\ContactList\Exception;
 /**
  *  Конфиг приложения
  */
 class AppConfig
 {
+    /** Скрывает сообщения о ошибках
+     * @var bool
+     */
+    private bool $hideErrorMsg;
+
+    /** Возвращает флаг, который указывает что нужно скрывать сообщения о ощибках
+     * @return bool
+     */
+    public function isHideErrorMsg(): bool
+    {
+        return $this->hideErrorMsg;
+    }
+
+    /** Устанавливает флаг указывающий что нужно скрывать сообщение о ошибках
+     * @param bool $hideErrorMsg
+     */
+    private function setHideErrorMsg(bool $hideErrorMsg): void
+    {
+        $this->hideErrorMsg = $hideErrorMsg;
+    }
     /** Путь до файла с данными о получателях
      * @var string
      */
@@ -59,7 +79,6 @@ class AppConfig
      *
      * @param string $pathToLogFile путь до файла с логами
      * @return AppConfig
-     * @throws Exception
      */
     private function setPathToLogFile(string $pathToLogFile): AppConfig
     {
@@ -79,7 +98,6 @@ class AppConfig
     /**
      * @param string $pathToRecipients
      * @return AppConfig
-     * @throws Exception
      */
     private function setPathToRecipients(string $pathToRecipients): AppConfig
     {
@@ -99,7 +117,6 @@ class AppConfig
     /**
      * @param string $pathToKinsfolk
      * @return AppConfig
-     * @throws Exception
      */
     private function setPathToKinsfolk(string $pathToKinsfolk): AppConfig
     {
@@ -119,7 +136,6 @@ class AppConfig
     /**
      * @param string $pathToCustomers
      * @return AppConfig
-     * @throws Exception
      */
     private function setPathToCustomers(string $pathToCustomers): AppConfig
     {
@@ -139,7 +155,6 @@ class AppConfig
     /**
      * @param string $pathToColleagues
      * @return AppConfig
-     * @throws Exception
      */
     private function setPathToColleagues(string $pathToColleagues): AppConfig
     {
@@ -152,12 +167,11 @@ class AppConfig
      *
      * @param string $path
      * @return void
-     * @throws Exception
      */
     private function validateFilePath(string $path):void
     {
         if(false === file_exists($path)) {
-            throw new Exception('Некорректный путь до файла с данными');
+            throw new Exception\RuntimeException('Некорректный путь до файла с данными');
         }
     }
 
@@ -169,6 +183,7 @@ class AppConfig
      * @uses AppConfig::setPathToKinsfolk()
      * @uses AppConfig::setPathToRecipient()
      * @uses AppConfig::setLoggerType()
+     * @uses AppConfig::setHideErrorMsg()
      */
     public static function createFromArray(array $config):self
     {

@@ -1,9 +1,8 @@
 <?php
 namespace EfTech\ContactList\Entity;
-use Exception;
-use EfTech\ContactList\Infrastructure\invalidDataStructureException;
+use EfTech\ContactList\Exception;
 use JsonSerializable;
-require_once __DIR__ . '/../Infrastructure/invalidDataStructureException.php';
+
 class Recipient implements JsonSerializable
 {
     /**
@@ -122,7 +121,6 @@ class Recipient implements JsonSerializable
     /**
      * @param array $data
      * @return Recipient
-     * @throws Exception
      */
     public static function createFromArray(array $data):Recipient
     {
@@ -137,7 +135,7 @@ class Recipient implements JsonSerializable
 
         if (count($missingFields) > 0) {
             $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
-            throw new invalidDataStructureException($errMsg);
+            throw new Exception\invalidDataStructureException($errMsg);
         }
 
         return new Recipient($data['id_recipient'], $data['full_name'], $data['birthday'] ,$data['profession']);

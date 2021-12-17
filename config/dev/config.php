@@ -19,5 +19,6 @@ return [
     /**
      *  Тип используемого логера
      */
-    'loggerType' => 'fileLogger'
+    'loggerType' => 'fileLogger',
+    'hideErrorMsg' => false
 ];

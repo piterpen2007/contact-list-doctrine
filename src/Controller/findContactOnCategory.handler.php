@@ -1,23 +1,19 @@
 <?php
 namespace EfTech\ContactList\Controller;
 
-
 use EfTech\ContactList\Entity\Colleague;
 use EfTech\ContactList\Entity\Customer;
 use EfTech\ContactList\Entity\Kinsfolk;
 use EfTech\ContactList\Entity\Recipient;
 use EfTech\ContactList\Infrastructure\AppConfig;
+use EfTech\ContactList\Infrastructure\http\httpResponse;
+use EfTech\ContactList\Infrastructure\http\ServerRequest;
+use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use function EfTech\ContactList\Infrastructure\loadData;
-use function EfTech\ContactList\Infrastructure\paramTypeValidation;
 
-require_once __DIR__ . '/../Entity/Recipient.php';
-require_once __DIR__ . '/../Entity/Customer.php';
-require_once __DIR__ . '/../Entity/Colleague.php';
-require_once __DIR__ . '/../Entity/Kinsfolk.php';
-require_once __DIR__ . '/../Infrastructure/AppConfig.php';
 require_once __DIR__ . '/../Infrastructure/app.function.php';
-require_once __DIR__ . '/../Infrastructure/Logger/LoggerInterface.php';
+
 
 /**
  * Функция поиска контакттов по категории
@@ -25,7 +21,7 @@ require_once __DIR__ . '/../Infrastructure/Logger/LoggerInterface.php';
  * @param $logger callable - параметр инкапсулирующий логгирование
  * @return array - возвращает результат поиска по категориям
  */
-return static function (array $request, LoggerInterface $logger, AppConfig $appConfig):array
+return static function (ServerRequest $request, LoggerInterface $logger, AppConfig $appConfig):httpResponse
 {
     $customers = loadData($appConfig->getPathToCustomers());
     $recipients = loadData($appConfig->getPathToRecipients());
@@ -34,51 +30,56 @@ return static function (array $request, LoggerInterface $logger, AppConfig $appC
 
     $logger->log('dispatch "category" url');
 
-    if (!array_key_exists('category', $request)) {
-        return [
+    $requestParams = $request->getQueryParams();
+
+    if (!array_key_exists('category', $requestParams)) {
+        $result = [
             'httpCode' => 500,
             'result' => [
                 'status' => 'fail',
                 'message' => 'empty category'
             ]
         ];
+        return ServerResponseFactory::createJsonResponse($result['httpCode'],$result['result']);
     }
     $foundRecipientsOnCategory = [];
-    if ($request['category'] === 'customers') {
+    if ($requestParams['category'] === 'customers') {
         foreach ($customers as $customer) {
             $foundRecipientsOnCategory[] = Customer::createFromArray($customer);
         }
         $logger->log('dispatch category "customers"');
         $logger->log('found customers: '. count($foundRecipientsOnCategory));
-    } elseif ($request['category'] === 'recipients') {
+    } elseif ($requestParams['category'] === 'recipients') {
         foreach ($recipients as $recipient) {
             $foundRecipientsOnCategory[] = Recipient::createFromArray($recipient);
         }
         $logger->log('dispatch category "recipients"');
         $logger->log('found customers: '. count($foundRecipientsOnCategory));
-    } elseif ($request['category'] === 'kinsfolk') {
+    } elseif ($requestParams['category'] === 'kinsfolk') {
         foreach ($kinsfolk as $kinsfolkValue) {
             $foundRecipientsOnCategory[] = Kinsfolk::createFromArray($kinsfolkValue);
         }
         $logger->log('dispatch category "kinsfolk"');
         $logger->log('found kinsfolk: '. count($foundRecipientsOnCategory));
-    } elseif ($request['category'] === 'colleagues') {
+    } elseif ($requestParams['category'] === 'colleagues') {
         foreach ($colleagues as $colleague) {
             $foundRecipientsOnCategory[] = Colleague::createFromArray($colleague);
         }
         $logger->log('dispatch category "colleagues"');
         $logger->log('found colleagues: '. count($foundRecipientsOnCategory));
     } else {
-        return [
+        $result =  [
             'httpCode' => 500,
             'result' => [
                 'status' => 'fail',
                 'message' => 'dispatch category nothing'
             ]
         ];
+        return ServerResponseFactory::createJsonResponse($result['httpCode'],$result['result']);
     }
-    return [
+    $result = [
         'httpCode' => 200,
         'result' => $foundRecipientsOnCategory
     ];
+    return ServerResponseFactory::createJsonResponse($result['httpCode'],$result['result']);
 };

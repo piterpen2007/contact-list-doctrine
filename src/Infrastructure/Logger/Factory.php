@@ -5,8 +5,6 @@ use EfTech\ContactList\Infrastructure\AppConfig;
 use EfTech\ContactList\Infrastructure\Logger\FileLogger as FileLogger;
 use EfTech\ContactList\Infrastructure\Logger\NullLogger as NullLogger;
 use EfTech\ContactLIst\Infrastructure\Logger\EchoLogger as EchoLogger;
-require_once __DIR__ . '/LoggerInterface.php';
-require_once __DIR__ . '/../AppConfig.php';
 /**
  *  Фабрика по созданию логеров
  *
