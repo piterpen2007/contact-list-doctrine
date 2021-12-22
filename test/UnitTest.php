@@ -1,6 +1,5 @@
 <?php
 
-require_once __DIR__ . '/../src/Infrastructure/app.function.php';
 require_once __DIR__ . '/../src/Infrastructure/Autoloader.php';
 
 use EfTech\ContactList\Infrastructure\App;
@@ -19,34 +18,6 @@ spl_autoload_register(
         'EfTech\\ContactListTest\\' => __DIR__ . '/../test/'
     ])
 );
-
-
-/** Вычисляет расскхождение массивов с доп проверкой индекса. Поддержка многомерных массивов
- * @param array $a1
- * @param array $a2
- * @return array
- */
-function array_diff_assoc_recursive(array $a1,array $a2):array
-{
-    $result = [];
-    foreach ($a1 as $k1 => $v1) {
-        if(false === array_key_exists($k1, $a2)){
-            $result[$k1] = $v1;
-            continue;
-        }
-        if(is_iterable($v1) && is_iterable($a2[$k1])) {
-            $resultCheck = array_diff_assoc_recursive($v1, $a2[$k1]);
-            if (count($resultCheck) > 0 ) {
-                $result[$k1] = $resultCheck;
-            }
-            continue;
-        }
-        if ($v1 !== $a2[$k1]) {
-            $result[$k1] = $v1;
-        }
-    }
-    return $result;
-}
 /**
  *  Тестирование приложения
  */
@@ -188,7 +159,10 @@ class UnitTest
             $httpResponse = (new App(
                 $testItem['in']['handlers'],
                 $testItem['in']['loggerFactory'],
-                $testItem['in']['appConfigFactory']
+                $testItem['in']['appConfigFactory'],
+                static function():\EfTech\ContactList\Infrastructure\View\RenderInterface {
+                    return new \EfTech\ContactList\Infrastructure\View\NullRender();
+                }
             ))->dispath($httpRequest);
 
 

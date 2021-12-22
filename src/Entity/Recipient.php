@@ -135,7 +135,7 @@ class Recipient implements JsonSerializable
 
         if (count($missingFields) > 0) {
             $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
-            throw new Exception\invalidDataStructureException($errMsg);
+            throw new Exception\InvalidDataStructureException($errMsg);
         }
 
         return new Recipient($data['id_recipient'], $data['full_name'], $data['birthday'] ,$data['profession']);
