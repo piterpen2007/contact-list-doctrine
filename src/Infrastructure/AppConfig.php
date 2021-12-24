@@ -1,6 +1,8 @@
 <?php
 namespace EfTech\ContactList\Infrastructure;
 use EfTech\ContactList\Exception;
+use EfTech\ContactList\Exception\ErrorCreateAppConfigException;
+
 /**
  *  Конфиг приложения
  */
@@ -171,7 +173,7 @@ class AppConfig
     private function validateFilePath(string $path):void
     {
         if(false === file_exists($path)) {
-            throw new Exception\RuntimeException('Некорректный путь до файла с данными');
+           throw new ErrorCreateAppConfigException('Некорректный путь до файла с данными');
         }
     }
 

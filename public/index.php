@@ -10,17 +10,18 @@ spl_autoload_register(new Autoloader([
 );
 use EfTech\ContactList\Infrastructure\AppConfig;
 use EfTech\ContactList\Infrastructure\App;
+use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\http\ServerRequestFactory;
-
-
+use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use EfTech\ContactList\Infrastructure\View\RenderInterface;
 
 
 $httpResponse = (new App(
-    include __DIR__ . '/../config/request.handlers.php',
-    'EfTech\ContactList\Infrastructure\Logger\Factory::create',
-    static function() {return AppConfig::createFromArray(include __DIR__ . '/../config/dev/config.php');},
-    static function() {
-        return new \EfTech\ContactList\Infrastructure\View\DefaultRender();
-    }
-))->dispath(ServerRequestFactory::createFromGlobals($_SERVER,));
+    static function(Container $di):array {return $di->get('handlers');},
+    static function(Container $di):LoggerInterface {return $di->get(LoggerInterface::class);},
+    static function(Container $di):AppConfig {return $di->get(AppConfig::class);},
+    static function(Container $di):RenderInterface {return $di->get(RenderInterface::class);},
+    static function():Container {return Container::createFromArray(require __DIR__ . '/../config/dev/di.php');}
+))->dispath(ServerRequestFactory::createFromGlobals($_SERVER));
+
 

@@ -5,10 +5,13 @@ require_once __DIR__ . '/../src/Infrastructure/Autoloader.php';
 use EfTech\ContactList\Infrastructure\App;
 use EfTech\ContactList\Infrastructure\AppConfig;
 use EfTech\ContactList\Infrastructure\Autoloader;
+use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Logger\NullLogger\Logger;
 use EfTech\ContactList\Infrastructure\Uri\Uri;
+use EfTech\ContactList\Infrastructure\View\NullRender;
+use EfTech\ContactList\Infrastructure\View\RenderInterface;
 use EfTech\ContactListTest\TestUtils;
 
 
@@ -25,21 +28,20 @@ class UnitTest
 {
     private static function testDataProvider():array
     {
-        $handlers = include __DIR__ . '/../config/request.handlers.php';
-        $loggerFactory = static function():LoggerInterface {return new Logger();};
+        $diConfig = require __DIR__ . '/../config/dev/di.php';
+        $diConfig['services'][LoggerInterface::class] = [
+            'class' => Logger::class
+        ];
+        $diConfig['services'][RenderInterface::class] = [
+            'class' => NullRender::class
+        ];
         return [
             [
                 'testName'=>'Тестирование поиска получателя по id',
                 'in' => [
-                    'handlers' => $handlers,
                     'uri' => '/recipient?id_recipient=1',
-                    'loggerFactory' =>'EfTech\ContactList\Infrastructure\Logger\Factory::create',
-                    'appConfigFactory' => static function (){
-                        $config = include __DIR__ . '/../config/dev/config.php';
-                        $config['loggerType'] = 'echoLogger';
-                        return AppConfig::createFromArray($config);
-                    }
-                ],
+                    'diConfig' => $diConfig
+                    ],
                 'out' => [
                     'httpCode' => 200,
                     'result' => [
@@ -55,14 +57,13 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации когда данные о получателях не кореектны. Нет поля birthday',
                 'in' => [
-                    'handlers' => $handlers,
                     'uri' => '/recipient?full_name=Осипов Геннадий Иванович',
-                    'loggerFactory' => $loggerFactory,
-                    'appConfigFactory' => static function (){
+                    'diConfig' => (static function($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/broken.recipient.json';
-                        return AppConfig::createFromArray($config);
-                    }
+                        $diConfig['instances']['appConfig'] = $config;
+                        return $diConfig;
+                    })($diConfig)
                 ],
                 'out' => [
                     'httpCode' => 503,
@@ -75,32 +76,32 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации с некорректным  данными конфига приложения',
                 'in' => [
-                    'handlers' => $handlers,
                     'uri' => '/recipient?id_recipient=1',
-                    'loggerFactory' => $loggerFactory,
-                    'appConfigFactory' => static function (){
-                        return 'Ops!';
-                    }
+                    'diConfig' => (static function($diConfig) {
+                        $diConfig['factories'][AppConfig::class] = static function () {
+                            return 'Ops!';
+                        };
+                        return $diConfig;
+                    })($diConfig)
                 ],
                 'out' => [
                     'httpCode' => 500,
                     'result' => [
                         'status' => 'fail',
-                        'message' => 'incorrect application config'
+                        'message' => 'system error'
                     ]
                 ]
             ],
             [
                 'testName' => 'Тестирование ситуации с некорректным путем до файла получателями',
                 'in' => [
-                    'handlers' => $handlers,
                     'uri' =>  '/recipient?id_recipient=1',
-                    'loggerFactory' => $loggerFactory,
-                    'appConfigFactory' => static function (){
+                    'diConfig' => (static function($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
-                        $config['pathToRecipients'] = __DIR__ . '/data/unknown.recipient.json';
-                        return AppConfig::createFromArray($config);
-    }
+                        $config['pathToRecipients'] = __DIR__ . '/data/unknown.recipients.json';
+                        $diConfig['instances']['appConfig'] = $config;
+                        return $diConfig;
+                    })($diConfig)
                 ],
                 'out' => [
                     'httpCode' => 500,
@@ -113,14 +114,13 @@ class UnitTest
             [
                 'testName' => 'Тестирование ситуации когда данные о клиентах некорректны. Нет поля id_recipient',
                 'in' => [
-                    'handlers' => $handlers,
                     'uri' => '/customers?full_name=Калинин Пётр Александрович',
-                    'loggerFactory' => $loggerFactory,
-                    'appConfigFactory' => static function (){
+                    'diConfig' => (static function($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToCustomers'] = __DIR__ . '/data/broken.customers.json';
-                        return AppConfig::createFromArray($config);
-                    }
+                        $diConfig['instances']['appConfig'] = $config;
+                        return $diConfig;
+                    })($diConfig)
                 ],
                 'out' => [
                     'httpCode' => 503,
@@ -156,13 +156,13 @@ class UnitTest
             );
             //Arrange и Act
 
+            $diConfig = $testItem['in']['diConfig'];
             $httpResponse = (new App(
-                $testItem['in']['handlers'],
-                $testItem['in']['loggerFactory'],
-                $testItem['in']['appConfigFactory'],
-                static function():\EfTech\ContactList\Infrastructure\View\RenderInterface {
-                    return new \EfTech\ContactList\Infrastructure\View\NullRender();
-                }
+                static function(Container $di):array {return $di->get('handlers');},
+                static function(Container $di):LoggerInterface {return $di->get(LoggerInterface::class);},
+                static function(Container $di):AppConfig {return $di->get(AppConfig::class);},
+                static function(Container $di):RenderInterface {return $di->get(RenderInterface::class);},
+                static function() use($diConfig) :Container {return Container::createFromArray($diConfig);}
             ))->dispath($httpRequest);
 
 

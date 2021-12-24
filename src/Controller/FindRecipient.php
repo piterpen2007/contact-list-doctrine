@@ -26,10 +26,10 @@ class FindRecipient implements ControllerInterface
     private AppConfig $appConfig;
 
     /**
-     * @param LoggerInterface $logger
      * @param AppConfig $appConfig
+     * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger, AppConfig $appConfig)
+    public function __construct(AppConfig $appConfig, LoggerInterface $logger)
     {
         $this->logger = $logger;
         $this->appConfig = $appConfig;
@@ -41,8 +41,7 @@ class FindRecipient implements ControllerInterface
     */
     private function loadData():array
     {
-        $loader = new JsonDataLoader();
-        return $loader->loadData($this->appConfig->getPathToRecipients());
+        return (new JsonDataLoader())->loadData($this->appConfig->getPathToRecipients());
     }
     /**  Валдирует параматры запроса
      * @param ServerRequest $request

@@ -21,15 +21,15 @@ class FindCustomers implements ControllerInterface
      */
     private LoggerInterface $logger;
     /** Конфиг приложения
-     * @var AppConfig
+     * @var AppConfig|null
      */
-    private AppConfig $appConfig;
+    private ?AppConfig $appConfig;
 
     /**
-     * @param LoggerInterface $logger
      * @param AppConfig $appConfig
+     * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger, AppConfig $appConfig)
+    public function __construct(AppConfig $appConfig, LoggerInterface $logger)
     {
         $this->logger = $logger;
         $this->appConfig = $appConfig;
@@ -41,8 +41,7 @@ class FindCustomers implements ControllerInterface
      */
     private function loadData():array
     {
-        $loader = new JsonDataLoader();
-        return $loader->loadData($this->appConfig->getPathToCustomers());
+        return (new JsonDataLoader())->loadData($this->appConfig->getPathToCustomers());
     }
     /**  Валдирует параматры запроса
      * @param ServerRequest $request

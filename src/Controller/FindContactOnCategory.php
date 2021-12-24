@@ -27,10 +27,10 @@ class FindContactOnCategory implements ControllerInterface
     private AppConfig $appConfig;
 
     /**
-     * @param LoggerInterface $logger
      * @param AppConfig $appConfig
+     * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger, AppConfig $appConfig)
+    public function __construct(AppConfig $appConfig, LoggerInterface $logger)
     {
         $this->logger = $logger;
         $this->appConfig = $appConfig;
