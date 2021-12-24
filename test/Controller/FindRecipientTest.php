@@ -46,12 +46,12 @@ class FindRecipientTest
         $diContainer = new Container(
             [
                 LoggerInterface::class => new Logger(),
-                AppConfig::class => AppConfig::createFromArray(require __DIR__ . '/../../config/dev/config.php')
+                'pathToRecipients' => $appConfig->getPathToRecipients()
             ],
             [
                 FindRecipient::class => [
                     'args' => [
-                        'appConfig' => AppConfig::class,
+                        'pathToRecipients' => 'pathToRecipients',
                         'logger' => LoggerInterface::class
                     ]
                 ]

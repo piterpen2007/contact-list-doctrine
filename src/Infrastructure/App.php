@@ -1,9 +1,8 @@
 <?php
 
 namespace EfTech\ContactList\Infrastructure;
-use EfTech\ContactList\Exception\RuntimeException;
-use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
+use EfTech\ContactList\Infrastructure\Router\RouterInterface;
 use EfTech\ContactList\Infrastructure\View\RenderInterface;
 use EfTech\ContactList\Infrastructure\http\httpResponse;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
@@ -16,10 +15,6 @@ use EfTech\ContactList\Exception;
  */
 final class App
 {
-    /**
-     * @var array|null Обработчики запросов
-     */
-    private ?array $handlers = null;
     /** Фабрика для создания логгеров
      * @var callable
      */
@@ -53,20 +48,27 @@ final class App
      * @var callable
      */
     private $diContainerFactory;
-    /** Фабрика реализующая логику создания обработчика запроса
+    /** Компанент отвечающий за роутинг запросов
+     * @var RouterInterface|null
+     */
+    private ?RouterInterface $router = null;
+
+    /** Фабрика реализующая роутер
      * @var callable
      */
-    private $handlersFactory;
+    private $routerFactory;
+
+
 
     /**
-     * @param callable $handlersFactory
+     * @param callable $routerFactory
      * @param callable $loggerFactory
      * @param callable $appConfigFactory
      * @param callable $renderFactory
      * @param callable $diContainerFactory
      */
     public function __construct(
-        callable $handlersFactory,
+        callable $routerFactory,
         callable $loggerFactory,
         callable $appConfigFactory,
         callable $renderFactory,
@@ -76,7 +78,7 @@ final class App
         $this->appConfigFactory = $appConfigFactory;
         $this->renderFactory = $renderFactory;
         $this->diContainerFactory = $diContainerFactory;
-        $this->handlersFactory = $handlersFactory;
+        $this->routerFactory = $routerFactory;
         $this->initErrorHandling();
     }
 
@@ -93,14 +95,14 @@ final class App
 
 
     /** Возвращает обработчики запросов
-     * @return array|null
+     * @return RouterInterface
      */
-    public function getHandlers(): ?array
+    public function getRouter(): RouterInterface
     {
-        if (null === $this->handlers) {
-            $this->handlers = ($this->handlersFactory)($this->getContainer());
+        if (null === $this->router) {
+            $this->router = ($this->routerFactory)($this->getContainer());
         }
-        return $this->handlers;
+        return $this->router;
     }
 
     /**
@@ -147,48 +149,6 @@ final class App
         return $this->container;
     }
 
-    /** Возвращает контроллер
-     * @param string $urlPath
-     * @return callable
-     */
-    private function getController(string $urlPath):callable
-    {
-        $handlers = $this->handlers;
-        if(is_callable($handlers[$urlPath])) {
-            $controller = $handlers[$urlPath];
-        } elseif (is_string($handlers[$urlPath]) &&
-            is_subclass_of($handlers[$urlPath], ControllerInterface::class, true)) {
-            $controller = $this->getContainer()->get($handlers[$urlPath]);
-        } else {
-            throw new RuntimeException("Для url '$urlPath' зарегистрирован некорректный обработчик");
-        }
-        return $controller;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /** Обработчик запроса
      * @param ServerRequest $serverRequest - объект серверного http запроса
      * @return httpResponse - реез ответ
@@ -202,11 +162,10 @@ final class App
 
             $urlPath = $serverRequest->getUri()->getPath();
             $logger->log('Url request received' . $urlPath);
+            $dispatcher = $this->getRouter()->getDispatcher($serverRequest);
+            if (is_callable($dispatcher)) {
 
-            if (array_key_exists($urlPath,$this->getHandlers())) {
-
-                $controller = $this->getController($urlPath);
-                $httpResponse = $controller($serverRequest);
+                $httpResponse = $dispatcher($serverRequest);
 
                 if (!($httpResponse instanceof httpResponse)) {
                     throw new Exception\UnexpectedValueException('Контроллер вернул некорректный результат');

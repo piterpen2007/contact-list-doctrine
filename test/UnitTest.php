@@ -9,6 +9,7 @@ use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Logger\NullLogger\Logger;
+use EfTech\ContactList\Infrastructure\Router\RouterInterface;
 use EfTech\ContactList\Infrastructure\Uri\Uri;
 use EfTech\ContactList\Infrastructure\View\NullRender;
 use EfTech\ContactList\Infrastructure\View\RenderInterface;
@@ -158,7 +159,7 @@ class UnitTest
 
             $diConfig = $testItem['in']['diConfig'];
             $httpResponse = (new App(
-                static function(Container $di):array {return $di->get('handlers');},
+                static function(Container $di): RouterInterface {return $di->get(RouterInterface::class);},
                 static function(Container $di):LoggerInterface {return $di->get(LoggerInterface::class);},
                 static function(Container $di):AppConfig {return $di->get(AppConfig::class);},
                 static function(Container $di):RenderInterface {return $di->get(RenderInterface::class);},

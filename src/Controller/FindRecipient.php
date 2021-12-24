@@ -9,30 +9,28 @@ use EfTech\ContactList\Infrastructure\http\httpResponse;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\Validator\Assert;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
-use EfTech\ContactList\Infrastructure\AppConfig;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use JsonException;
 use Exception;
 
 class FindRecipient implements ControllerInterface
 {
+    /** Путь до файла с данными о получателях
+     * @var string
+     */
+    private string $pathToRecipients;
     /** Логгер
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
-    /** Конфиг приложения
-     * @var AppConfig
-     */
-    private AppConfig $appConfig;
 
     /**
-     * @param AppConfig $appConfig
      * @param LoggerInterface $logger
      */
-    public function __construct(AppConfig $appConfig, LoggerInterface $logger)
+    public function __construct(string $pathToRecipients, LoggerInterface $logger)
     {
         $this->logger = $logger;
-        $this->appConfig = $appConfig;
+        $this->pathToRecipients = $pathToRecipients;
     }
 
     /** Загружает данные о получателях
@@ -41,7 +39,7 @@ class FindRecipient implements ControllerInterface
     */
     private function loadData():array
     {
-        return (new JsonDataLoader())->loadData($this->appConfig->getPathToRecipients());
+        return (new JsonDataLoader())->loadData($this->pathToRecipients);
     }
     /**  Валдирует параматры запроса
      * @param ServerRequest $request

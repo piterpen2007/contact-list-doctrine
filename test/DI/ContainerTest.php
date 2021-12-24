@@ -35,7 +35,7 @@ class ContainerTest
             'services' => [
                 FindRecipient::class => [
                     'args' => [
-                        'appConfig' => AppConfig::class,
+                        'pathToRecipients' => 'pathToRecipients',
                         'logger' => LoggerInterface::class
                     ]
                 ],
@@ -57,7 +57,12 @@ class ContainerTest
                 AppConfig::class => static function(ContainerInterface $c): AppConfig {
                     $appConfig = $c->get('appConfig');
                     return AppConfig::createFromArray($appConfig);
-                }
+                },
+                'pathToRecipients' => static function(ContainerInterface $c):string {
+                    /** @var AppConfig $appConfig */
+                    $appConfig = $c->get(AppConfig::class);
+                    return $appConfig->getPathToRecipients();
+                },
 
             ]
 

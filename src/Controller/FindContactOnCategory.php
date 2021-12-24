@@ -6,7 +6,6 @@ use EfTech\ContactList\Entity\Colleague;
 use EfTech\ContactList\Entity\Customer;
 use EfTech\ContactList\Entity\Kinsfolk;
 use EfTech\ContactList\Entity\Recipient;
-use EfTech\ContactList\Infrastructure\AppConfig;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\http\httpResponse;
@@ -17,24 +16,37 @@ use JsonException;
 
 class FindContactOnCategory implements ControllerInterface
 {
+    private string $pathToCustomers;
+    private string $pathToRecipients;
+    private string $pathToKinsfolk;
+    private string $pathToColleagues;
+
     /** Логгер
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
-    /** Конфиг приложения
-     * @var AppConfig
-     */
-    private AppConfig $appConfig;
 
     /**
-     * @param AppConfig $appConfig
+     * @param string $pathToCustomers
+     * @param string $pathToRecipients
+     * @param string $pathToKinsfolk
+     * @param string $pathToColleagues
      * @param LoggerInterface $logger
      */
-    public function __construct(AppConfig $appConfig, LoggerInterface $logger)
-    {
+    public function __construct(
+        string $pathToCustomers,
+        string $pathToRecipients,
+        string $pathToKinsfolk,
+        string $pathToColleagues,
+        LoggerInterface $logger
+    ) {
+        $this->pathToCustomers = $pathToCustomers;
+        $this->pathToRecipients = $pathToRecipients;
+        $this->pathToKinsfolk = $pathToKinsfolk;
+        $this->pathToColleagues = $pathToColleagues;
         $this->logger = $logger;
-        $this->appConfig = $appConfig;
     }
+
 
     /** Загружает данные о получателях по категориям
      * @return array
@@ -43,10 +55,10 @@ class FindContactOnCategory implements ControllerInterface
     private function loadData():array
     {
         $loader = new JsonDataLoader();
-        $customers = $loader->loadData($this->appConfig->getPathToCustomers());
-        $recipients = $loader->loadData($this->appConfig->getPathToRecipients());
-        $kinsfolk = $loader->loadData($this->appConfig->getPathToKinsfolk());
-        $colleague = $loader->loadData($this->appConfig->getPathToColleagues());
+        $customers = $loader->loadData($this->pathToCustomers);
+        $recipients = $loader->loadData($this->pathToRecipients);
+        $kinsfolk = $loader->loadData($this->pathToKinsfolk);
+        $colleague = $loader->loadData($this->pathToColleagues);
 
         return [
             'customers' => $customers,
@@ -61,7 +73,7 @@ class FindContactOnCategory implements ControllerInterface
         $requestParams = $request->getQueryParams();
 
         if (!array_key_exists('category', $requestParams)) {
-            return $result = [
+            return [
                 'httpCode' => 500,
                 'result' => [
                     'status' => 'fail',
@@ -94,22 +106,24 @@ class FindContactOnCategory implements ControllerInterface
             $this->logger->log('dispatch category "colleagues"');
             $this->logger->log('found colleagues: '. count($foundRecipientsOnCategory));
         } else {
-            $result =  [
+            return  [
                 'httpCode' => 500,
                 'result' => [
                     'status' => 'fail',
                     'message' => 'dispatch category nothing'
                 ]
             ];
-            return $result;
         }
-        $result = [
+        return [
             'httpCode' => 200,
             'result' => $foundRecipientsOnCategory
         ];
-        return $result;
+
     }
 
+    /**
+     * @throws JsonException
+     */
     public function __invoke(ServerRequest $request): httpResponse
     {
         $recipientsOnCategory = $this->loadData();

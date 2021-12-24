@@ -3,7 +3,6 @@
 namespace EfTech\ContactList\Controller;
 
 use EfTech\ContactList\Entity\Customer;
-use EfTech\ContactList\Infrastructure\AppConfig;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\http\httpResponse;
@@ -16,23 +15,24 @@ use JsonException;
 
 class FindCustomers implements ControllerInterface
 {
+    /** Путь до файла с данными о клиентах
+     * @var string
+     */
+    private string $pathToCustomers;
     /** Логгер
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
-    /** Конфиг приложения
-     * @var AppConfig|null
-     */
-    private ?AppConfig $appConfig;
+
 
     /**
-     * @param AppConfig $appConfig
      * @param LoggerInterface $logger
      */
-    public function __construct(AppConfig $appConfig, LoggerInterface $logger)
+    public function __construct(string $pathToCustomers, LoggerInterface $logger)
     {
         $this->logger = $logger;
-        $this->appConfig = $appConfig;
+        $this->pathToCustomers = $pathToCustomers;
+
     }
 
     /** Загружает данные о клиентах
@@ -41,7 +41,7 @@ class FindCustomers implements ControllerInterface
      */
     private function loadData():array
     {
-        return (new JsonDataLoader())->loadData($this->appConfig->getPathToCustomers());
+        return (new JsonDataLoader())->loadData($this->pathToCustomers);
     }
     /**  Валдирует параматры запроса
      * @param ServerRequest $request
