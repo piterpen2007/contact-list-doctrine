@@ -2,7 +2,7 @@
 
 namespace EfTech\ContactListTest\Infrastructure\DI;
 
-use EfTech\ContactList\Controller\FindRecipient;
+use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Infrastructure\AppConfig;
 use EfTech\ContactList\Infrastructure\Autoloader;
 use EfTech\ContactList\Infrastructure\DI\Container;
@@ -33,7 +33,7 @@ class ContainerTest
                 'appConfig' =>require __DIR__ . '/../../config/dev/config.php'
             ],
             'services' => [
-                FindRecipient::class => [
+                GetRecipientsCollectionController::class => [
                     'args' => [
                         'pathToRecipients' => 'pathToRecipients',
                         'logger' => LoggerInterface::class
@@ -69,10 +69,10 @@ class ContainerTest
         ];
         $di = Container::createFromArray($diConfig);
         //Act
-        $controller = $di->get(FindRecipient::class);
+        $controller = $di->get(GetRecipientsCollectionController::class);
 
         //Assert
-        if ($controller instanceof FindRecipient) {
+        if ($controller instanceof GetRecipientsCollectionController) {
             echo "     ОК - di контейнер отработал корректно";
         } else {
             echo "     FAIL - di контейнер отработал корректно";

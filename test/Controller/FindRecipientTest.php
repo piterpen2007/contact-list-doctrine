@@ -4,7 +4,7 @@ namespace EfTech\ContactListTest\Infrastructure\Controller;
 
 require_once __DIR__ . '/../../src/Infrastructure/Autoloader.php';
 
-use EfTech\ContactList\Controller\FindRecipient;
+use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Infrastructure\AppConfig;
 use EfTech\ContactList\Infrastructure\Autoloader;
 use EfTech\ContactList\Infrastructure\DI\Container;
@@ -49,7 +49,7 @@ class FindRecipientTest
                 'pathToRecipients' => $appConfig->getPathToRecipients()
             ],
             [
-                FindRecipient::class => [
+                GetRecipientsCollectionController::class => [
                     'args' => [
                         'pathToRecipients' => 'pathToRecipients',
                         'logger' => LoggerInterface::class
@@ -58,7 +58,7 @@ class FindRecipientTest
             ]
         );
 
-        $findRecipients = $diContainer->get(FindRecipient::class);
+        $findRecipients = $diContainer->get(GetRecipientsCollectionController::class);
         $httpResponse = $findRecipients($httpRequest);
         //Assert
         if ($httpResponse->getStatusCode() === 200) {

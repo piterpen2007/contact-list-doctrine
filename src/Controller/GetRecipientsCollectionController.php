@@ -13,7 +13,7 @@ use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use JsonException;
 use Exception;
 
-class FindRecipient implements ControllerInterface
+class GetRecipientsCollectionController implements ControllerInterface
 {
     /** Путь до файла с данными о получателях
      * @var string
@@ -53,8 +53,8 @@ class FindRecipient implements ControllerInterface
             'birthday' => 'incorrect birthday',
             'profession' => 'incorrect profession'
         ];
-        $queryParams = $request->getQueryParams();
-        return Assert::arrayElementsIsString($paramValidations,$queryParams);
+        $params = array_merge($request->getQueryParams(),$request->getAttributes());
+        return Assert::arrayElementsIsString($paramValidations,$params);
     }
     /** Алгоритм поиска получателей
      * @param array $recipients
@@ -65,18 +65,21 @@ class FindRecipient implements ControllerInterface
     private function searchForRecipientsInData(array $recipients, ServerRequest $serverRequest):array
     {
         $findRecipient = [];
-        $requestParams =$serverRequest->getQueryParams();
+        $searchCriteria = array_merge($serverRequest->getQueryParams(),$serverRequest->getAttributes());
         foreach ($recipients as $recipient) {
-            if (array_key_exists('id_recipient', $requestParams)) {
-                $recipientMeetSearchCriteria = $requestParams['id_recipient'] === (string)$recipient['id_recipient'];
-            } elseif (array_key_exists('full_name', $requestParams)) {
-                $recipientMeetSearchCriteria = $requestParams['full_name'] === $recipient['full_name'];
-            } elseif (array_key_exists('birthday', $requestParams)) {
-                $recipientMeetSearchCriteria = $requestParams['birthday'] === $recipient['birthday'];
-            } elseif (array_key_exists('profession', $requestParams)) {
-                $recipientMeetSearchCriteria = $requestParams['profession'] === $recipient['profession'];
+            if (array_key_exists('id_recipient', $searchCriteria)) {
+                $recipientMeetSearchCriteria = $searchCriteria['id_recipient'] === (string)$recipient['id_recipient'];
             } else {
                 $recipientMeetSearchCriteria = true;
+            }
+            if (array_key_exists('full_name', $searchCriteria)) {
+                $recipientMeetSearchCriteria = $searchCriteria['full_name'] === $recipient['full_name'];
+            }
+            if (array_key_exists('birthday', $searchCriteria)) {
+                $recipientMeetSearchCriteria = $searchCriteria['birthday'] === $recipient['birthday'];
+            }
+            if (array_key_exists('profession', $searchCriteria)) {
+                $recipientMeetSearchCriteria = $searchCriteria['profession'] === $recipient['profession'];
             }
             if ($recipientMeetSearchCriteria) {
                 $findRecipient[] = Recipient::createFromArray($recipient);
@@ -98,9 +101,10 @@ class FindRecipient implements ControllerInterface
         $resultOfParamValidation = $this->validateQueryParams($request);
 
         if (null === $resultOfParamValidation) {
-            $httpCode = 200;
             $recipients = $this->loadData();
-            $result = $this->searchForRecipientsInData($recipients,$request);
+            $foundRecipients = $this->searchForRecipientsInData($recipients,$request);
+            $httpCode = $this->buildHttpCode($foundRecipients);
+            $result = $this->buildResult($foundRecipients);
         } else {
             $httpCode = 500;
 
@@ -111,5 +115,23 @@ class FindRecipient implements ControllerInterface
         }
         return ServerResponseFactory::createJsonResponse($httpCode,$result);
     }
+    /** Определяет http code
+     * @param array $foundRecipients
+     * @return int
+     */
+    protected function buildHttpCode(array $foundRecipients):int
+    {
+        return 200;
+    }
+
+    /** Подготавливает данные для ответа
+     * @param array $foundRecipients
+     * @return array|Recipient
+     */
+    protected function buildResult(array $foundRecipients)
+    {
+        return $foundRecipients;
+    }
+
 }
 

@@ -1,11 +1,11 @@
 <?php
 
-use EfTech\ContactList\Controller\FindContactOnCategory;
-use EfTech\ContactList\Controller\FindCustomers;
-use EfTech\ContactList\Controller\FindRecipient;
+use EfTech\ContactList\Controller\GetContactCollectionController;
+use EfTech\ContactList\Controller\GetCustomersCollectionController;
+use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 
 return [
-    '/recipient' => FindRecipient::class,
-    '/customers' =>FindCustomers::class,
-    '/category' => FindContactOnCategory::class
+    '/recipient' => GetRecipientsCollectionController::class,
+    '/customers' =>GetCustomersCollectionController::class,
+    '/contact' => GetContactCollectionController::class
 ];

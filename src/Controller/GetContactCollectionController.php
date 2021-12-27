@@ -14,7 +14,7 @@ use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use JsonException;
 
-class FindContactOnCategory implements ControllerInterface
+class GetContactCollectionController implements ControllerInterface
 {
     private string $pathToCustomers;
     private string $pathToRecipients;
@@ -70,55 +70,60 @@ class FindContactOnCategory implements ControllerInterface
     private function searchForRecipientsOnCategoryInData(array $recipientsOnCategory,ServerRequest $request):array
     {
         $foundRecipientsOnCategory = [];
-        $requestParams = $request->getQueryParams();
 
-        if (!array_key_exists('category', $requestParams)) {
-            return [
-                'httpCode' => 500,
-                'result' => [
-                    'status' => 'fail',
-                    'message' => 'empty category'
-                ]
-            ];
-        }
-        if ($requestParams['category'] === 'customers') {
+        $searchCriteria = array_merge($request->getQueryParams(), $request->getAttributes());
+        if (array_key_exists('category', $searchCriteria)) {
+            if ($searchCriteria['category'] === 'customers') {
+                foreach ($recipientsOnCategory['customers'] as $customer) {
+                    $foundRecipientsOnCategory[] = Customer::createFromArray($customer);
+                }
+                $this->logger->log('dispatch category "customers"');
+                $this->logger->log('found customers: ' . count($foundRecipientsOnCategory));
+            } elseif ($searchCriteria['category'] === 'recipients') {
+                foreach ($recipientsOnCategory['recipients'] as $recipient) {
+                    $foundRecipientsOnCategory[] = Recipient::createFromArray($recipient);
+                }
+                $this->logger->log('dispatch category "recipients"');
+                $this->logger->log('found customers: ' . count($foundRecipientsOnCategory));
+            } elseif ($searchCriteria['category'] === 'kinsfolk') {
+                foreach ($recipientsOnCategory['kinsfolk'] as $kinsfolkValue) {
+                    $foundRecipientsOnCategory[] = Kinsfolk::createFromArray($kinsfolkValue);
+                }
+                $this->logger->log('dispatch category "kinsfolk"');
+                $this->logger->log('found kinsfolk: ' . count($foundRecipientsOnCategory));
+            } elseif ($searchCriteria['category'] === 'colleagues') {
+                foreach ($recipientsOnCategory['colleagues'] as $colleague) {
+                    $foundRecipientsOnCategory[] = Colleague::createFromArray($colleague);
+                }
+                $this->logger->log('dispatch category "colleagues"');
+                $this->logger->log('found colleagues: ' . count($foundRecipientsOnCategory));
+            } else {
+                return [
+                    'httpCode' => 500,
+                    'result' => [
+                        'status' => 'fail',
+                        'message' => 'dispatch category nothing'
+                    ]
+                ];
+            }
+        } else {
             foreach ($recipientsOnCategory['customers'] as $customer) {
                 $foundRecipientsOnCategory[] = Customer::createFromArray($customer);
             }
-            $this->logger->log('dispatch category "customers"');
-            $this->logger->log('found customers: '. count($foundRecipientsOnCategory));
-        } elseif ($requestParams['category'] === 'recipients') {
             foreach ($recipientsOnCategory['recipients'] as $recipient) {
                 $foundRecipientsOnCategory[] = Recipient::createFromArray($recipient);
             }
-            $this->logger->log('dispatch category "recipients"');
-            $this->logger->log('found customers: '. count($foundRecipientsOnCategory));
-        } elseif ($requestParams['category'] === 'kinsfolk') {
             foreach ($recipientsOnCategory['kinsfolk'] as $kinsfolkValue) {
                 $foundRecipientsOnCategory[] = Kinsfolk::createFromArray($kinsfolkValue);
             }
-            $this->logger->log('dispatch category "kinsfolk"');
-            $this->logger->log('found kinsfolk: '. count($foundRecipientsOnCategory));
-        } elseif ($requestParams['category'] === 'colleagues') {
             foreach ($recipientsOnCategory['colleagues'] as $colleague) {
                 $foundRecipientsOnCategory[] = Colleague::createFromArray($colleague);
             }
-            $this->logger->log('dispatch category "colleagues"');
-            $this->logger->log('found colleagues: '. count($foundRecipientsOnCategory));
-        } else {
-            return  [
-                'httpCode' => 500,
-                'result' => [
-                    'status' => 'fail',
-                    'message' => 'dispatch category nothing'
-                ]
-            ];
         }
         return [
             'httpCode' => 200,
             'result' => $foundRecipientsOnCategory
         ];
-
     }
 
     /**
@@ -131,4 +136,21 @@ class FindContactOnCategory implements ControllerInterface
         return ServerResponseFactory::createJsonResponse($result['httpCode'],$result['result']);
     }
 
+    /** Определяет http code
+     * @param array $foundRecipientsOnCategory
+     * @return int
+     */
+    protected function buildHttpCode(array $foundRecipientsOnCategory):int
+    {
+        return 200;
+    }
+
+    /** Подготавливает данные для ответа
+     * @param array $foundRecipientsOnCategory
+     * @return array|Recipient
+     */
+    protected function buildResult(array $foundRecipientsOnCategory)
+    {
+        return $foundRecipientsOnCategory;
+    }
 }

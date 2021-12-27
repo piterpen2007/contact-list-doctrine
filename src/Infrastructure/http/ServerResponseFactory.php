@@ -22,7 +22,7 @@ class ServerResponseFactory
      * @param array $data
      * @return httpResponse
      */
-    public static function createJsonResponse(int $code, array $data):httpResponse
+    public static function createJsonResponse(int $code,$data):httpResponse
     {
         try {
 

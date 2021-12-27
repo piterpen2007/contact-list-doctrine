@@ -1,7 +1,10 @@
 <?php
-use EfTech\ContactList\Controller\FindContactOnCategory;
-use EfTech\ContactList\Controller\FindCustomers;
-use EfTech\ContactList\Controller\FindRecipient;
+use EfTech\ContactList\Controller\GetContactCollectionController;
+use EfTech\ContactList\Controller\GetContactController;
+use EfTech\ContactList\Controller\GetCustomersCollectionController;
+use EfTech\ContactList\Controller\GetCustomersController;
+use EfTech\ContactList\Controller\GetRecipientsCollectionController;
+use EfTech\ContactList\Controller\GetRecipientsController;
 use EfTech\ContactList\Infrastructure\AppConfig;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
 use EfTech\ContactList\Infrastructure\Logger\FileLogger\Logger;
@@ -11,28 +14,54 @@ use EfTech\ContactList\Infrastructure\Router\ControllerFactory;
 use EfTech\ContactList\Infrastructure\Router\DefaultRouter;
 use EfTech\ContactList\Infrastructure\Router\RegExpRouter;
 use EfTech\ContactList\Infrastructure\Router\RouterInterface;
+use EfTech\ContactList\Infrastructure\Router\UniversalRouter;
 use EfTech\ContactList\Infrastructure\View\DefaultRender;
 use EfTech\ContactList\Infrastructure\View\RenderInterface;
 
 return [
     'instances' => [
         'handlers' => require __DIR__ . '/../request.handlers.php',
+        'regExpHandlers' => require __DIR__ . '/../regExp.handlers.php',
+        'controllerNs' => 'EfTech\\ContactList\\Controller',
         'appConfig' => require __DIR__ . '/config.php'
     ],
     'services' => [
-        FindRecipient::class => [
+        GetRecipientsController::class => [
             'args' => [
                 'pathToRecipients' => 'pathToRecipients',
                 'logger' => LoggerInterface::class
             ]
         ],
-        FindCustomers::class => [
+        GetCustomersController::class => [
             'args' => [
                 'pathToCustomers' => 'pathToCustomers',
                 'logger' => LoggerInterface::class
             ]
         ],
-        FindContactOnCategory::class => [
+
+        GetRecipientsCollectionController::class => [
+            'args' => [
+                'pathToRecipients' => 'pathToRecipients',
+                'logger' => LoggerInterface::class
+            ]
+        ],
+        GetCustomersCollectionController::class => [
+            'args' => [
+                'pathToCustomers' => 'pathToCustomers',
+                'logger' => LoggerInterface::class
+            ]
+        ],
+        GetContactCollectionController::class => [
+            'args' => [
+                'pathToCustomers' => 'pathToCustomers',
+                'pathToRecipients' => 'pathToRecipients',
+                'pathToKinsfolk' => 'pathToKinsfolk',
+                'pathToColleagues' => 'pathToColleagues',
+                'logger' => LoggerInterface::class
+
+            ]
+        ],
+        GetContactController::class => [
             'args' => [
                 'pathToCustomers' => 'pathToCustomers',
                 'pathToRecipients' => 'pathToRecipients',
@@ -55,7 +84,14 @@ return [
             'class' => ChainRouters::class,
             'args' => [
                 RegExpRouter::class,
-                DefaultRouter::class
+                DefaultRouter::class,
+                UniversalRouter::class
+            ]
+        ],
+        UniversalRouter::class => [
+            'args' => [
+                'ControllerFactory' => ControllerFactory::class,
+                'controllerNs' => 'controllerNs'
             ]
         ],
         DefaultRouter::class => [
@@ -71,7 +107,8 @@ return [
         ],
         RegExpRouter::class => [
             'args' => [
-
+                'handlers' => 'regExpHandlers',
+                'controllerFactory' => ControllerFactory::class
             ]
         ]
     ],
