@@ -1,4 +1,7 @@
 <?php
+
+use EfTech\ContactList\ConsoleCommand\FindCustomers;
+use EfTech\ContactList\ConsoleCommand\FindRecipients;
 use EfTech\ContactList\Controller\GetContactCollectionController;
 use EfTech\ContactList\Controller\GetContactController;
 use EfTech\ContactList\Controller\GetCustomersCollectionController;
@@ -6,6 +9,10 @@ use EfTech\ContactList\Controller\GetCustomersController;
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Controller\GetRecipientsController;
 use EfTech\ContactList\Infrastructure\AppConfig;
+use EfTech\ContactList\Infrastructure\Console\Output\EchoOutput;
+use EfTech\ContactList\Infrastructure\Console\Output\OutputInterface;
+use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
+use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
 use EfTech\ContactList\Infrastructure\Logger\FileLogger\Logger;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
@@ -17,6 +24,8 @@ use EfTech\ContactList\Infrastructure\Router\RouterInterface;
 use EfTech\ContactList\Infrastructure\Router\UniversalRouter;
 use EfTech\ContactList\Infrastructure\View\DefaultRender;
 use EfTech\ContactList\Infrastructure\View\RenderInterface;
+use EfTech\ContactList\Service\SearchCustomersService\SearchCustomersService;
+use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsService;
 
 return [
     'instances' => [
@@ -26,29 +35,59 @@ return [
         'appConfig' => require __DIR__ . '/config.php'
     ],
     'services' => [
+        DataLoaderInterface::class => [
+            'class' => JsonDataLoader::class
+        ],
+        SearchRecipientsService::class => [
+            'args' => [
+                'logger' => LoggerInterface::class,
+                'pathToRecipients' => 'pathToRecipients',
+                'dataLoader' => DataLoaderInterface::class
+            ]
+
+        ],
+        GetRecipientsCollectionController::class => [
+            'args' => [
+                'logger' => LoggerInterface::class,
+                'searchRecipientsService' => SearchRecipientsService::class,
+                ]
+        ],
+
         GetRecipientsController::class => [
             'args' => [
-                'pathToRecipients' => 'pathToRecipients',
-                'logger' => LoggerInterface::class
+                'logger' => LoggerInterface::class,
+                'searchRecipientsService' => SearchRecipientsService::class,
+            ]
+        ],
+        SearchCustomersService::class => [
+            'args' => [
+                'logger' => LoggerInterface::class,
+                'pathToCustomers' => 'pathToCustomers',
+                'dataLoader' => DataLoaderInterface::class
             ]
         ],
         GetCustomersController::class => [
             'args' => [
-                'pathToCustomers' => 'pathToCustomers',
-                'logger' => LoggerInterface::class
-            ]
-        ],
-
-        GetRecipientsCollectionController::class => [
-            'args' => [
-                'pathToRecipients' => 'pathToRecipients',
-                'logger' => LoggerInterface::class
+                'logger' => LoggerInterface::class,
+                'searchCustomersService' => SearchCustomersService::class,
             ]
         ],
         GetCustomersCollectionController::class => [
             'args' => [
-                'pathToCustomers' => 'pathToCustomers',
-                'logger' => LoggerInterface::class
+                'logger' => LoggerInterface::class,
+                'searchCustomersService' => SearchCustomersService::class,
+                ]
+        ],
+        FindCustomers::class => [
+            'args' => [
+                'output' => OutputInterface::class,
+                'searchCustomersService' => SearchCustomersService::class,
+            ]
+        ],
+        FindRecipients::class => [
+            'args' => [
+                'output' => OutputInterface::class,
+                'searchRecipientsService' => SearchRecipientsService::class,
             ]
         ],
         GetContactCollectionController::class => [
@@ -110,7 +149,13 @@ return [
                 'handlers' => 'regExpHandlers',
                 'controllerFactory' => ControllerFactory::class
             ]
-        ]
+        ],
+        OutputInterface::class => [
+            'class' => EchoOutput::class,
+            'args' => [
+
+            ]
+        ],
     ],
 
 

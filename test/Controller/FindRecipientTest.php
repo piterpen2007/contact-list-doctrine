@@ -7,11 +7,14 @@ require_once __DIR__ . '/../../src/Infrastructure/Autoloader.php';
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Infrastructure\AppConfig;
 use EfTech\ContactList\Infrastructure\Autoloader;
+use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
+use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Logger\NullLogger\Logger;
 use EfTech\ContactList\Infrastructure\Uri\Uri;
+use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsService;
 use EfTech\ContactListTest\TestUtils;
 
 
@@ -52,10 +55,20 @@ class FindRecipientTest
             [
                 GetRecipientsCollectionController::class => [
                     'args' => [
-                        'pathToRecipients' => 'pathToRecipients',
-                        'logger' => LoggerInterface::class
+                        'logger' => LoggerInterface::class,
+                        'searchRecipientsService' => SearchRecipientsService::class
                     ]
-                ]
+                ],
+                SearchRecipientsService::class => [
+                    'args' => [
+                        'logger' => LoggerInterface::class,
+                        'pathToRecipients' => 'pathToRecipients',
+                        'dataLoader' => DataLoaderInterface::class
+                    ]
+                ],
+                DataLoaderInterface::class => [
+                    'class' => JsonDataLoader::class
+                ],
             ]
         );
 

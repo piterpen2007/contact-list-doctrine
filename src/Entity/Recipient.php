@@ -1,10 +1,16 @@
 <?php
 namespace EfTech\ContactList\Entity;
 use EfTech\ContactList\Exception;
+use EfTech\ContactList\Exception\DomainException;
+use EfTech\ContactList\ValueObject\Balance;
 use JsonSerializable;
 
-class Recipient implements JsonSerializable
+class Recipient
 {
+    /** баланс контакта
+     * @var Balance[]
+     */
+    private array $balances;
     /**
      * @var int id Получателя
      */
@@ -28,14 +34,32 @@ class Recipient implements JsonSerializable
      * @param string $birthday
      * @param string $profession
      */
-    public function __construct(int $id_recipient, string $full_name, string $birthday, string $profession)
+    public function __construct(int $id_recipient,
+        string $full_name,
+        string $birthday,
+        string $profession,
+        array $balances
+    )
     {
         $this->id_recipient = $id_recipient;
         $this->full_name = $full_name;
         $this->birthday = $birthday;
         $this->profession = $profession;
+        foreach ($balances as $balance) {
+            if (!$balance instanceof Balance) {
+                throw new DomainException('Некорректный формат данных по балансу');
+            }
+        }
+        $this->balances = $balances;
     }
 
+    /** Возвращает данные о балансе
+     * @return array
+     */
+    public function getBalance(): array
+    {
+        return $this->balances;
+    }
 
     /**
      * @return int Возвращает id получателя
@@ -128,7 +152,8 @@ class Recipient implements JsonSerializable
             'id_recipient',
             'full_name',
             'birthday',
-            'profession'
+            'profession',
+            'balance'
         ];
 
         $missingFields = array_diff($requiredFields,array_keys($data));
@@ -138,7 +163,11 @@ class Recipient implements JsonSerializable
             throw new Exception\InvalidDataStructureException($errMsg);
         }
 
-        return new Recipient($data['id_recipient'], $data['full_name'], $data['birthday'] ,$data['profession']);
+        return new Recipient($data['id_recipient'],
+            $data['full_name'],
+            $data['birthday'] ,
+            $data['profession'],
+            $data['balance']);
     }
 
 }

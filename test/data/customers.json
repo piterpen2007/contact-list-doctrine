@@ -7,7 +7,8 @@
 	"contract_number": "5684",
 	"average_transaction_amount": 2500,
 	"discount": "5%",
-	"time_to_call": "С 9:00 до 13:00 в будни"
+	"time_to_call": "С 9:00 до 13:00 в будни",
+	"balance" : []
 },
 {
 	"id_recipient": 8,
@@ -17,7 +18,8 @@
 	"contract_number": "5683",
 	"average_transaction_amount": 9500,
 	"discount": "10%",
-	"time_to_call": "С 12:00 до 16:00 в будни"
+	"time_to_call": "С 12:00 до 16:00 в будни",
+	"balance" : []
 },
 {
 	"id_recipient": 9,
@@ -27,6 +29,7 @@
 	"contract_number": "5682",
 	"average_transaction_amount": 15200,
 	"discount": "10%",
-	"time_to_call": "С 17:00 до 19:00 в будни"
+	"time_to_call": "С 17:00 до 19:00 в будни",
+	"balance" : []
 }
 	]

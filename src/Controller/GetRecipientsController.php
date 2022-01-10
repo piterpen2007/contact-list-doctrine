@@ -18,11 +18,11 @@ class GetRecipientsController extends GetRecipientsCollectionController
     /**
      * @inheritDoc
      */
-    protected function buildResult(array $foundRecipients)
+    protected function buildResult(array $foundRecipients):array
     {
         return 1 === count($foundRecipients)
-            ? current($foundRecipients)
-            : ['status' => 'fail', 'message' => 'entity not found'];
+            ? $this->serializeRecipient(current($foundRecipients))
+            : [ 'status' => 'fail', 'message' => 'entity not found'];
 
     }
 

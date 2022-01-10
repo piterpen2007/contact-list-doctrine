@@ -5,10 +5,13 @@ namespace EfTech\ContactListTest\Infrastructure\DI;
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Infrastructure\AppConfig;
 use EfTech\ContactList\Infrastructure\Autoloader;
+use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
+use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
 use EfTech\ContactList\Infrastructure\Logger\FileLogger\Logger;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsService;
 
 
 require_once __DIR__ . '/../../src/Infrastructure/Autoloader.php';
@@ -33,10 +36,18 @@ class ContainerTest
                 'appConfig' =>require __DIR__ . '/../../config/dev/config.php'
             ],
             'services' => [
+                SearchRecipientsService::class => [
+                    'args' => [
+                        'logger' => LoggerInterface::class,
+                        'pathToRecipients' => 'pathToRecipients',
+                        'dataLoader' => DataLoaderInterface::class
+                    ]
+
+                ],
                 GetRecipientsCollectionController::class => [
                     'args' => [
-                        'pathToRecipients' => 'pathToRecipients',
-                        'logger' => LoggerInterface::class
+                        'logger' => LoggerInterface::class,
+                        'searchRecipientsService' => SearchRecipientsService::class,
                     ]
                 ],
                 LoggerInterface::class => [
@@ -44,7 +55,10 @@ class ContainerTest
                     'args' => [
                         'pathToFile' => 'pathToLogFile'
                     ]
-                ]
+                ],
+                DataLoaderInterface::class => [
+                    'class' => JsonDataLoader::class
+                ],
 
 
             ],

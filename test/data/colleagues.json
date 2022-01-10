@@ -6,7 +6,8 @@
 	"profession": "",
 	"department": "Дирекция",
 	"position": "Директор",
-	"room_number": "405"
+	"room_number": "405",
+	"balance" : []
 },
 {
 	"id_recipient": 11,
@@ -15,6 +16,7 @@
 	"profession": "",
 	"department": "Дирекция",
 	"position": "Секретарь",
-	"room_number": "404"
+	"room_number": "404",
+	"balance" : []
 }
 ]

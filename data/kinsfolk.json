@@ -6,6 +6,7 @@
 	"profession": "Столяр",
 	"status": "Дед",
 	"ringtone": "Bells",
-	"hotkey": "1"
+	"hotkey": "1",
+	"balance" : []
 }
 	]

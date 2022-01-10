@@ -4,21 +4,24 @@ namespace EfTech\ContactList\Controller;
 
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
-use EfTech\ContactList\Entity\Recipient;
 use EfTech\ContactList\Infrastructure\http\httpResponse;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\Validator\Assert;
-use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use EfTech\ContactList\Service\SearchRecipientsService\RecipientDto;
+use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsCriteria;
+use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsService;
 use JsonException;
 use Exception;
 
 class GetRecipientsCollectionController implements ControllerInterface
 {
-    /** Путь до файла с данными о получателях
-     * @var string
+    /**
+     *
+     *
+     * @var SearchRecipientsService
      */
-    private string $pathToRecipients;
+    private SearchRecipientsService $searchRecipientsService;
     /** Логгер
      * @var LoggerInterface
      */
@@ -26,20 +29,12 @@ class GetRecipientsCollectionController implements ControllerInterface
 
     /**
      * @param LoggerInterface $logger
+     * @param SearchRecipientsService $searchRecipientsService
      */
-    public function __construct(string $pathToRecipients, LoggerInterface $logger)
+    public function __construct(LoggerInterface $logger, SearchRecipientsService $searchRecipientsService)
     {
         $this->logger = $logger;
-        $this->pathToRecipients = $pathToRecipients;
-    }
-
-    /** Загружает данные о получателях
-    * @return array
-    * @throws JsonException
-    */
-    private function loadData():array
-    {
-        return (new JsonDataLoader())->loadData($this->pathToRecipients);
+        $this->searchRecipientsService = $searchRecipientsService;
     }
     /**  Валдирует параматры запроса
      * @param ServerRequest $request
@@ -56,38 +51,6 @@ class GetRecipientsCollectionController implements ControllerInterface
         $params = array_merge($request->getQueryParams(),$request->getAttributes());
         return Assert::arrayElementsIsString($paramValidations,$params);
     }
-    /** Алгоритм поиска получателей
-     * @param array $recipients
-     * @param ServerRequest $serverRequest
-     * @return array
-     * @throws Exception
-     */
-    private function searchForRecipientsInData(array $recipients, ServerRequest $serverRequest):array
-    {
-        $findRecipient = [];
-        $searchCriteria = array_merge($serverRequest->getQueryParams(),$serverRequest->getAttributes());
-        foreach ($recipients as $recipient) {
-            if (array_key_exists('id_recipient', $searchCriteria)) {
-                $recipientMeetSearchCriteria = $searchCriteria['id_recipient'] === (string)$recipient['id_recipient'];
-            } else {
-                $recipientMeetSearchCriteria = true;
-            }
-            if (array_key_exists('full_name', $searchCriteria)) {
-                $recipientMeetSearchCriteria = $searchCriteria['full_name'] === $recipient['full_name'];
-            }
-            if (array_key_exists('birthday', $searchCriteria)) {
-                $recipientMeetSearchCriteria = $searchCriteria['birthday'] === $recipient['birthday'];
-            }
-            if (array_key_exists('profession', $searchCriteria)) {
-                $recipientMeetSearchCriteria = $searchCriteria['profession'] === $recipient['profession'];
-            }
-            if ($recipientMeetSearchCriteria) {
-                $findRecipient[] = Recipient::createFromArray($recipient);
-            }
-        }
-        $this->logger->log("Найдено получателей : " . count($findRecipient));
-        return $findRecipient;
-    }
 
 
     /**
@@ -101,8 +64,15 @@ class GetRecipientsCollectionController implements ControllerInterface
         $resultOfParamValidation = $this->validateQueryParams($request);
 
         if (null === $resultOfParamValidation) {
-            $recipients = $this->loadData();
-            $foundRecipients = $this->searchForRecipientsInData($recipients,$request);
+            $params = array_merge($request->getQueryParams(), $request->getAttributes());
+            $foundRecipients = $this->searchRecipientsService->search(
+                (new SearchRecipientsCriteria())
+                    ->setIdRecipient($params['id_recipient'] ?? null)
+                    ->setFullName($params['full_name'] ?? null)
+                    ->setBirthday($params['birthday'] ?? null)
+                    ->setProfession($params['profession'] ?? null)
+            );
+
             $httpCode = $this->buildHttpCode($foundRecipients);
             $result = $this->buildResult($foundRecipients);
         } else {
@@ -126,12 +96,31 @@ class GetRecipientsCollectionController implements ControllerInterface
 
     /** Подготавливает данные для ответа
      * @param array $foundRecipients
-     * @return array|Recipient
+     * @return array
      */
-    protected function buildResult(array $foundRecipients)
+    protected function buildResult(array $foundRecipients): array
     {
-        return $foundRecipients;
+        $result = [];
+        foreach ($foundRecipients as $foundRecipient) {
+            $result[] = $this->serializeRecipient($foundRecipient);
+        }
+        return $result;
     }
+
+    /**
+     * @param RecipientDto $recipientDto
+     * @return array
+     */
+    final protected function serializeRecipient(RecipientDto $recipientDto):array
+    {
+        return [
+            'id_recipient' => $recipientDto->getIdRecipient(),
+            'full_name' => $recipientDto->getFullName(),
+            'birthday' => $recipientDto->getBirthday(),
+            'profession' => $recipientDto->getProfession(),
+        ];
+    }
+
 
 }
 

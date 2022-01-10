@@ -20,8 +20,8 @@ class GetCustomersController extends GetCustomersCollectionController
     protected function buildResult(array $foundCustomers)
     {
         return 1 === count($foundCustomers)
-            ? current($foundCustomers)
-            : ['status' => 'fail', 'message' => 'entity not found'];
+            ? $this->serializeCustomer(current($foundCustomers))
+            : [ 'status' => 'fail', 'message' => 'entity not found'];
 
     }
 
