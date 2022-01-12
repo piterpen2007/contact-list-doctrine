@@ -1,6 +1,7 @@
 <?php
 
 
+use EfTech\ContactList\ConsoleCommand\FindContacts;
 use EfTech\ContactList\ConsoleCommand\FindCustomers;
 use EfTech\ContactList\ConsoleCommand\FindRecipients;
 

@@ -8,9 +8,11 @@ use EfTech\ContactList\Infrastructure\http\httpResponse;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
-use EfTech\ContactList\Service\SearchContactsService\ContactDto;
+use EfTech\ContactList\Service\SearchContactsService\ColleaguesDto;
+use EfTech\ContactList\Service\SearchContactsService\CustomerDto;
+use EfTech\ContactList\Service\SearchContactsService\KinsfolkDto;
 use EfTech\ContactList\Service\SearchContactsService\SearchContactsCriteria;
-use EfTech\ContactList\Service\SearchContactsService\SearchContactsService;
+use EfTech\ContactList\Service\SearchContactsService;
 
 class GetContactCollectionController implements ControllerInterface
 {
@@ -39,14 +41,21 @@ class GetContactCollectionController implements ControllerInterface
     {
         $this->logger->log("Ветка contact");
         $params = array_merge($request->getQueryParams(), $request->getAttributes());
-        //$recipientsOnCategory = $this->loadData();
-        $foundContact = $this->searchContactsService->search(
-            (new SearchContactsCriteria())
-                ->setCategory($params['category'] ?? null)
-        );
-        $httpCode = $this->buildHttpCode($foundContact);
-        $result = $this->buildResult($foundContact);
-        //$result = $this->searchForRecipientsOnCategoryInData($recipientsOnCategory,$request);
+        if(array_key_exists('category',$params) && in_array($params['category'],['recipients','customers','kinsfolk','colleagues'])) {
+            $foundContact = $this->searchContactsService->search(
+                (new SearchContactsCriteria())
+                    ->setCategory($params['category'] ?? null)
+            );
+            $httpCode = $this->buildHttpCode($foundContact);
+            $result = $this->buildResult($foundContact);
+        } else {
+            $httpCode = 404;
+            $result=[
+                'status' => 'fail',
+                'message' => 'dispatch category nothing'
+            ];
+        }
+
         return ServerResponseFactory::createJsonResponse($httpCode,$result);
     }
 
@@ -63,7 +72,7 @@ class GetContactCollectionController implements ControllerInterface
      * @param array $foundRecipientsOnCategories
      * @return array|Recipient
      */
-    protected function buildResult(array $foundRecipientsOnCategories)
+    protected function buildResult(array $foundRecipientsOnCategories):array
     {
         $result = [];
         foreach ($foundRecipientsOnCategories as $foundRecipientsOnCategory) {
@@ -74,20 +83,50 @@ class GetContactCollectionController implements ControllerInterface
 
 
     /**
-     * @param ContactDto $contactDto
+     * @param object $contactDto
      * @return array
      */
-    final protected function serializeContact(ContactDto $contactDto):array
+    final protected function serializeContact(object $contactDto):array
     {
+        if ($contactDto instanceof CustomerDto) {
+            return [
+                'id_recipient' => $contactDto->getIdRecipient(),
+                'full_name' => $contactDto->getFullName(),
+                'birthday' => $contactDto->getBirthday(),
+                'profession' => $contactDto->getProfession(),
+                'contract_number' => $contactDto->getContactNumber(),
+                'average_transaction_amount' => $contactDto->getAverageTransactionAmount(),
+                'discount' => $contactDto->getDiscount(),
+                'time_to_call' => $contactDto->getTimeToCall()
+            ];
+        }
+        if ($contactDto instanceof ColleaguesDto) {
+            return [
+                'id_recipient' => $contactDto->getIdRecipient(),
+                'full_name' => $contactDto->getFullName(),
+                'birthday' => $contactDto->getBirthday(),
+                'profession' => $contactDto->getProfession(),
+                'department' => $contactDto->getDepartment(),
+                'position' => $contactDto->getPosition(),
+                'room_number'=> $contactDto->getRoomNumber()
+            ];
+        }
+        if ($contactDto instanceof KinsfolkDto) {
+            return [
+                'id_recipient' => $contactDto->getIdRecipient(),
+                'full_name' => $contactDto->getFullName(),
+                'birthday' => $contactDto->getBirthday(),
+                'profession' => $contactDto->getProfession(),
+                'status' => $contactDto->getStatus(),
+                'ringtone' => $contactDto->getRingtone(),
+                'hotkey' => $contactDto->getHotkey()
+            ];
+        }
         return [
             'id_recipient' => $contactDto->getIdRecipient(),
             'full_name' => $contactDto->getFullName(),
             'birthday' => $contactDto->getBirthday(),
             'profession' => $contactDto->getProfession(),
-            'contract_number' => $contactDto->getContactNumber(),
-            'average_transaction_amount' => $contactDto->getAverageTransactionAmount(),
-            'discount' => $contactDto->getDiscount(),
-
         ];
     }
 

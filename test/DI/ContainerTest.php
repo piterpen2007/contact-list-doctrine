@@ -11,7 +11,7 @@ use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
 use EfTech\ContactList\Infrastructure\Logger\FileLogger\Logger;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
-use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsService;
+use EfTech\ContactList\Service\SearchRecipientsService;
 
 
 require_once __DIR__ . '/../../src/Infrastructure/Autoloader.php';

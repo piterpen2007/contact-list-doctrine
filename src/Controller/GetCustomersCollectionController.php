@@ -11,7 +11,7 @@ use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Validator\Assert;
 use EfTech\ContactList\Service\SearchCustomersService\CustomerDto;
 use EfTech\ContactList\Service\SearchCustomersService\SearchCustomersCriteria;
-use EfTech\ContactList\Service\SearchCustomersService\SearchCustomersService;
+use EfTech\ContactList\Service\SearchCustomersService;
 use Exception;
 
 class GetCustomersCollectionController implements ControllerInterface

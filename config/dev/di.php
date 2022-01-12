@@ -1,5 +1,6 @@
 <?php
 
+use EfTech\ContactList\ConsoleCommand\FindContacts;
 use EfTech\ContactList\ConsoleCommand\FindCustomers;
 use EfTech\ContactList\ConsoleCommand\FindRecipients;
 use EfTech\ContactList\Controller\GetContactCollectionController;
@@ -24,8 +25,9 @@ use EfTech\ContactList\Infrastructure\Router\RouterInterface;
 use EfTech\ContactList\Infrastructure\Router\UniversalRouter;
 use EfTech\ContactList\Infrastructure\View\DefaultRender;
 use EfTech\ContactList\Infrastructure\View\RenderInterface;
-use EfTech\ContactList\Service\SearchCustomersService\SearchCustomersService;
-use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsService;
+use EfTech\ContactList\Service\SearchContactsService;
+use EfTech\ContactList\Service\SearchCustomersService;
+use EfTech\ContactList\Service\SearchRecipientsService;
 
 return [
     'instances' => [
@@ -37,6 +39,22 @@ return [
     'services' => [
         DataLoaderInterface::class => [
             'class' => JsonDataLoader::class
+        ],
+        GetContactCollectionController::class => [
+            'args' => [
+                'logger' => LoggerInterface::class,
+                'searchContactsService' => SearchContactsService::class,
+            ]
+        ],
+        SearchContactsService::class => [
+            'args' => [
+                'dataLoader' => DataLoaderInterface::class,
+                'logger' => LoggerInterface::class,
+                'pathToRecipients' => 'pathToRecipients',
+                'pathToCustomers' => 'pathToCustomers',
+                'pathToColleagues' => 'pathToColleagues',
+                'pathToKinsfolk' => 'pathToKinsfolk'
+            ]
         ],
         SearchRecipientsService::class => [
             'args' => [
@@ -90,24 +108,16 @@ return [
                 'searchRecipientsService' => SearchRecipientsService::class,
             ]
         ],
-        GetContactCollectionController::class => [
+        FindContacts::class => [
             'args' => [
-                'pathToCustomers' => 'pathToCustomers',
-                'pathToRecipients' => 'pathToRecipients',
-                'pathToKinsfolk' => 'pathToKinsfolk',
-                'pathToColleagues' => 'pathToColleagues',
-                'logger' => LoggerInterface::class
-
+                'output' => OutputInterface::class,
+                'searchContactsService' => SearchContactsService::class,
             ]
         ],
         GetContactController::class => [
             'args' => [
-                'pathToCustomers' => 'pathToCustomers',
-                'pathToRecipients' => 'pathToRecipients',
-                'pathToKinsfolk' => 'pathToKinsfolk',
-                'pathToColleagues' => 'pathToColleagues',
-                'logger' => LoggerInterface::class
-
+                'logger' => LoggerInterface::class,
+                'searchContactsService' => SearchContactsService::class,
             ]
         ],
         LoggerInterface::class => [

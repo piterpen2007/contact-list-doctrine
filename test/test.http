@@ -170,7 +170,7 @@ GET http://localhost:8082/contact?category=privet
 
 > {%
      client.test("Тестирование ситуация, когда передали некорректные даанные по категории", function () {
-            client.assert(response.status === 500, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
+            client.assert(response.status === 404, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
             client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
             client.assert(response.body['status'] === "fail", "Некорректный статус");
             client.assert(response.body['message'] === "dispatch category nothing", "Некорректное сообщение");
@@ -182,9 +182,10 @@ GET http://localhost:8082/contact
 
 > {%
    client.test('### Тестирование ситуации, когда передали пустую категорию через универсальный роутер', function () {
-   client.assert(response.status === 200, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
-   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
-   client.assert(response.body.hasOwnProperty('length') && response.body.length === 11, "В ответе есть 11 элемента");
+   client.assert(response.status === 404, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
+            client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+            client.assert(response.body['status'] === "fail", "Некорректный статус");
+            client.assert(response.body['message'] === "dispatch category nothing", "Некорректное сообщение");
  });
  %}
 
@@ -289,7 +290,7 @@ GET http://localhost:8082/contact/privet
 
 > {%
      client.test("Тестирование ситуации, когда передали некорректную категорию", function () {
-            client.assert(response.status === 500, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
+            client.assert(response.status === 404, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
             client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
             client.assert(response.body['status'] === "fail", "Некорректный статус");
             client.assert(response.body['message'] === "dispatch category nothing", "Некорректное сообщение");

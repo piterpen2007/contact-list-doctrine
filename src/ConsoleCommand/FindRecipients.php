@@ -5,7 +5,7 @@ use EfTech\ContactList\Infrastructure\Console\Output\OutputInterface;
 use EfTech\ContactList\Infrastructure\Console\CommandInterface;
 use EfTech\ContactList\Service\SearchRecipientsService\RecipientDto;
 use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsCriteria;
-use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsService;
+use EfTech\ContactList\Service\SearchRecipientsService;
 use JsonException;
 
 final class FindRecipients implements CommandInterface

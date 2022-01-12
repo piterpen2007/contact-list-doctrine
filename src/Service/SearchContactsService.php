@@ -1,6 +1,6 @@
 <?php
 
-namespace EfTech\ContactList\Service\SearchContactsService;
+namespace EfTech\ContactList\Service;
 
 use EfTech\ContactList\Entity\Colleague;
 use EfTech\ContactList\Entity\Customer;
@@ -8,8 +8,12 @@ use EfTech\ContactList\Entity\Kinsfolk;
 use EfTech\ContactList\Entity\Recipient;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
-use EfTech\ContactList\Service\SearchRecipientsService\RecipientDto;
-use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsCriteria;
+use EfTech\ContactList\Service\SearchContactsService\ColleaguesDto;
+use EfTech\ContactList\Service\SearchContactsService\ContactDto;
+use EfTech\ContactList\Service\SearchContactsService\CustomerDto;
+use EfTech\ContactList\Service\SearchContactsService\KinsfolkDto;
+use EfTech\ContactList\Service\SearchContactsService\SearchContactsCriteria;
+use EfTech\ContactList\Service\SearchContactsService\RecipientDto;
 
 class SearchContactsService
 {
@@ -79,27 +83,53 @@ class SearchContactsService
     }
 
     /**
-     * Создание dto Получателя
+     * Создание dto контакта
      * @param object $contact
      */
     private function createDto(object $contact):object
     {
-        return new ContactDto(
-            $contact->getIdRecipient(),
-            $contact->getFullName(),
-            $contact->getBirthday(),
-            $contact->getProfession(),
-            $contact->getStatus(),
-            $contact->getRingtone(),
-            $contact->getHotkey(),
-            $contact->getContactNumber(),
-            $contact->getAverageTransactionAmount(),
-            $contact->getDiscount(),
-            $contact->getTimeToCall(),
-            $contact->getDepartment(),
-            $contact->getPosition(),
-            $contact->getRoomNumber()
-        );
+        if ($contact instanceof Customer) {
+            return new CustomerDto(
+                $contact->getIdRecipient(),
+                $contact->getFullName(),
+                $contact->getBirthday(),
+                $contact->getProfession(),
+                $contact->getContractNumber(),
+                $contact->getAverageTransactionAmount(),
+                $contact->getDiscount(),
+                $contact->getTimeToCall()
+            );
+        }
+
+        if ($contact instanceof Kinsfolk) {
+            return new KinsfolkDto(
+                $contact->getIdRecipient(),
+                $contact->getFullName(),
+                $contact->getBirthday(),
+                $contact->getProfession(),
+                $contact->getStatus(),
+                $contact->getRingtone(),
+                $contact->getHotkey()
+            );
+        }
+
+        if ($contact instanceof Colleague) {
+            return new ColleaguesDto(
+                $contact->getIdRecipient(),
+                $contact->getFullName(),
+                $contact->getBirthday(),
+                $contact->getProfession(),
+                $contact->getDepartment(),
+                $contact->getPosition(),
+                $contact->getRoomNumber()
+            );
+        }
+            return new RecipientDto(
+                $contact->getIdRecipient(),
+                $contact->getFullName(),
+                $contact->getBirthday(),
+                $contact->getProfession()
+            );
     }
 
     /**
@@ -146,15 +176,7 @@ class SearchContactsService
                 }
                 $this->logger->log('dispatch category "colleagues"');
                 $this->logger->log('found colleagues: ' . count($foundRecipientsOnCategory));
-            } /*else {
-                return [
-                    'httpCode' => 500,
-                    'result' => [
-                        'status' => 'fail',
-                        'message' => 'dispatch category nothing'
-                    ]
-                ];
-            }*/
+            }
         } else {
             foreach ($recipientsOnCategory['customers'] as $customer) {
                 $foundRecipientsOnCategory[] = Customer::createFromArray($customer);
@@ -169,10 +191,7 @@ class SearchContactsService
                 $foundRecipientsOnCategory[] = Colleague::createFromArray($colleague);
             }
         }
-        return [
-            'httpCode' => 200,
-            'result' => $foundRecipientsOnCategory
-        ];
+        return $foundRecipientsOnCategory;
     }
 
 

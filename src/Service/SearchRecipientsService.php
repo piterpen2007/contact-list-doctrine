@@ -1,11 +1,13 @@
 <?php
 
-namespace EfTech\ContactList\Service\SearchRecipientsService;
+namespace EfTech\ContactList\Service;
 
 use EfTech\ContactList\Entity\Recipient;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 use EfTech\ContactList\Infrastructure\invalidDataStructureException;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use EfTech\ContactList\Service\SearchRecipientsService\RecipientDto;
+use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsCriteria;
 use EfTech\ContactList\ValueObject\Balance;
 use EfTech\ContactList\ValueObject\Currency;
 use EfTech\ContactList\ValueObject\Money;
@@ -46,7 +48,6 @@ class SearchRecipientsService
 
     /**
      * @return array
-     * @throws JsonException
      */
     private function loadData():array
     {
@@ -137,7 +138,7 @@ class SearchRecipientsService
         $currencyName = 'RUB' === $balances['currency'] ? 'рубль' : 'неизвестно';
         return new Balance(
             new Money(
-                $balances['price'],
+                $balances['amount'],
                 new Currency($balances['currency'], $currencyName)
             )
         );

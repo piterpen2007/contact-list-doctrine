@@ -11,18 +11,27 @@ class RecipientDto
     protected string $birthday;
     protected string $profession;
 
+
     /**
      * @param int $id_recipient
      * @param string $fullName
      * @param string $birthday
      * @param string $profession
+     * @param array $balance
      */
-    public function __construct(int $id_recipient, string $fullName, string $birthday, string $profession)
+    public function __construct(
+        int $id_recipient,
+        string $fullName,
+        string $birthday,
+        string $profession
+
+    )
     {
         $this->id_recipient = $id_recipient;
         $this->fullName = $fullName;
         $this->birthday = $birthday;
         $this->profession = $profession;
+
     }
 
     /**
@@ -56,6 +65,7 @@ class RecipientDto
     {
         return $this->profession;
     }
+
 
 
 }

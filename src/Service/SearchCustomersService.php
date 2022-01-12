@@ -1,10 +1,12 @@
 <?php
 
-namespace EfTech\ContactList\Service\SearchCustomersService;
+namespace EfTech\ContactList\Service;
 
 use EfTech\ContactList\Entity\Customer;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use EfTech\ContactList\Service\SearchCustomersService\CustomerDto;
+use EfTech\ContactList\Service\SearchCustomersService\SearchCustomersCriteria;
 use JsonException;
 
 class SearchCustomersService

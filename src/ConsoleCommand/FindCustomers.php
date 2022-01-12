@@ -6,7 +6,7 @@ use EfTech\ContactList\Infrastructure\Console\CommandInterface;
 use EfTech\ContactList\Infrastructure\Console\Output\OutputInterface;
 use EfTech\ContactList\Service\SearchCustomersService\CustomerDto;
 use EfTech\ContactList\Service\SearchCustomersService\SearchCustomersCriteria;
-use EfTech\ContactList\Service\SearchCustomersService\SearchCustomersService;
+use EfTech\ContactList\Service\SearchCustomersService;
 use JsonException;
 
 class FindCustomers implements CommandInterface

@@ -143,4 +143,5 @@ final class Customer extends Recipient
             $data['time_to_call']
         );
     }
+
 }

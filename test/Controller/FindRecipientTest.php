@@ -14,7 +14,7 @@ use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Logger\NullLogger\Logger;
 use EfTech\ContactList\Infrastructure\Uri\Uri;
-use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsService;
+use EfTech\ContactList\Service\SearchRecipientsService;
 use EfTech\ContactListTest\TestUtils;
 
 

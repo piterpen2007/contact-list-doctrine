@@ -10,7 +10,7 @@ use EfTech\ContactList\Infrastructure\Validator\Assert;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Service\SearchRecipientsService\RecipientDto;
 use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsCriteria;
-use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsService;
+use EfTech\ContactList\Service\SearchRecipientsService;
 use JsonException;
 use Exception;
 

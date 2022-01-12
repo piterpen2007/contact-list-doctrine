@@ -132,15 +132,6 @@ class Recipient
         $this->profession = $profession;
         return $this;
     }
-    public function jsonSerialize():array
-    {
-        return [
-            'id_recipient' => $this->id_recipient,
-            'full_name' => $this->full_name,
-            'birthday' => $this->birthday,
-            'profession' => $this->profession
-        ];
-    }
 
     /**
      * @param array $data
