@@ -7,7 +7,6 @@ interface DataLoaderInterface
     /** Загружаю и десериализую данные
      * @param string $sourceName
      * @return array
-     * @throws \JsonException
      */
-    function loadData(string $sourceName): array;
+    public function loadData(string $sourceName): array;
 }

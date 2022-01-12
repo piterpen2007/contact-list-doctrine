@@ -1,6 +1,5 @@
 <?php
-namespace EfTech\ContactList\Service\SearchCustomersService;
-use EfTech\ContactList\Service\SearchRecipientsService\RecipientDto;
+namespace EfTech\ContactList\Service\SearchContactsService;
 
 class CustomerDto
 {
