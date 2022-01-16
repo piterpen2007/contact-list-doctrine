@@ -41,21 +41,21 @@ class GetContactCollectionController implements ControllerInterface
     {
         $this->logger->log("Ветка contact");
         $params = array_merge($request->getQueryParams(), $request->getAttributes());
-        if(in_array($params['category'],['recipients','customers','kinsfolk','colleagues'])) {
+       // if(in_array($params['category'],['recipients','customers','kinsfolk','colleagues'])) {
             $foundContact = $this->searchContactsService->search(
                 (new SearchContactsCriteria())
                     ->setCategory($params['category'] ?? null)
             );
-            $httpCode = $this->buildHttpCode($foundContact);
-            $result = $this->buildResult($foundContact);
-        } else {
-            $httpCode = 404;
+            if(0 === count($foundContact)) {
+                $httpCode = 404;
             $result=[
                 'status' => 'fail',
                 'message' => 'dispatch category nothing'
             ];
-        }
-
+            } else {
+                $httpCode = $this->buildHttpCode($foundContact);
+                $result = $this->buildResult($foundContact);
+            }
         return ServerResponseFactory::createJsonResponse($httpCode,$result);
     }
 

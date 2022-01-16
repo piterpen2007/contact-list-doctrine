@@ -3,6 +3,7 @@
 namespace EfTech\ContactListTest\Infrastructure\DI;
 
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
+use EfTech\ContactList\Entity\RecipientRepositoryInterface;
 use EfTech\ContactList\Infrastructure\AppConfig;
 use EfTech\ContactList\Infrastructure\Autoloader;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
@@ -11,6 +12,7 @@ use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
 use EfTech\ContactList\Infrastructure\Logger\FileLogger\Logger;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use EfTech\ContactList\Repository\RecipientJsonFileRepository;
 use EfTech\ContactList\Service\SearchRecipientsService;
 
 
@@ -39,8 +41,7 @@ class ContainerTest
                 SearchRecipientsService::class => [
                     'args' => [
                         'logger' => LoggerInterface::class,
-                        'pathToRecipients' => 'pathToRecipients',
-                        'dataLoader' => DataLoaderInterface::class
+                        'recipientRepository' => RecipientRepositoryInterface::class
                     ]
 
                 ],
@@ -48,6 +49,13 @@ class ContainerTest
                     'args' => [
                         'logger' => LoggerInterface::class,
                         'searchRecipientsService' => SearchRecipientsService::class,
+                    ]
+                ],
+                RecipientRepositoryInterface::class => [
+                    'class' => RecipientJsonFileRepository::class,
+                    'args' => [
+                        'pathToRecipients' => 'pathToRecipients',
+                        'dataLoader' => DataLoaderInterface::class
                     ]
                 ],
                 LoggerInterface::class => [

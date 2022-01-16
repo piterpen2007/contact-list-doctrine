@@ -3,53 +3,38 @@
 namespace EfTech\ContactList\Service;
 
 use EfTech\ContactList\Entity\Customer;
+use EfTech\ContactList\Entity\CustomerRepositoryInterface;
+use EfTech\ContactList\Entity\RecipientRepositoryInterface;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Service\SearchCustomersService\CustomerDto;
 use EfTech\ContactList\Service\SearchCustomersService\SearchCustomersCriteria;
+use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsCriteria;
 use JsonException;
 
 class SearchCustomersService
 {
     /**
-     *
-     *
-     * @var DataLoaderInterface
+     * @var CustomerRepositoryInterface
      */
-    private DataLoaderInterface $dataLoader;
+    private CustomerRepositoryInterface $customerRepository;
     /**
      *
      *
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
-    /**
-     *
-     *
-     * @var string
-     */
-    private string $pathToCustomers;
 
     /**
+     * @param CustomerRepositoryInterface $customerRepository
      * @param LoggerInterface $logger
-     * @param string $pathToCustomers
-     * @param DataLoaderInterface $dataLoader
      */
-    public function __construct(LoggerInterface $logger ,string $pathToCustomers, DataLoaderInterface $dataLoader)
+    public function __construct(CustomerRepositoryInterface $customerRepository, LoggerInterface $logger)
     {
-        $this->dataLoader = $dataLoader;
+        $this->customerRepository = $customerRepository;
         $this->logger = $logger;
-        $this->pathToCustomers = $pathToCustomers;
     }
 
-    /**
-     * @return array
-     * @throws JsonException
-     */
-    private function loadData():array
-    {
-        return $this->dataLoader->loadData($this->pathToCustomers);
-    }
 
     /**
      * Создание dto клиента
@@ -76,7 +61,8 @@ class SearchCustomersService
      */
     public function search(SearchCustomersCriteria $searchCriteria):array
     {
-        $entitiesCollection = $this->searchEntity($searchCriteria);
+        $criteria = $this->searchCriteriaToArray($searchCriteria);
+        $entitiesCollection = $this->customerRepository->findBy($criteria);
         $dtoCollection = [];
         foreach ($entitiesCollection as $entity) {
             $dtoCollection[] = $this->createDto($entity);
@@ -85,48 +71,20 @@ class SearchCustomersService
         return $dtoCollection;
     }
 
-    /** Алгоритм поиска клиетов
-     * @param SearchCustomersCriteria $searchCriteria
-     * @return array
-     * @throws JsonException
-     */
-    private function searchEntity(SearchCustomersCriteria $searchCriteria):array
+    private function searchCriteriaToArray(SearchCustomersCriteria $searchCriteria): array
     {
-        $customers = $this->loadData();
-        $foundCustomers = [];
-        foreach ($customers as $customer) {
-            if (null !== $searchCriteria->getIdRecipient()) {
-                $customerMeetSearchCriteria = $searchCriteria->getIdRecipient() === $customer['id_recipient'];
-            } else {
-                $customerMeetSearchCriteria = true;
-            }
-            if ($customerMeetSearchCriteria && null !== $searchCriteria->getFullName()) {
-                $customerMeetSearchCriteria = $searchCriteria->getFullName() === $customer['full_name'];
-            }
-            if ($customerMeetSearchCriteria && null !== $searchCriteria->getBirthday()) {
-                $customerMeetSearchCriteria = $searchCriteria->getBirthday() === $customer['birthday'];
-            }
-            if ($customerMeetSearchCriteria && null !== $searchCriteria->getProfession()) {
-                $customerMeetSearchCriteria = $searchCriteria->getProfession() === $customer['profession'];
-            }
-            if ($customerMeetSearchCriteria && null !== $searchCriteria->getContactNumber()) {
-                $customerMeetSearchCriteria = $searchCriteria->getContactNumber() === $customer['contract_number'];
-            }
-            if ($customerMeetSearchCriteria && null !== $searchCriteria->getAverageTransactionAmount()) {
-                $customerMeetSearchCriteria = $searchCriteria->getAverageTransactionAmount() === (string)$customer['average_transaction_amount'];
-            }
-            if ($customerMeetSearchCriteria && null !== $searchCriteria->getDiscount()) {
-                $customerMeetSearchCriteria = $searchCriteria->getDiscount() === $customer['discount'];
-            }
-            if ($customerMeetSearchCriteria && null !== $searchCriteria->getTimeToCall()) {
-                $customerMeetSearchCriteria = $searchCriteria->getTimeToCall() === $customer['time_to_call'];
-            }
+        $criteriaForRepository = [
+            'id_recipient' => $searchCriteria->getIdRecipient(),
+            'full_name' => $searchCriteria->getFullName(),
+            'birthday' => $searchCriteria->getBirthday(),
+            'profession' => $searchCriteria->getProfession(),
+            'contract_number' => $searchCriteria->getContactNumber(),
+            'average_transaction_amount' => $searchCriteria->getAverageTransactionAmount(),
+            'discount' => $searchCriteria->getDiscount(),
+            'time_to_call' => $searchCriteria->getTimeToCall()
+        ];
+        return array_filter($criteriaForRepository, static function($v):bool {return null !== $v;});
 
-            if ($customerMeetSearchCriteria) {
-                $foundCustomers[] = Customer::createFromArray($customer);
-            }
-        }
-        $this->logger->log("Найдено клиентов : " . count($foundCustomers));
-        return $foundCustomers;
     }
+
 }

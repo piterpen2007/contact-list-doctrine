@@ -5,6 +5,7 @@ namespace EfTech\ContactListTest\Infrastructure\Controller;
 require_once __DIR__ . '/../../src/Infrastructure/Autoloader.php';
 
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
+use EfTech\ContactList\Entity\RecipientRepositoryInterface;
 use EfTech\ContactList\Infrastructure\AppConfig;
 use EfTech\ContactList\Infrastructure\Autoloader;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
@@ -14,6 +15,7 @@ use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Logger\NullLogger\Logger;
 use EfTech\ContactList\Infrastructure\Uri\Uri;
+use EfTech\ContactList\Repository\RecipientJsonFileRepository;
 use EfTech\ContactList\Service\SearchRecipientsService;
 use EfTech\ContactListTest\TestUtils;
 
@@ -62,6 +64,13 @@ class FindRecipientTest
                 SearchRecipientsService::class => [
                     'args' => [
                         'logger' => LoggerInterface::class,
+                        'recipientRepository' => RecipientRepositoryInterface::class
+                    ]
+
+                ],
+                RecipientRepositoryInterface::class => [
+                    'class' => RecipientJsonFileRepository::class,
+                    'args' => [
                         'pathToRecipients' => 'pathToRecipients',
                         'dataLoader' => DataLoaderInterface::class
                     ]

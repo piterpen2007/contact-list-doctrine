@@ -5,10 +5,17 @@ use EfTech\ContactList\ConsoleCommand\FindCustomers;
 use EfTech\ContactList\ConsoleCommand\FindRecipients;
 use EfTech\ContactList\Controller\GetContactCollectionController;
 use EfTech\ContactList\Controller\GetContactController;
+use EfTech\ContactList\Controller\GetContactListCollectionController;
+use EfTech\ContactList\Controller\GetContactListController;
 use EfTech\ContactList\Controller\GetCustomersCollectionController;
 use EfTech\ContactList\Controller\GetCustomersController;
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Controller\GetRecipientsController;
+use EfTech\ContactList\Controller\UpdateMoveToBlacklistContactListController;
+use EfTech\ContactList\Entity\ContactListRepositoryInterface;
+use EfTech\ContactList\Entity\ContactRepositoryInterface;
+use EfTech\ContactList\Entity\CustomerRepositoryInterface;
+use EfTech\ContactList\Entity\RecipientRepositoryInterface;
 use EfTech\ContactList\Infrastructure\AppConfig;
 use EfTech\ContactList\Infrastructure\Console\Output\EchoOutput;
 use EfTech\ContactList\Infrastructure\Console\Output\OutputInterface;
@@ -25,6 +32,12 @@ use EfTech\ContactList\Infrastructure\Router\RouterInterface;
 use EfTech\ContactList\Infrastructure\Router\UniversalRouter;
 use EfTech\ContactList\Infrastructure\View\DefaultRender;
 use EfTech\ContactList\Infrastructure\View\RenderInterface;
+use EfTech\ContactList\Repository\ContactJsonRepository;
+use EfTech\ContactList\Repository\ContactListJsonRepository;
+use EfTech\ContactList\Repository\CustomerJsonFileRepository;
+use EfTech\ContactList\Repository\RecipientJsonFileRepository;
+use EfTech\ContactList\Service\MoveToBlacklistContactListService;
+use EfTech\ContactList\Service\SearchContactListService;
 use EfTech\ContactList\Service\SearchContactsService;
 use EfTech\ContactList\Service\SearchCustomersService;
 use EfTech\ContactList\Service\SearchRecipientsService;
@@ -37,8 +50,61 @@ return [
         'appConfig' => require __DIR__ . '/config.php'
     ],
     'services' => [
+        UpdateMoveToBlacklistContactListController::class => [
+            'args' => [
+                'moveToBlacklistContactListService' => MoveToBlacklistContactListService::class
+            ]
+        ],
+        MoveToBlacklistContactListService::class => [
+            'args' => [
+                'textDocumentRepository' => ContactListRepositoryInterface::class
+            ]
+        ],
+        ContactListRepositoryInterface::class => [
+            'class' => ContactListJsonRepository::class,
+            'args' => [
+                'pathToContactList' => 'pathToContactList',
+                'dataLoader' => DataLoaderInterface::class
+            ]
+        ],
+        ContactRepositoryInterface::class => [
+            'class' => ContactJsonRepository::class,
+            'args' => [
+                'pathToRecipients' => 'pathToRecipients',
+                'pathToCustomers' => 'pathToCustomers',
+                'pathToKinsfolk' => 'pathToKinsfolk',
+                'pathToColleagues' => 'pathToColleagues',
+                'dataLoader' => DataLoaderInterface::class
+            ]
+        ],
+        CustomerRepositoryInterface::class => [
+            'class' => CustomerJsonFileRepository::class,
+            'args' => [
+                'pathToCustomers' => 'pathToCustomers',
+                'dataLoader' => DataLoaderInterface::class
+            ]
+        ],
+        RecipientRepositoryInterface::class => [
+            'class' => RecipientJsonFileRepository::class,
+            'args' => [
+                'pathToRecipients' => 'pathToRecipients',
+                'dataLoader' => DataLoaderInterface::class
+            ]
+        ],
         DataLoaderInterface::class => [
             'class' => JsonDataLoader::class
+        ],
+        GetContactListCollectionController::class => [
+            'args' => [
+                'logger' => LoggerInterface::class,
+                'searchContactsService' => SearchContactListService::class,
+            ]
+        ],
+        GetContactListController::class => [
+            'args' => [
+                'logger' => LoggerInterface::class,
+                'searchContactListService' => SearchContactListService::class,
+            ]
         ],
         GetContactCollectionController::class => [
             'args' => [
@@ -46,21 +112,22 @@ return [
                 'searchContactsService' => SearchContactsService::class,
             ]
         ],
+        SearchContactListService::class => [
+            'args' => [
+                'logger' => LoggerInterface::class,
+                'contactListRepository' => ContactListRepositoryInterface::class,
+            ]
+        ],
         SearchContactsService::class => [
             'args' => [
-                'dataLoader' => DataLoaderInterface::class,
-                'logger' => LoggerInterface::class,
-                'pathToRecipients' => 'pathToRecipients',
-                'pathToCustomers' => 'pathToCustomers',
-                'pathToColleagues' => 'pathToColleagues',
-                'pathToKinsfolk' => 'pathToKinsfolk'
+                'contactRepository' => ContactRepositoryInterface::class,
+                'logger' => LoggerInterface::class
             ]
         ],
         SearchRecipientsService::class => [
             'args' => [
                 'logger' => LoggerInterface::class,
-                'pathToRecipients' => 'pathToRecipients',
-                'dataLoader' => DataLoaderInterface::class
+                'recipientRepository' => RecipientRepositoryInterface::class
             ]
 
         ],
@@ -79,9 +146,8 @@ return [
         ],
         SearchCustomersService::class => [
             'args' => [
-                'logger' => LoggerInterface::class,
-                'pathToCustomers' => 'pathToCustomers',
-                'dataLoader' => DataLoaderInterface::class
+                'customerRepository' => CustomerRepositoryInterface::class,
+                'logger' => LoggerInterface::class
             ]
         ],
         GetCustomersController::class => [
@@ -172,6 +238,11 @@ return [
     'factories' => [
         ContainerInterface::class => static function(ContainerInterface $c):ContainerInterface {
             return $c;
+        },
+        'pathToContactList' => static function (ContainerInterface $c): string {
+            /** @var AppConfig $appConfig */
+            $appConfig = $c->get(AppConfig::class);
+            return $appConfig->getPathToContactList();
         },
         'pathToLogFile' => static function (ContainerInterface $c): string {
             /** @var AppConfig $appConfig */

@@ -182,10 +182,9 @@ GET http://localhost:8082/contact
 
 > {%
    client.test('### Тестирование ситуации, когда передали пустую категорию через универсальный роутер', function () {
-   client.assert(response.status === 404, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
-            client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
-            client.assert(response.body['status'] === "fail", "Некорректный статус");
-            client.assert(response.body['message'] === "dispatch category nothing", "Некорректное сообщение");
+   client.assert(response.status === 200, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body.hasOwnProperty('length') && response.body.length === 11, "В ответе есть 5 элемента");
  });
  %}
 
@@ -298,3 +297,39 @@ GET http://localhost:8082/contact/privet
  %}
 
 
+### Отправка контакта в черный список
+PUT http://localhost:8082/contactList/6/moveToBlacklist
+
+> {%
+   client.test('Отправка контакта в черный список', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body['id_entry'] === 6, "id записи не корректен");
+   client.assert(response.body['id_recipient'] === 6, "id контакта не корректен");
+   client.assert(response.body['blacklist'] === true, "статус черного списка не корректен");
+ });
+ %}
+
+### Поиск по списку контактов с информацией о черном списке
+GET http://localhost:8082/contactList/8
+
+> {%
+   client.test('Отправка контакта в черный список', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body['id_entry'] === 8, "id записи не корректен");
+   client.assert(response.body['id_recipient'] === 8, "id контакта не корректен");
+   client.assert(response.body['blacklist'] === false, "статус черного списка не корректен");
+ });
+ %}
+
+### Поиск по списку контактов с информацией о черном списке
+GET http://localhost:8082/contactList
+
+> {%
+   client.test('### Поиск по списку контактов с информацией о черном списке', function () {
+   client.assert(response.status === 200, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
+   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
+   client.assert(response.body.hasOwnProperty('length') && response.body.length === 11, "В ответе есть 5 элемента");
+ });
+ %}

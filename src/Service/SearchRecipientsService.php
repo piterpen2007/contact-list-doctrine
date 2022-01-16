@@ -3,55 +3,34 @@
 namespace EfTech\ContactList\Service;
 
 use EfTech\ContactList\Entity\Recipient;
-use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
-use EfTech\ContactList\Infrastructure\invalidDataStructureException;
+use EfTech\ContactList\Entity\RecipientRepositoryInterface;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Service\SearchRecipientsService\RecipientDto;
 use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsCriteria;
-use EfTech\ContactList\ValueObject\Balance;
-use EfTech\ContactList\ValueObject\Currency;
-use EfTech\ContactList\ValueObject\Money;
-use JsonException;
 
 class SearchRecipientsService
 {
+
     /**
-     *
-     *
-     * @var DataLoaderInterface
+     * @var RecipientRepositoryInterface
      */
-    private DataLoaderInterface $dataLoader;
+    private RecipientRepositoryInterface $recipientRepository;
     /**
      *
      *
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
-    /**
-     *
-     *
-     * @var string
-     */
-    private string $pathToRecipients;
 
     /**
      * @param LoggerInterface $logger
-     * @param string $pathToRecipients
-     * @param DataLoaderInterface $dataLoader
+     * @param RecipientRepositoryInterface $recipientRepository
      */
-    public function __construct(LoggerInterface $logger ,string $pathToRecipients, DataLoaderInterface $dataLoader)
+    public function __construct(LoggerInterface $logger, RecipientRepositoryInterface $recipientRepository
+    )
     {
-        $this->dataLoader = $dataLoader;
         $this->logger = $logger;
-        $this->pathToRecipients = $pathToRecipients;
-    }
-
-    /**
-     * @return array
-     */
-    private function loadData():array
-    {
-        return $this->dataLoader->loadData($this->pathToRecipients);
+        $this->recipientRepository = $recipientRepository;
     }
     /**
      * Создание dto Получателя
@@ -72,11 +51,11 @@ class SearchRecipientsService
     /**
      * @param SearchRecipientsCriteria $searchCriteria
      * @return RecipientDto[]
-     * @throws JsonException
      */
     public function search(SearchRecipientsCriteria $searchCriteria):array
     {
-        $entitiesCollection = $this->searchEntity($searchCriteria);
+        $criteria = $this->searchCriteriaToArray($searchCriteria);
+        $entitiesCollection = $this->recipientRepository->findBy($criteria);
         $dtoCollection = [];
         foreach ($entitiesCollection as $entity) {
             $dtoCollection[] = $this->createDto($entity);
@@ -85,83 +64,17 @@ class SearchRecipientsService
         return $dtoCollection;
     }
 
-    /** Алгоритм поиска получателей
-     * @param SearchRecipientsCriteria $searchCriteria
-     * @return array
-     * @throws JsonException
-     */
-    private function searchEntity(SearchRecipientsCriteria $searchCriteria):array
+    private function searchCriteriaToArray(SearchRecipientsCriteria $searchCriteria): array
     {
-        $recipients = $this->loadData();
-        $findRecipient = [];
-        foreach ($recipients as $recipient) {
-            if (null !== $searchCriteria->getIdRecipient()) {
-                $recipientMeetSearchCriteria = $searchCriteria->getIdRecipient() === $recipient['id_recipient'];
-            } else {
-                $recipientMeetSearchCriteria = true;
-            }
-            if ($recipientMeetSearchCriteria && null !== $searchCriteria->getFullName()) {
-                $recipientMeetSearchCriteria = $searchCriteria->getFullName() === $recipient['full_name'];
-            }
-            if ($recipientMeetSearchCriteria && null !== $searchCriteria->getBirthday()) {
-                $recipientMeetSearchCriteria = $searchCriteria->getBirthday() === $recipient['birthday'];
-            }
-            if ($recipientMeetSearchCriteria && null !== $searchCriteria->getProfession()) {
-                $recipientMeetSearchCriteria = $searchCriteria->getProfession() === $recipient['profession'];
-            }
-            if ($recipientMeetSearchCriteria) {
-                $recipient['balance'] = $this->createBalancesData($recipient);
-                $findRecipient[] = Recipient::createFromArray($recipient);
-            }
-        }
-        $this->logger->log("Найдено получателей : " . count($findRecipient));
-        return $findRecipient;
+        $criteriaForRepository = [
+            'id_recipient' => $searchCriteria->getIdRecipient(),
+            'full_name' => $searchCriteria->getFullName(),
+            'birthday' => $searchCriteria->getBirthday(),
+            'profession' => $searchCriteria->getProfession()
+        ];
+        return array_filter($criteriaForRepository, static function($v):bool {return null !== $v;});
+
     }
 
-    private function createBalanceData($balances):Balance
-    {
-        if (false === is_array($balances)) {
-            throw new InvalidDataStructureException('Данные о балансе имеют невалидный формат');
-        }
-        if (false === array_key_exists('amount',$balances)) {
-            throw new InvalidDataStructureException('Отсутствуют данные о деньгах на балансе');
-        }
-        if (false === is_int($balances['amount'])) {
-            throw new InvalidDataStructureException('Данные о самом балансе имеют неверный формат');
-        }
-        if (false === array_key_exists('currency', $balances)) {
-            throw new InvalidDataStructureException('Отсутствуют данные о валюте');
-        }
-        if (false === is_string($balances['currency'])) {
-            throw new InvalidDataStructureException('Данные о валюте имеют не верный формат');
-        }
-        $currencyName = 'RUB' === $balances['currency'] ? 'рубль' : 'неизвестно';
-        return new Balance(
-            new Money(
-                $balances['amount'],
-                new Currency($balances['currency'], $currencyName)
-            )
-        );
-    }
-    /**
-     * - " "
-     *
-     * @param array $recipients
-     *
-     * @return Balance[]
-     */
-    private function createBalancesData(array $recipients):array
-    {
-        if(false === array_key_exists('balance',$recipients)) {
-            throw new InvalidDataStructureException('Нет данных о балансе');
-        }
-        if(false === is_array($recipients['balance'])) {
-            throw new InvalidDataStructureException('Данные о балансе имею неверный формат');
-        }
-        $balancesData = [];
-        foreach ($recipients['balance'] as $balanceData) {
-            $balancesData[] = $this->createBalanceData($balanceData);
-        }
-        return $balancesData;
-    }
+
 }

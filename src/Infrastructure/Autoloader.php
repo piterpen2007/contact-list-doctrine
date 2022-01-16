@@ -50,6 +50,8 @@ final class Autoloader
         $pathToFile = $this->classNameToPath($className);
         if (null !== $pathToFile && file_exists($pathToFile) && false === is_dir($pathToFile)) {
             require_once $pathToFile;
+        } else {
+            $r = 0;
         }
     }
 

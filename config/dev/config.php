@@ -17,6 +17,10 @@ return [
      */
     'pathToColleagues' => __DIR__ . '/../../data/colleagues.json',
     /**
+     *  Путь до файла с данными о черном списке
+     */
+    'pathToContactList' => __DIR__ . '/../../data/contact_list.json',
+    /**
      *  Тип используемого логера
      */
     'loggerType' => 'fileLogger',

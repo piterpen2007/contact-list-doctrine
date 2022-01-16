@@ -44,10 +44,34 @@ class AppConfig
      * @var string
      */
     private string $pathToColleagues =__DIR__ . '/../../data/colleagues.json';
+    /** Путь до файла с данными о черном списке
+     * @var string
+     */
+    private string $pathToContactList = __DIR__ . '/../../data/contact_list.json';
     /**
      * @var string Тип логера
      */
     private string $loggerType = 'nullLogger';
+
+    /**
+     * @return string
+     */
+    public function getPathToContactList(): string
+    {
+        return $this->pathToContactList;
+    }
+
+    /**
+     * @param string $pathToContactList
+     * @return AppConfig
+     */
+    public function setPathToContactList(string $pathToContactList): AppConfig
+    {
+        $this->validateFilePath($pathToContactList);
+        $this->pathToContactList = $pathToContactList;
+        return $this;
+    }
+
 
     /** Возвращает тип логера
      * @return string
@@ -186,6 +210,7 @@ class AppConfig
      * @uses AppConfig::setPathToRecipient()
      * @uses AppConfig::setLoggerType()
      * @uses AppConfig::setHideErrorMsg()
+     * @uses AppConfig::setPathToContactList()
      */
     public static function createFromArray(array $config):self
     {
