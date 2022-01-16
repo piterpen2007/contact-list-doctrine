@@ -41,7 +41,7 @@ class GetContactCollectionController implements ControllerInterface
     {
         $this->logger->log("Ветка contact");
         $params = array_merge($request->getQueryParams(), $request->getAttributes());
-        if(array_key_exists('category',$params) && in_array($params['category'],['recipients','customers','kinsfolk','colleagues'])) {
+        if(in_array($params['category'],['recipients','customers','kinsfolk','colleagues'])) {
             $foundContact = $this->searchContactsService->search(
                 (new SearchContactsCriteria())
                     ->setCategory($params['category'] ?? null)
