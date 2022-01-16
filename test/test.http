@@ -311,7 +311,7 @@ PUT http://localhost:8082/contactList/6/moveToBlacklist
  %}
 
 ### Поиск по списку контактов с информацией о черном списке
-GET http://localhost:8082/contactList/8
+GET http://localhost:8082/contactList/11
 
 > {%
    client.test('Отправка контакта в черный список', function () {
@@ -333,3 +333,7 @@ GET http://localhost:8082/contactList
    client.assert(response.body.hasOwnProperty('length') && response.body.length === 11, "В ответе есть 5 элемента");
  });
  %}
+
+
+### Поиск по списку контактов с информацией о черном списке
+GET http://localhost:8082/address/2

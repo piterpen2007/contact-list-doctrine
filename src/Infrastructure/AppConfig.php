@@ -48,10 +48,35 @@ class AppConfig
      * @var string
      */
     private string $pathToContactList = __DIR__ . '/../../data/contact_list.json';
+    /** Путь до файла с данными о адресах
+     * @var string
+     */
+    private string $pathToAddresses = __DIR__ . '/../../data/address.json';
+
     /**
      * @var string Тип логера
      */
     private string $loggerType = 'nullLogger';
+
+    /**
+     * @return string
+     */
+    public function getPathToAddresses(): string
+    {
+        return $this->pathToAddresses;
+    }
+
+    /**
+     * @param string $pathToAddresses
+     * @return AppConfig
+     */
+    public function setPathToAddresses(string $pathToAddresses): AppConfig
+    {
+        $this->validateFilePath($pathToAddresses);
+        $this->pathToAddresses = $pathToAddresses;
+        return $this;
+    }
+
 
     /**
      * @return string
@@ -211,6 +236,7 @@ class AppConfig
      * @uses AppConfig::setLoggerType()
      * @uses AppConfig::setHideErrorMsg()
      * @uses AppConfig::setPathToContactList()
+     * @uses AppConfig::setPathToAddresses()
      */
     public static function createFromArray(array $config):self
     {

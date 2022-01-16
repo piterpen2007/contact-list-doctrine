@@ -27,7 +27,7 @@ class ContactListJsonRepository implements ContactListRepositoryInterface
      */
     private ?array $contactListData = null;
 
-    /** Сопоставляет id книги с номером элемента в $booksData
+    /** Сопоставляет id онтакта с номером элемента в $contactListData
      * @var array|null
      */
     private ?array $contactListIdToIndex = null;
@@ -102,7 +102,7 @@ class ContactListJsonRepository implements ContactListRepositoryInterface
      */
     private function getItemIndex(ContactList $entity):int
     {
-        $id = $entity->getIdRecipient();
+        $id = $entity->getIdEntry();
         $contactListIdToIndex = $this->contactListIdToIndex;
         if (false === array_key_exists($id, $contactListIdToIndex)) {
             throw new RuntimeException("Контакт с id '$id' не найден в хранилище");

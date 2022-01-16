@@ -21,6 +21,10 @@ return [
      */
     'pathToContactList' => __DIR__ . '/../../data/contact_list.json',
     /**
+     *  Путь до файла с данными о адресах
+     */
+    'pathToAddresses' => __DIR__ . '/../../data/address.json',
+    /**
      *  Тип используемого логера
      */
     'loggerType' => 'fileLogger',
