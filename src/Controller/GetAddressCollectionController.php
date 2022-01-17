@@ -61,7 +61,7 @@ class GetAddressCollectionController implements ControllerInterface
             $foundAddresses = $this->contactListService
                 ->search((new SearchAddressService\SearchAddressCriteria())
                     ->setIdAddress($params['id_address'] ?? null)
-                    ->setIdRecipient($params['id_recipient'] ?? null)
+                    ->setIdRecipient(isset($params['id_recipient']) ? (int)$params['id_recipient'] : null)
                     ->setAddress($params['address'] ?? null)
                     ->setStatus($params['status'] ?? null)
                 );

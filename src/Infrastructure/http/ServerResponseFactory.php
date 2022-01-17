@@ -12,6 +12,8 @@ class ServerResponseFactory
      */
     private const PHRASES = [
         200 => 'OK',
+        201 => 'Created',
+        400 => 'Bad request',
         404 => 'Not found',
         503 => 'Service Unavailable',
         500 => 'Internal Server Error'

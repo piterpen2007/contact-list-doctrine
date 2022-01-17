@@ -25,15 +25,11 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
      * @var DataLoaderInterface
      */
     private DataLoaderInterface $dataLoader;
-    /** данные о контактном списке
+    /** данные о адресах
      * @var array|null
      */
     private ?array $addressData = null;
 
-    /** Сопоставляет id адреса с номером элемента в $addressListData
-     * @var array|null
-     */
-    private ?array $addressIdToIndex = null;
 
     /**
      * @param string $pathToAddress
@@ -52,12 +48,11 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
     {
         if (null === $this->addressData) {
             $this->addressData = $this->dataLoader->loadData($this->pathToAddress);
-            $this->addressIdToIndex = array_combine(
+            $this->currentId = max(
                 array_map(
-                    [$this,'extractTextDocument'],
+                    static function (array $v) {return $v['id_address'];},
                     $this->addressData
-                ),
-                array_keys($this->addressData)
+                )
             );
         }
         return $this->addressData;
@@ -66,15 +61,15 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
     private function extractTextDocument($v):int
     {
         if (false === is_array($v)) {
-            throw new InvalidDataStructureException('Данные о текстовом документе должны быть массивом');
+            throw new InvalidDataStructureException('Данные о адресе должны быть массивом');
         }
-        if (false === array_key_exists('id',$v)) {
-            throw new InvalidDataStructureException('Нету id текстового документа');
+        if (false === array_key_exists('id_address',$v)) {
+            throw new InvalidDataStructureException('Нету id адреса');
         }
-        if (false === is_int($v['id'])) {
-            throw new InvalidDataStructureException('id текстового документа должен быть целым числом');
+        if (false === is_int($v['id_address'])) {
+            throw new InvalidDataStructureException('id адреса должен быть целым числом');
         }
-        return $v['id'];
+        return $v['id_address'];
 
     }
 
@@ -108,7 +103,7 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
     public function nextId(): int
     {
         $this->loadData();
-        $this->currentId = $this->currentId + 1;
+        ++$this->currentId;
         return $this->currentId;
 
     }
@@ -119,7 +114,6 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
         $item = $this->buildJsonDataAddress($entity);
         $this->addressData[] = $item;
         $data = $this->addressData;
-        $this->addressIdToIndex[$entity->getIdAddress()] = array_key_last($this->addressData);
         $file = $this->pathToAddress;
 
         $jsonStr = json_encode($data, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);

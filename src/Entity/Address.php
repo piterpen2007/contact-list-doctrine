@@ -6,14 +6,14 @@ use EfTech\ContactList\Infrastructure\invalidDataStructureException;
 
 class Address
 {
-    /**
-     * константа статуса
-     */
-    public const STATUS_HOME = 'home';
-    /**
-     * константа статуса
-     */
-    public const STATUS_WORK = 'work';
+//    /**
+//     * константа статуса
+//     */
+//    public const STATUS_HOME = 'home';
+//    /**
+//     * константа статуса
+//     */
+//    public const STATUS_WORK = 'work';
     /**
      * @var int id адреса
      */

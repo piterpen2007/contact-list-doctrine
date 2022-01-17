@@ -27,7 +27,7 @@
     {
         "id_entry": 6,
         "id_recipient": 6,
-        "blacklist": false
+        "blacklist": true
     },
     {
         "id_entry": 7,

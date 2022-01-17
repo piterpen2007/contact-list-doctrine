@@ -23,6 +23,6 @@ $httpResponse = (new App(
     static function(Container $di):AppConfig {return $di->get(AppConfig::class);},
     static function(Container $di):RenderInterface {return $di->get(RenderInterface::class);},
     static function():Container {return Container::createFromArray(require __DIR__ . '/../config/dev/di.php');}
-))->dispath(ServerRequestFactory::createFromGlobals($_SERVER));
+))->dispath(ServerRequestFactory::createFromGlobals($_SERVER,file_get_contents('php://input')));
 
 
