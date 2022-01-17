@@ -2,10 +2,10 @@
 namespace EfTech\ContactList\Service\SearchAddressService;
 class SearchAddressCriteria
 {
-    private ?int $id_recipient;
-    private ?int $id_address;
-    private ?string $address;
-    private ?string $status;
+    private ?int $id_recipient = null;
+    private ?int $id_address = null;
+    private ?string $address = null;
+    private ?string $status = null;
 
     /**
      * @return int|null

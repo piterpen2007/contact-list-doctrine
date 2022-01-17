@@ -42,4 +42,21 @@ class ServerResponseFactory
         return new httpResponse('1.1', ['Content-Type' => 'application/json'],$body, $code  ,$phrases);
     }
 
+
+    public static function createHtmlResponse(int $code,string $html):httpResponse
+    {
+        try {
+            if ( false === array_key_exists($code, self::PHRASES)) {
+                throw new RuntimeException('Некорректный код ответа');
+            }
+            $phrases = self::PHRASES[$code];
+        } catch (Throwable $e) {
+            $html = '<h1>Unknown Error</h1>>';
+            $code = 520;
+            $phrases = 'Unknown Error';
+
+        }
+        return new httpResponse('1.1', ['Content-Type' => 'text/html'],$html, $code, $phrases );
+    }
+
 }

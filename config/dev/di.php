@@ -3,6 +3,7 @@
 use EfTech\ContactList\ConsoleCommand\FindContacts;
 use EfTech\ContactList\ConsoleCommand\FindCustomers;
 use EfTech\ContactList\ConsoleCommand\FindRecipients;
+use EfTech\ContactList\Controller\AddressAdministrationController;
 use EfTech\ContactList\Controller\CreateAddressController;
 use EfTech\ContactList\Controller\GetAddressCollectionController;
 use EfTech\ContactList\Controller\GetAddressController;
@@ -36,6 +37,8 @@ use EfTech\ContactList\Infrastructure\Router\RouterInterface;
 use EfTech\ContactList\Infrastructure\Router\UniversalRouter;
 use EfTech\ContactList\Infrastructure\View\DefaultRender;
 use EfTech\ContactList\Infrastructure\View\RenderInterface;
+use EfTech\ContactList\Infrastructure\ViewTemplate\PhtmlTemplate;
+use EfTech\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface;
 use EfTech\ContactList\Repository\AddressJsonFileRepository;
 use EfTech\ContactList\Repository\ContactJsonRepository;
 use EfTech\ContactList\Repository\ContactListJsonRepository;
@@ -57,6 +60,17 @@ return [
         'appConfig' => require __DIR__ . '/config.php'
     ],
     'services' => [
+        ViewTemplateInterface::class => [
+            'class' => PhtmlTemplate::class
+        ],
+        AddressAdministrationController::class => [
+            'args' => [
+                'arrivalAddressService' => ArrivalAddressService::class,
+                'searchAddressService' => SearchAddressService::class,
+                'viewTemplate' => ViewTemplateInterface::class,
+                'logger' => LoggerInterface::class
+            ]
+        ],
         CreateAddressController::class => [
             'args' => [
                 'arrivalAddressService' => ArrivalAddressService::class

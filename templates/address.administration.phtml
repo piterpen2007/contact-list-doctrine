@@ -1,0 +1,103 @@
+<?php
+use EfTech\ContactList;
+/**
+ * @var ContactList\Service\SearchAddressService\AddressDto[] $Addresses;
+ * @var array $formValidationResults
+ */
+?>
+<style>
+    table {
+        width: 500px;
+        margin-bottom: 20px;
+        border: 1px solid #dddddd;
+        border-collapse: collapse;
+    }
+    table th {
+        font-weight: bold;
+        padding: 5px;
+        background: #efefef;
+        border: 1px solid #dddddd;
+    }
+    table td {
+        border: 1px solid #dddddd;
+        padding: 5px;
+    }
+    form label {
+        width: 100pt;
+        display: block;
+    }
+
+</style>
+
+<h1 style="text-align: center">Address page</h1>
+
+<div>
+    <h2>Добавить адрес</h2>
+    <form method="post">
+        <div>
+            <label for="address_id_recipient">id контакта</label>
+            <input type="text" name="id_recipient" id="address_id_recipient">
+            <?php if (isset($formValidationResults['address']['id_recipient'])): ?>
+            <ul>
+                <?php foreach ($formValidationResults['address']['id_recipient'] as $err): ?>
+                <li><?php print $err ?></li>
+                        <?php endforeach; ?>
+            </ul>
+            <?php endif; ?>
+        </div>
+        <div>
+            <label for="address">Адрес</label>
+            <input type="text" name="address" id="address">
+            <?php if (isset($formValidationResults['address']['address'])): ?>
+                <ul>
+                    <?php foreach ($formValidationResults['address']['address'] as $err): ?>
+                        <li><?php print $err ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
+        <div>
+            <label for="status_address">Статус</label>
+            <input type="text" name="status" id="status_address">
+            <?php if (isset($formValidationResults['address']['status'])): ?>
+                <ul>
+                    <?php foreach ($formValidationResults['address']['status'] as $err): ?>
+                        <li><?php print $err ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+        </div>
+        <div>
+            <input type="submit" value="Добавить"/>
+        </div>
+
+    </form>
+</div>
+
+
+
+<table>
+    <thead>
+        <tr>
+            <th> № </th>
+            <th> id Контакта </th>
+            <th> Адрес </th>
+            <th> Статус </th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($Addresses as $index => $Address): ?>
+            <tr>
+                <td><?php print $index ?> </td>
+                <td><?php print $Address->getIdRecipient() ?> </td>
+                <td>
+                    <?php print $Address->getAddress() ?>
+                </td>
+                <td>
+                    <?php print $Address->getStatus() ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
