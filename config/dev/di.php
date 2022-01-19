@@ -1,5 +1,8 @@
 <?php
 
+use EfTech\ContactList\Infrastructure\Logger\Adapter\FileAdapter;
+use EfTech\ContactList\Infrastructure\Logger\AdapterInterface;
+use EfTech\ContactList\Infrastructure\Logger\Logger;
 use EfTech\ContactList\Infrastructure\Session\SessionNative;
 use EfTech\ContactList\ConsoleCommand\FindContacts;
 use EfTech\ContactList\ConsoleCommand\FindCustomers;
@@ -32,7 +35,6 @@ use EfTech\ContactList\Infrastructure\Console\Output\OutputInterface;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
-use EfTech\ContactList\Infrastructure\Logger\FileLogger\Logger;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Router\ChainRouters;
 use EfTech\ContactList\Infrastructure\Router\ControllerFactory;
@@ -280,6 +282,12 @@ return [
         ],
         LoggerInterface::class => [
             'class' => Logger::class,
+            'args' => [
+                'adapter' => AdapterInterface::class
+            ]
+        ],
+        AdapterInterface::class => [
+            'class' => FileAdapter::class,
             'args' => [
                 'pathToFile' => 'pathToLogFile'
             ]

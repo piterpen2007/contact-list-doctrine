@@ -58,7 +58,7 @@ class GetContactListCollectionController implements ControllerInterface
      */
     public function __invoke(ServerRequest $request): HttpResponse
     {
-        $this->logger->log("Ветка contact-list");
+        $this->logger->info("Ветка contact-list");
         $resultOfParamValidation = $this->validateQueryParams($request);
 
         if (null === $resultOfParamValidation) {

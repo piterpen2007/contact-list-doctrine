@@ -2,6 +2,8 @@
 
 namespace EfTech\ContactListTest\Infrastructure\DI;
 
+use EfTech\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
+use EfTech\ContactList\Infrastructure\Logger\AdapterInterface;
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Entity\RecipientRepositoryInterface;
 use EfTech\ContactList\Infrastructure\AppConfig;
@@ -10,7 +12,7 @@ use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
-use EfTech\ContactList\Infrastructure\Logger\FileLogger\Logger;
+use EfTech\ContactList\Infrastructure\Logger\Logger;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Repository\RecipientJsonFileRepository;
 use EfTech\ContactList\Service\SearchRecipientsService;
@@ -61,8 +63,11 @@ class ContainerTest
                 LoggerInterface::class => [
                     'class' => Logger::class,
                     'args' => [
-                        'pathToFile' => 'pathToLogFile'
+                        'adapter' => AdapterInterface::class
                     ]
+                ],
+                AdapterInterface::class => [
+                    'class' => NullAdapter::class
                 ],
                 DataLoaderInterface::class => [
                     'class' => JsonDataLoader::class

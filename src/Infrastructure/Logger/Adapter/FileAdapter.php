@@ -1,11 +1,11 @@
 <?php
-namespace EfTech\ContactList\Infrastructure\Logger\FileLogger;
-use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+
+namespace EfTech\ContactList\Infrastructure\Logger\Adapter;
 
 /**
- *  Логирует в файл
+ * Запись лога в файл
  */
-class Logger implements LoggerInterface
+class FileAdapter implements \EfTech\ContactList\Infrastructure\Logger\AdapterInterface
 {
     /**
      * @var string путь до файла где пишутся логи
@@ -22,9 +22,8 @@ class Logger implements LoggerInterface
 
     /**
      * @inheritDoc
-     *
      */
-    public function log(string $msg): void
+    public function write(string $logLevel, string $msg): void
     {
         file_put_contents($this->pathToFile, "$msg\n", FILE_APPEND);
     }

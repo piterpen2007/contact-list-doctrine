@@ -60,7 +60,7 @@ class SearchRecipientsService
         foreach ($entitiesCollection as $entity) {
             $dtoCollection[] = $this->createDto($entity);
         }
-        $this->logger->log( 'found recipients: ' . count($entitiesCollection));
+        $this->logger->debug( 'found recipients: ' . count($entitiesCollection));
         return $dtoCollection;
     }
 

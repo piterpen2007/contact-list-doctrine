@@ -12,8 +12,9 @@ use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
+use EfTech\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
+use EfTech\ContactList\Infrastructure\Logger\Logger;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
-use EfTech\ContactList\Infrastructure\Logger\NullLogger\Logger;
 use EfTech\ContactList\Infrastructure\Uri\Uri;
 use EfTech\ContactList\Repository\RecipientJsonFileRepository;
 use EfTech\ContactList\Service\SearchRecipientsService;
@@ -51,7 +52,7 @@ class FindRecipientTest
         $appConfig = AppConfig::createFromArray(require __DIR__ . '/../../config/dev/config.php');
         $diContainer = new Container(
             [
-                LoggerInterface::class => new Logger(),
+                LoggerInterface::class => new Logger(new NullAdapter()),
                 'pathToRecipients' => $appConfig->getPathToRecipients()
             ],
             [

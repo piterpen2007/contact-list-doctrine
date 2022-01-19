@@ -70,7 +70,7 @@ class AddressAdministrationController implements ControllerInterface
             if (false === $this->httpAuthProvider->isAuth()) {
                 return $this->httpAuthProvider->doAuth($request->getUri());
             }
-            $this->logger->log('run AddressAdministrationController::__invoke');
+            $this->logger->info('run AddressAdministrationController::__invoke');
 
             $resultCreationAddress = [];
             if ('POST' === $request->getMethod()) {

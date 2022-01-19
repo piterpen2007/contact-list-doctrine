@@ -54,12 +54,11 @@ class GetRecipientsCollectionController implements ControllerInterface
 
 
     /**
-     * @throws JsonException
      * @throws Exception
      */
     public function __invoke(ServerRequest $request): httpResponse
     {
-        $this->logger->log("Ветка recipient");
+        $this->logger->info("Ветка recipient");
 
         $resultOfParamValidation = $this->validateQueryParams($request);
 

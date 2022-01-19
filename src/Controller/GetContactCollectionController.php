@@ -39,7 +39,7 @@ class GetContactCollectionController implements ControllerInterface
 
     public function __invoke(ServerRequest $request): httpResponse
     {
-        $this->logger->log("Ветка contact");
+        $this->logger->info("Ветка contact");
         $params = array_merge($request->getQueryParams(), $request->getAttributes());
        // if(in_array($params['category'],['recipients','customers','kinsfolk','colleagues'])) {
             $foundContact = $this->searchContactsService->search(

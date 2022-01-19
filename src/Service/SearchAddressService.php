@@ -58,7 +58,7 @@ class SearchAddressService
         foreach ($entitiesCollection as $entity) {
             $dtoCollection[] = $this->createDto($entity);
         }
-        $this->logger->log("Найдено addresses: " . count($entitiesCollection));
+        $this->logger->debug("Найдено addresses: " . count($entitiesCollection));
         return $dtoCollection;
     }
 

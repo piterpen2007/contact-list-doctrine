@@ -25,10 +25,6 @@ return [
      */
     'pathToAddresses' => __DIR__ . '/../../data/address.json',
     /**
-     *  Тип используемого логера
-     */
-    'loggerType' => 'fileLogger',
-    /**
      * Путь до файла с пользователями
      */
     'pathToUsers' => __DIR__ . '/../../data/users.json',

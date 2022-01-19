@@ -62,7 +62,7 @@ class GetCustomersCollectionController implements ControllerInterface
      */
     public function __invoke(ServerRequest $request): httpResponse
     {
-        $this->logger->log("Ветка customer");
+        $this->logger->info("Ветка customer");
 
         $resultOfParamValidation = $this->validateQueryParams($request);
 

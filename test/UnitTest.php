@@ -8,7 +8,6 @@ use EfTech\ContactList\Infrastructure\Autoloader;
 use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
-use EfTech\ContactList\Infrastructure\Logger\NullLogger\Logger;
 use EfTech\ContactList\Infrastructure\Router\RouterInterface;
 use EfTech\ContactList\Infrastructure\Uri\Uri;
 use EfTech\ContactList\Infrastructure\View\NullRender;
@@ -30,8 +29,8 @@ class UnitTest
     private static function testDataProvider():array
     {
         $diConfig = require __DIR__ . '/../config/dev/di.php';
-        $diConfig['services'][LoggerInterface::class] = [
-            'class' => Logger::class
+        $diConfig['services'][\EfTech\ContactList\Infrastructure\Logger\AdapterInterface::class] = [
+            'class' => \EfTech\ContactList\Infrastructure\Logger\Adapter\NullAdapter::class
         ];
         $diConfig['services'][RenderInterface::class] = [
             'class' => NullRender::class

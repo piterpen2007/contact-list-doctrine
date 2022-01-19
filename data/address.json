@@ -52,5 +52,11 @@
         "id_recipient": 7,
         "address": "Школьная",
         "status": "Дом"
+    },
+    {
+        "id_address": 10,
+        "id_recipient": 11,
+        "address": "Это адрес контакта",
+        "status": "Домашний"
     }
 ]

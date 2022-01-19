@@ -60,7 +60,7 @@ class SearchContactListService
         foreach ($entitiesCollection as $entity) {
             $dtoCollection[] = $this->createDto($entity);
         }
-        $this->logger->log("Найдено contact_list: " . count($entitiesCollection));
+        $this->logger->debug("Найдено contact_list: " . count($entitiesCollection));
         return $dtoCollection;
     }
 

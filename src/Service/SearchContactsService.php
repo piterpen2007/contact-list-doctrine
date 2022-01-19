@@ -98,7 +98,7 @@ class SearchContactsService
         foreach ($entitiesCollection as $entity) {
             $dtoCollection[] = $this->createDto($entity);
         }
-        $this->logger->log( 'found contacts: ' . count($entitiesCollection));
+        $this->logger->debug( 'found contacts: ' . count($entitiesCollection));
         return $dtoCollection;
     }
 

@@ -61,10 +61,7 @@ class AppConfig
      * @var string
      */
     private string $loginUri;
-    /**
-     * @var string Тип логера
-     */
-    private string $loggerType = 'nullLogger';
+
 
     /**
      * @return string
@@ -144,23 +141,7 @@ class AppConfig
     }
 
 
-    /** Возвращает тип логера
-     * @return string
-     */
-    public function getLoggerType(): string
-    {
-        return $this->loggerType;
-    }
 
-    /** Устанавливает тип логера
-     * @param string $loggerType
-     * @return AppConfig
-     */
-    private function setLoggerType(string $loggerType): AppConfig
-    {
-        $this->loggerType = $loggerType;
-        return $this;
-    }
     private string $pathToLogFile =  __DIR__ . '/../../var/log/app.log';
 
     /** Возвращает путь до файла с логами
@@ -279,7 +260,6 @@ class AppConfig
      * @uses AppConfig::setPathToCustomers()
      * @uses AppConfig::setPathToKinsfolk()
      * @uses AppConfig::setPathToRecipient()
-     * @uses AppConfig::setLoggerType()
      * @uses AppConfig::setHideErrorMsg()
      * @uses AppConfig::setPathToContactList()
      * @uses AppConfig::setPathToAddresses()
