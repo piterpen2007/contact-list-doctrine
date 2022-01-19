@@ -1,8 +1,10 @@
 <?php
 
+use EfTech\ContactList\Infrastructure\Session\SessionNative;
 use EfTech\ContactList\ConsoleCommand\FindContacts;
 use EfTech\ContactList\ConsoleCommand\FindCustomers;
 use EfTech\ContactList\ConsoleCommand\FindRecipients;
+use EfTech\ContactList\ConsoleCommand\HashStr;
 use EfTech\ContactList\Controller\AddressAdministrationController;
 use EfTech\ContactList\Controller\CreateAddressController;
 use EfTech\ContactList\Controller\GetAddressCollectionController;
@@ -15,6 +17,7 @@ use EfTech\ContactList\Controller\GetCustomersCollectionController;
 use EfTech\ContactList\Controller\GetCustomersController;
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Controller\GetRecipientsController;
+use EfTech\ContactList\Controller\LoginController;
 use EfTech\ContactList\Controller\UpdateMoveToBlacklistContactListController;
 use EfTech\ContactList\Entity\AddressRepositoryInterface;
 use EfTech\ContactList\Entity\ContactListRepositoryInterface;
@@ -22,6 +25,8 @@ use EfTech\ContactList\Entity\ContactRepositoryInterface;
 use EfTech\ContactList\Entity\CustomerRepositoryInterface;
 use EfTech\ContactList\Entity\RecipientRepositoryInterface;
 use EfTech\ContactList\Infrastructure\AppConfig;
+use EfTech\ContactList\Infrastructure\Auth\HttpAuthProvider;
+use EfTech\ContactList\Infrastructure\Auth\UserDataStorageInterface;
 use EfTech\ContactList\Infrastructure\Console\Output\EchoOutput;
 use EfTech\ContactList\Infrastructure\Console\Output\OutputInterface;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
@@ -35,6 +40,8 @@ use EfTech\ContactList\Infrastructure\Router\DefaultRouter;
 use EfTech\ContactList\Infrastructure\Router\RegExpRouter;
 use EfTech\ContactList\Infrastructure\Router\RouterInterface;
 use EfTech\ContactList\Infrastructure\Router\UniversalRouter;
+use EfTech\ContactList\Infrastructure\Session\SessionInterface;
+use EfTech\ContactList\Infrastructure\Uri\Uri;
 use EfTech\ContactList\Infrastructure\View\DefaultRender;
 use EfTech\ContactList\Infrastructure\View\RenderInterface;
 use EfTech\ContactList\Infrastructure\ViewTemplate\PhtmlTemplate;
@@ -44,12 +51,12 @@ use EfTech\ContactList\Repository\ContactJsonRepository;
 use EfTech\ContactList\Repository\ContactListJsonRepository;
 use EfTech\ContactList\Repository\CustomerJsonFileRepository;
 use EfTech\ContactList\Repository\RecipientJsonFileRepository;
+use EfTech\ContactList\Repository\UserJsonFileRepository;
 use EfTech\ContactList\Service\ArrivalAddressService;
 use EfTech\ContactList\Service\MoveToBlacklistContactListService;
 use EfTech\ContactList\Service\SearchAddressService;
 use EfTech\ContactList\Service\SearchContactListService;
 use EfTech\ContactList\Service\SearchContactsService;
-use EfTech\ContactList\Service\SearchContactsService\SearchContactsCriteria;
 use EfTech\ContactList\Service\SearchCustomersService;
 use EfTech\ContactList\Service\SearchRecipientsService;
 
@@ -61,6 +68,31 @@ return [
         'appConfig' => require __DIR__ . '/config.php'
     ],
     'services' => [
+        HashStr::class => [
+            'args' => [
+                'output' => OutputInterface::class
+            ]
+        ],
+        HttpAuthProvider::class => [
+            'args' => [
+                'userDataStorage' => UserDataStorageInterface::class,
+                'session' => SessionInterface::class,
+                'loginUri' => 'loginUri'
+            ]
+        ],
+        LoginController::class => [
+            'args' => [
+                'viewTemplate' => ViewTemplateInterface::class,
+                'httpAuthProvider' => HttpAuthProvider::class
+            ]
+        ],
+        UserDataStorageInterface::class => [
+            'class' => UserJsonFileRepository::class,
+            'args' => [
+                'pathToUsers' => 'pathToUsers',
+                'dataLoader' => DataLoaderInterface::class
+            ]
+        ],
         ViewTemplateInterface::class => [
             'class' => PhtmlTemplate::class
         ],
@@ -70,7 +102,8 @@ return [
                 'searchAddressService' => SearchAddressService::class,
                 'viewTemplate' => ViewTemplateInterface::class,
                 'logger' => LoggerInterface::class,
-                'searchContactsService' => SearchContactsService::class
+                'searchContactsService' => SearchContactsService::class,
+                'httpAuthProvider' => HttpAuthProvider::class
             ]
         ],
         CreateAddressController::class => [
@@ -295,8 +328,21 @@ return [
 
 
     'factories' => [
+        'loginUri' => static function(ContainerInterface $c): Uri {
+            /** @var AppConfig $appConfig */
+            $appConfig = $c->get(AppConfig::class);
+            return Uri::createFromString($appConfig->getLoginUri());
+        },
+        SessionInterface::class => static function(ContainerInterface $c) {
+            return SessionNative::create();
+        },
         ContainerInterface::class => static function(ContainerInterface $c):ContainerInterface {
             return $c;
+        },
+        'pathToUsers' => static function(ContainerInterface $c):string {
+            /** @var AppConfig $appConfig */
+            $appConfig = $c->get(AppConfig::class);
+            return $appConfig->getPathToUsers();
         },
         'pathToAddresses' => static function (ContainerInterface $c): string {
             /** @var AppConfig $appConfig */

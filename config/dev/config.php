@@ -28,5 +28,13 @@ return [
      *  Тип используемого логера
      */
     'loggerType' => 'fileLogger',
+    /**
+     * Путь до файла с пользователями
+     */
+    'pathToUsers' => __DIR__ . '/../../data/users.json',
+    /**
+     * Uri по которому можно открыть форму логина
+     */
+    'loginUri' => '/login',
     'hideErrorMsg' => false
 ];

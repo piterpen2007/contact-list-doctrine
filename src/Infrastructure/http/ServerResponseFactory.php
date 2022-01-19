@@ -2,6 +2,7 @@
 
 namespace EfTech\ContactList\Infrastructure\http;
 
+use EfTech\ContactList\Infrastructure\Uri\Uri;
 use EfTech\ContactList\Exception\RuntimeException;
 use Throwable;
 
@@ -13,6 +14,8 @@ class ServerResponseFactory
     private const PHRASES = [
         200 => 'OK',
         201 => 'Created',
+        301 => 'Temporary Redirect',
+        302 => 'Found',
         400 => 'Bad request',
         404 => 'Not found',
         503 => 'Service Unavailable',
@@ -57,6 +60,27 @@ class ServerResponseFactory
 
         }
         return new httpResponse('1.1', ['Content-Type' => 'text/html'],$html, $code, $phrases );
+    }
+
+    public static function redirect(Uri $uri,int $httpCode = 302):httpResponse
+    {
+        try {
+            if (!($httpCode >= 300 && $httpCode < 400)) {
+                throw new RuntimeException('Некорректный код для редиректа');
+            }
+            if (false === array_key_exists($httpCode, self::PHRASES)) {
+                throw new RuntimeException('Некорректный код ответа');
+            }
+            $phrases = self::PHRASES[$httpCode];
+            $body = '';
+            $headers = ['Location' => (string)$uri];
+        } catch (Throwable $e) {
+            $body = '<h1>Unknown Error</h1>>';
+            $httpCode = 520;
+            $phrases = 'Unknown Error';
+            $headers = ['Content-Type' => 'text/html'];
+        }
+        return new httpResponse('1.1', $headers,$body, $httpCode, $phrases );
     }
 
 }

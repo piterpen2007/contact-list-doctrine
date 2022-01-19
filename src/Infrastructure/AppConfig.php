@@ -53,10 +53,56 @@ class AppConfig
      */
     private string $pathToAddresses = __DIR__ . '/../../data/address.json';
 
+    /** Путь до файла с пользователями
+     * @var string
+     */
+    private string $pathToUsers = __DIR__ . '/../../data/users.json';
+    /** Возвращает ури логина
+     * @var string
+     */
+    private string $loginUri;
     /**
      * @var string Тип логера
      */
     private string $loggerType = 'nullLogger';
+
+    /**
+     * @return string
+     */
+    public function getPathToUsers(): string
+    {
+        return $this->pathToUsers;
+    }
+
+    /**
+     * @param string $pathToUsers
+     * @return AppConfig
+     */
+    public function setPathToUsers(string $pathToUsers): AppConfig
+    {
+        $this->validateFilePath($pathToUsers);
+        $this->pathToUsers = $pathToUsers;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLoginUri(): string
+    {
+        return $this->loginUri;
+    }
+
+    /**
+     * @param string $loginUri
+     * @return AppConfig
+     */
+    public function setLoginUri(string $loginUri): AppConfig
+    {
+        $this->loginUri = $loginUri;
+        return $this;
+    }
+
 
     /**
      * @return string
@@ -237,6 +283,8 @@ class AppConfig
      * @uses AppConfig::setHideErrorMsg()
      * @uses AppConfig::setPathToContactList()
      * @uses AppConfig::setPathToAddresses()
+     * @uses AppConfig::setPathToUsers()
+     * @uses AppConfig::setLoginUri()
      */
     public static function createFromArray(array $config):self
     {

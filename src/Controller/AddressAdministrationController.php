@@ -2,6 +2,7 @@
 
 namespace EfTech\ContactList\Controller;
 
+use EfTech\ContactList\Infrastructure\Auth\HttpAuthProvider;
 use EfTech\ContactList\Exception\RuntimeException;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
 use EfTech\ContactList\Infrastructure\http\httpResponse;
@@ -18,6 +19,7 @@ use EfTech\ContactList\Service\SearchContactsService\SearchContactsCriteria;
 
 class AddressAdministrationController implements ControllerInterface
 {
+    private HttpAuthProvider $httpAuthProvider;
     /** Сервис добавлениянового адреса
      * @var ArrivalAddressService
      */
@@ -35,7 +37,6 @@ class AddressAdministrationController implements ControllerInterface
      */
     private LoggerInterface $logger;
     private SearchContactsService $searchContactsService;
-    private SearchContactsCriteria $searchContactsCriteria;
 
     /**
      * @param ArrivalAddressService $arrivalAddressService
@@ -43,14 +44,15 @@ class AddressAdministrationController implements ControllerInterface
      * @param ViewTemplateInterface $viewTemplate
      * @param LoggerInterface $logger
      * @param SearchContactsService $searchContactsService
-     * @param SearchContactsCriteria $searchContactsCriteria
+     * @param HttpAuthProvider $httpAuthProvider
      */
     public function __construct(
         ArrivalAddressService $arrivalAddressService,
         SearchAddressService $addressService,
         ViewTemplateInterface $viewTemplate,
         LoggerInterface $logger,
-        SearchContactsService $searchContactsService
+        SearchContactsService $searchContactsService,
+        HttpAuthProvider $httpAuthProvider
 
     ) {
         $this->arrivalAddressService = $arrivalAddressService;
@@ -58,12 +60,16 @@ class AddressAdministrationController implements ControllerInterface
         $this->viewTemplate = $viewTemplate;
         $this->logger = $logger;
         $this->searchContactsService = $searchContactsService;
+        $this->httpAuthProvider = $httpAuthProvider;
     }
 
 
     public function __invoke(ServerRequest $request): httpResponse
     {
         try {
+            if (false === $this->httpAuthProvider->isAuth()) {
+                return $this->httpAuthProvider->doAuth($request->getUri());
+            }
             $this->logger->log('run AddressAdministrationController::__invoke');
 
             $resultCreationAddress = [];

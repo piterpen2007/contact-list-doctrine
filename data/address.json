@@ -46,5 +46,11 @@
         "id_recipient": 9,
         "address": "пвапвпа",
         "status": "авпвпа"
+    },
+    {
+        "id_address": 9,
+        "id_recipient": 7,
+        "address": "Школьная",
+        "status": "Дом"
     }
 ]
