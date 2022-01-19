@@ -4,7 +4,7 @@ namespace EfTech\ContactList\Service\SearchContactsService;
 
 class SearchContactsCriteria
 {
-    private ?string $category;
+    private ?string $category = null;
 
     /**
      * @return string|null

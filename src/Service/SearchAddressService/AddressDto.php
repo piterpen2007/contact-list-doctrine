@@ -15,10 +15,10 @@ class AddressDto
      * @param string|null $address
      * @param string|null $status
      */
-    public function __construct(?int $id_recipient, ?int $id_address, ?string $address, ?string $status)
+    public function __construct(?int $id_address, ?int $id_recipient, ?string $address, ?string $status)
     {
-        $this->id_recipient = $id_recipient;
         $this->id_address = $id_address;
+        $this->id_recipient = $id_recipient;
         $this->address = $address;
         $this->status = $status;
     }

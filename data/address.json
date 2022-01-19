@@ -37,44 +37,14 @@
     },
     {
         "id_address": 7,
-        "id_recipient": 7,
-        "address": "Это адрес контакта",
-        "status": "Домашний"
+        "id_recipient": 5,
+        "address": "ывпывпып",
+        "status": "ывпывпыпв"
     },
     {
         "id_address": 8,
-        "id_recipient": 10,
-        "address": "Это адрес контакта",
-        "status": "Домашний"
-    },
-    {
-        "id_address": 9,
         "id_recipient": 9,
-        "address": "Это адрес контакта",
-        "status": "Домашний"
-    },
-    {
-        "id_address": 10,
-        "id_recipient": 11,
-        "address": "Это адрес контакта",
-        "status": "Домашний"
-    },
-    {
-        "id_address": 11,
-        "id_recipient": 5,
-        "address": "gdfgdf",
-        "status": "gdfg"
-    },
-    {
-        "id_address": 12,
-        "id_recipient": 0,
-        "address": "gdfgdf",
-        "status": "gdfg"
-    },
-    {
-        "id_address": 13,
-        "id_recipient": 12,
-        "address": "gdfgdf",
-        "status": "gdfg"
+        "address": "пвапвпа",
+        "status": "авпвпа"
     }
 ]

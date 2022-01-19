@@ -13,6 +13,8 @@ use EfTech\ContactList\Service\ArrivalAddressService;
 use EfTech\ContactList\Service\ArrivalNewAddressService\NewAddressDto;
 use EfTech\ContactList\Service\SearchAddressService;
 use EfTech\ContactList\Service\SearchAddressService\SearchAddressCriteria;
+use EfTech\ContactList\Service\SearchContactsService;
+use EfTech\ContactList\Service\SearchContactsService\SearchContactsCriteria;
 
 class AddressAdministrationController implements ControllerInterface
 {
@@ -32,48 +34,66 @@ class AddressAdministrationController implements ControllerInterface
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
+    private SearchContactsService $searchContactsService;
+    private SearchContactsCriteria $searchContactsCriteria;
 
     /**
      * @param ArrivalAddressService $arrivalAddressService
      * @param SearchAddressService $addressService
      * @param ViewTemplateInterface $viewTemplate
      * @param LoggerInterface $logger
+     * @param SearchContactsService $searchContactsService
+     * @param SearchContactsCriteria $searchContactsCriteria
      */
     public function __construct(
         ArrivalAddressService $arrivalAddressService,
         SearchAddressService $addressService,
         ViewTemplateInterface $viewTemplate,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        SearchContactsService $searchContactsService
 
     ) {
         $this->arrivalAddressService = $arrivalAddressService;
         $this->addressService = $addressService;
         $this->viewTemplate = $viewTemplate;
         $this->logger = $logger;
+        $this->searchContactsService = $searchContactsService;
     }
 
 
     public function __invoke(ServerRequest $request): httpResponse
     {
-        $this->logger->log('run AddressAdministrationController::__invoke');
+        try {
+            $this->logger->log('run AddressAdministrationController::__invoke');
 
-        $resultCreationAddress = [];
-        if ('POST' === $request->getMethod()) {
-            $resultCreationAddress = $this->creationOfTextDocument($request);
+            $resultCreationAddress = [];
+            if ('POST' === $request->getMethod()) {
+                $resultCreationAddress = $this->creationOfAddress($request);
+            }
+            $dtoAddressesCollection = $this->addressService->search(new SearchAddressCriteria());
+            $dtoContactsCollection = $this->searchContactsService->search(new SearchContactsCriteria());
+            $viewData = [
+                'Addresses' => $dtoAddressesCollection,
+                'contacts' => $dtoContactsCollection
+            ];
+            $context = array_merge($viewData, $resultCreationAddress);
+            $template = __DIR__ . '/../../templates/address.administration.phtml';
+            $httpCode = 200;
+        } catch (\Throwable $e) {
+            $httpCode = 500;
+            $template = __DIR__ . '/../../templates/errors.phtml';
+            $context = [
+                'errors' => [
+                    $e->getMessage()
+                ]
+            ];
         }
-        $dtoAddressesCollection = $this->addressService->search(new SearchAddressCriteria());
-        $viewData = [
-            'Addresses' => $dtoAddressesCollection,
-        ];
-        $context = array_merge($viewData,$resultCreationAddress);
-
-
         $html = $this->viewTemplate->render(
-            __DIR__ . '/../../templates/address.administration.phtml',
+            $template,
             $context
         );
 
-        return ServerResponseFactory::createHtmlResponse(200,$html);
+        return ServerResponseFactory::createHtmlResponse($httpCode,$html);
     }
 
     /** Результат создания адресов
@@ -81,7 +101,7 @@ class AddressAdministrationController implements ControllerInterface
      * @param ServerRequest $request
      * @return array - данные о ошибках у форм создания адресов
      */
-    private function creationOfTextDocument(ServerRequest $request):array
+    private function creationOfAddress(ServerRequest $request):array
     {
         $dataToCreate = [];
         parse_str($request->getBody(),$dataToCreate);
@@ -94,6 +114,8 @@ class AddressAdministrationController implements ControllerInterface
         $result['formValidationResults']['address'] = $this->validateAddresses($dataToCreate);
         if (0 === count($result['formValidationResults']['address'])) {
             $this->createAddress($dataToCreate);
+        } else {
+            $result['addressData'] = $dataToCreate;
         }
         return $result;
     }

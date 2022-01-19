@@ -49,6 +49,7 @@ use EfTech\ContactList\Service\MoveToBlacklistContactListService;
 use EfTech\ContactList\Service\SearchAddressService;
 use EfTech\ContactList\Service\SearchContactListService;
 use EfTech\ContactList\Service\SearchContactsService;
+use EfTech\ContactList\Service\SearchContactsService\SearchContactsCriteria;
 use EfTech\ContactList\Service\SearchCustomersService;
 use EfTech\ContactList\Service\SearchRecipientsService;
 
@@ -68,7 +69,8 @@ return [
                 'arrivalAddressService' => ArrivalAddressService::class,
                 'searchAddressService' => SearchAddressService::class,
                 'viewTemplate' => ViewTemplateInterface::class,
-                'logger' => LoggerInterface::class
+                'logger' => LoggerInterface::class,
+                'searchContactsService' => SearchContactsService::class
             ]
         ],
         CreateAddressController::class => [

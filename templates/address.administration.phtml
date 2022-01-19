@@ -2,7 +2,9 @@
 use EfTech\ContactList;
 /**
  * @var ContactList\Service\SearchAddressService\AddressDto[] $Addresses;
+ * @var ContactList\Service\SearchContactsService\ContactDto[] $contacts
  * @var array $formValidationResults
+ * @var array $addressData
  */
 ?>
 <style>
@@ -35,15 +37,17 @@ use EfTech\ContactList;
     <h2>Добавить адрес</h2>
     <form method="post">
         <div>
-            <label for="address_id_recipient">id контакта</label>
-            <input type="text" name="id_recipient" id="address_id_recipient">
-            <?php if (isset($formValidationResults['address']['id_recipient'])): ?>
-            <ul>
-                <?php foreach ($formValidationResults['address']['id_recipient'] as $err): ?>
-                <li><?php print $err ?></li>
-                        <?php endforeach; ?>
-            </ul>
-            <?php endif; ?>
+            <label for="address_id_recipient">Информация о контакте</label>
+            <select name="id_recipient" id="address_id_recipient">
+                <?php foreach ($contacts as $index => $contact): ?>
+                    <option <?php echo (isset($addressData['id_recipient'])
+                    && $addressData['id_recipient']
+                    === (string)$contact->getIdRecipient() ? 'selected' : '') ?> value="<?php echo $contact->getIdRecipient() ?>">
+                        <?php echo $contact->getFullName() ?>
+                        <?php echo $contact->getIdRecipient() ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
         </div>
         <div>
             <label for="address">Адрес</label>
@@ -89,7 +93,13 @@ use EfTech\ContactList;
         <?php foreach ($Addresses as $index => $Address): ?>
             <tr>
                 <td><?php print $index ?> </td>
-                <td><?php print $Address->getIdRecipient() ?> </td>
+                <td> <?php foreach ($contacts as $contact): ?>
+                    <?php   if($contact->getIdRecipient() === $Address->getIdRecipient()): ?>
+                            <?php print $contact->getFullName() . ' ' . $Address->getIdRecipient() ?>
+                    <?php endif; ?>
+
+                    <?php endforeach; ?>
+                </td>
                 <td>
                     <?php print $Address->getAddress() ?>
                 </td>
@@ -97,7 +107,8 @@ use EfTech\ContactList;
                     <?php print $Address->getStatus() ?>
                 </td>
             </tr>
-        <?php endforeach; ?>
+            <?php endforeach; ?>
+
     </tbody>
 </table>
 
