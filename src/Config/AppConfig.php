@@ -1,33 +1,16 @@
 <?php
-namespace EfTech\ContactList\Infrastructure;
-use EfTech\ContactList\Exception;
+namespace EfTech\ContactList\Config;
 use EfTech\ContactList\Exception\ErrorCreateAppConfigException;
-
+use \EfTech\ContactList\Infrastructure\HttpApplication\AppConfig as BaseConfig;
 /**
  *  Конфиг приложения
  */
-class AppConfig
+class AppConfig extends BaseConfig
 {
-    /** Скрывает сообщения о ошибках
-     * @var bool
-     */
-    private bool $hideErrorMsg;
 
-    /** Возвращает флаг, который указывает что нужно скрывать сообщения о ощибках
-     * @return bool
-     */
-    public function isHideErrorMsg(): bool
-    {
-        return $this->hideErrorMsg;
-    }
 
-    /** Устанавливает флаг указывающий что нужно скрывать сообщение о ошибках
-     * @param bool $hideErrorMsg
-     */
-    private function setHideErrorMsg(bool $hideErrorMsg): void
-    {
-        $this->hideErrorMsg = $hideErrorMsg;
-    }
+
+
     /** Путь до файла с данными о получателях
      * @var string
      */
@@ -75,7 +58,7 @@ class AppConfig
      * @param string $pathToUsers
      * @return AppConfig
      */
-    public function setPathToUsers(string $pathToUsers): AppConfig
+    protected function setPathToUsers(string $pathToUsers): AppConfig
     {
         $this->validateFilePath($pathToUsers);
         $this->pathToUsers = $pathToUsers;
@@ -94,7 +77,7 @@ class AppConfig
      * @param string $loginUri
      * @return AppConfig
      */
-    public function setLoginUri(string $loginUri): AppConfig
+    protected function setLoginUri(string $loginUri): AppConfig
     {
         $this->loginUri = $loginUri;
         return $this;
@@ -113,7 +96,7 @@ class AppConfig
      * @param string $pathToAddresses
      * @return AppConfig
      */
-    public function setPathToAddresses(string $pathToAddresses): AppConfig
+    protected function setPathToAddresses(string $pathToAddresses): AppConfig
     {
         $this->validateFilePath($pathToAddresses);
         $this->pathToAddresses = $pathToAddresses;
@@ -133,7 +116,7 @@ class AppConfig
      * @param string $pathToContactList
      * @return AppConfig
      */
-    public function setPathToContactList(string $pathToContactList): AppConfig
+    protected function setPathToContactList(string $pathToContactList): AppConfig
     {
         $this->validateFilePath($pathToContactList);
         $this->pathToContactList = $pathToContactList;
@@ -158,7 +141,7 @@ class AppConfig
      * @param string $pathToLogFile путь до файла с логами
      * @return AppConfig
      */
-    private function setPathToLogFile(string $pathToLogFile): AppConfig
+    protected function setPathToLogFile(string $pathToLogFile): AppConfig
     {
         $this->validateFilePath($pathToLogFile);
         $this->pathToLogFile = $pathToLogFile;
@@ -177,7 +160,7 @@ class AppConfig
      * @param string $pathToRecipients
      * @return AppConfig
      */
-    private function setPathToRecipients(string $pathToRecipients): AppConfig
+    protected function setPathToRecipients(string $pathToRecipients): AppConfig
     {
         $this->validateFilePath($pathToRecipients);
         $this->pathToRecipients = $pathToRecipients;
@@ -196,7 +179,7 @@ class AppConfig
      * @param string $pathToKinsfolk
      * @return AppConfig
      */
-    private function setPathToKinsfolk(string $pathToKinsfolk): AppConfig
+    protected function setPathToKinsfolk(string $pathToKinsfolk): AppConfig
     {
         $this->validateFilePath($pathToKinsfolk);
         $this->pathToKinsfolk = $pathToKinsfolk;
@@ -215,7 +198,7 @@ class AppConfig
      * @param string $pathToCustomers
      * @return AppConfig
      */
-    private function setPathToCustomers(string $pathToCustomers): AppConfig
+    protected function setPathToCustomers(string $pathToCustomers): AppConfig
     {
         $this->validateFilePath($pathToCustomers);
         $this->pathToCustomers = $pathToCustomers;
@@ -234,7 +217,7 @@ class AppConfig
      * @param string $pathToColleagues
      * @return AppConfig
      */
-    private function setPathToColleagues(string $pathToColleagues): AppConfig
+    protected function setPathToColleagues(string $pathToColleagues): AppConfig
     {
         $this->validateFilePath($pathToColleagues);
         $this->pathToColleagues = $pathToColleagues;
@@ -253,32 +236,6 @@ class AppConfig
         }
     }
 
-    /**
-     * @param array $config
-     * @return static
-     * @uses AppConfig::setPathToColleagues()
-     * @uses AppConfig::setPathToCustomers()
-     * @uses AppConfig::setPathToKinsfolk()
-     * @uses AppConfig::setPathToRecipient()
-     * @uses AppConfig::setHideErrorMsg()
-     * @uses AppConfig::setPathToContactList()
-     * @uses AppConfig::setPathToAddresses()
-     * @uses AppConfig::setPathToUsers()
-     * @uses AppConfig::setLoginUri()
-     */
-    public static function createFromArray(array $config):self
-    {
-        $appConfig = new self();
-
-
-        foreach ($config as $key => $value) {
-            if(property_exists($appConfig, $key)) {
-                $setter = 'set' . ucfirst($key);
-                $appConfig->{$setter}($value);
-            }
-        }
-        return $appConfig;
-    }
 
 
 

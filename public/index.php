@@ -1,15 +1,15 @@
 <?php
 
-require_once __DIR__ . '/../src/Infrastructure/Autoloader.php';
+require_once __DIR__ . '/../src/Infrastructure/Autoloader/Autoloader.php';
 
-use EfTech\ContactList\Infrastructure\Autoloader;
+use EfTech\ContactList\Infrastructure\Autoloader\Autoloader;
 spl_autoload_register(new Autoloader([
         'EfTech\\ContactList\\' => __DIR__ . '/../src/',
         'EfTech\\ContactListTest\\' => __DIR__ . '/../test/'
     ])
 );
-use EfTech\ContactList\Infrastructure\AppConfig;
-use EfTech\ContactList\Infrastructure\App;
+use EfTech\ContactList\Config\AppConfig;
+use EfTech\ContactList\Infrastructure\HttpApplication\App;
 use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\http\ServerRequestFactory;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;

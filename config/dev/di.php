@@ -27,7 +27,7 @@ use EfTech\ContactList\Entity\ContactListRepositoryInterface;
 use EfTech\ContactList\Entity\ContactRepositoryInterface;
 use EfTech\ContactList\Entity\CustomerRepositoryInterface;
 use EfTech\ContactList\Entity\RecipientRepositoryInterface;
-use EfTech\ContactList\Infrastructure\AppConfig;
+use EfTech\ContactList\Config\AppConfig;
 use EfTech\ContactList\Infrastructure\Auth\HttpAuthProvider;
 use EfTech\ContactList\Infrastructure\Auth\UserDataStorageInterface;
 use EfTech\ContactList\Infrastructure\Console\Output\EchoOutput;

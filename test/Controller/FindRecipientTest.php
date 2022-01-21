@@ -2,12 +2,12 @@
 
 namespace EfTech\ContactListTest\Infrastructure\Controller;
 
-require_once __DIR__ . '/../../src/Infrastructure/Autoloader.php';
+require_once __DIR__ . '/../../src/Infrastructure/Autoloader/Autoloader.php';
 
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Entity\RecipientRepositoryInterface;
-use EfTech\ContactList\Infrastructure\AppConfig;
-use EfTech\ContactList\Infrastructure\Autoloader;
+use EfTech\ContactList\Config\AppConfig;
+use EfTech\ContactList\Infrastructure\Autoloader\Autoloader;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\DI\Container;

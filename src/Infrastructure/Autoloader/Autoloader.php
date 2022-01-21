@@ -1,6 +1,6 @@
 <?php
 
-namespace EfTech\ContactList\Infrastructure;
+namespace EfTech\ContactList\Infrastructure\Autoloader;
 
     /**
      *  Автозагрузчик классов

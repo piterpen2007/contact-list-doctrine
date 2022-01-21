@@ -2,7 +2,8 @@
 
 namespace EfTech\ContactList\Entity;
 
-use EfTech\ContactList\Infrastructure\invalidDataStructureException;
+
+use EfTech\ContactList\Exception\InvalidDataStructureException;
 
 class Address
 {
@@ -134,7 +135,7 @@ class Address
 
         if (count($missingFields) > 0) {
             $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
-            throw new invalidDataStructureException($errMsg);
+            throw new InvalidDataStructureException($errMsg);
         }
 
         return new Address(

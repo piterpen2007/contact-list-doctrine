@@ -2,11 +2,11 @@
 
 namespace EfTech\ConctactList\Infrastructure\http;
 
-use EfTech\ContactList\Infrastructure\Autoloader;
+use EfTech\ContactList\Infrastructure\Autoloader\Autoloader;
 use EfTech\ContactList\Infrastructure\http\ServerRequestFactory;
 use EfTech\ContactListTest\TestUtils;
 
-require_once __DIR__ . '/../../../src/Infrastructure/Autoloader.php';
+require_once __DIR__ . '/../../../src/Infrastructure/Autoloader/Autoloader.php';
 
 spl_autoload_register(
     new Autoloader([

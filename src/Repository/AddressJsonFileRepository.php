@@ -4,8 +4,9 @@ namespace EfTech\ContactList\Repository;
 
 use EfTech\ContactList\Entity\Address;
 use EfTech\ContactList\Entity\AddressRepositoryInterface;
+use EfTech\ContactList\Exception\InvalidDataStructureException;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
-use EfTech\ContactList\Infrastructure\invalidDataStructureException;
+
 
 class AddressJsonFileRepository implements AddressRepositoryInterface
 {

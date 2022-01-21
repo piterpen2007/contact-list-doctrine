@@ -1,10 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../src/Infrastructure/Autoloader.php';
+require_once __DIR__ . '/../src/Infrastructure/Autoloader/Autoloader.php';
 
-use EfTech\ContactList\Infrastructure\App;
-use EfTech\ContactList\Infrastructure\AppConfig;
-use EfTech\ContactList\Infrastructure\Autoloader;
+use EfTech\ContactList\Infrastructure\HttpApplication\App;
+use EfTech\ContactList\Config\AppConfig;
+use EfTech\ContactList\Infrastructure\Autoloader\Autoloader;
 use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;

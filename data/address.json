@@ -31,32 +31,26 @@
     },
     {
         "id_address": 6,
-        "id_recipient": 6,
-        "address": "",
-        "status": ""
+        "id_recipient": 7,
+        "address": "Школьная",
+        "status": "Home"
     },
     {
         "id_address": 7,
-        "id_recipient": 5,
-        "address": "ывпывпып",
-        "status": "ывпывпыпв"
+        "id_recipient": 7,
+        "address": "Школьная",
+        "status": "Home"
     },
     {
         "id_address": 8,
-        "id_recipient": 9,
-        "address": "пвапвпа",
-        "status": "авпвпа"
+        "id_recipient": 7,
+        "address": "Школьная",
+        "status": "Home"
     },
     {
         "id_address": 9,
-        "id_recipient": 7,
+        "id_recipient": 8,
         "address": "Школьная",
-        "status": "Дом"
-    },
-    {
-        "id_address": 10,
-        "id_recipient": 11,
-        "address": "Это адрес контакта",
-        "status": "Домашний"
+        "status": "Work"
     }
 ]

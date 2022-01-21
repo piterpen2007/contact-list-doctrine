@@ -1,6 +1,7 @@
 <?php
 
-namespace EfTech\ContactList\Infrastructure;
+namespace EfTech\ContactList\Infrastructure\HttpApplication;
+use EfTech\ContactList\Config\AppConfig;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
 use EfTech\ContactList\Infrastructure\Router\RouterInterface;
 use EfTech\ContactList\Infrastructure\View\RenderInterface;

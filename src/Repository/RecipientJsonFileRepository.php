@@ -3,8 +3,8 @@ namespace EfTech\ContactList\Repository;
 
 use EfTech\ContactList\Entity\Recipient;
 use EfTech\ContactList\Entity\RecipientRepositoryInterface;
+use EfTech\ContactList\Exception\InvalidDataStructureException;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
-use EfTech\ContactList\Infrastructure\invalidDataStructureException;
 use EfTech\ContactList\ValueObject\Balance;
 use EfTech\ContactList\ValueObject\Currency;
 use EfTech\ContactList\ValueObject\Money;

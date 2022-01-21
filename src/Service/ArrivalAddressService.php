@@ -32,15 +32,15 @@ class ArrivalAddressService
 
     public function registerAddress(NewAddressDto $addressDto): ResultRegisterNewAddressDto
     {
-        $recipientId = $addressDto->getIdRecipient();
-
-        $contactsCollections = $this->addressRepository->findBy(['id_recipient' => $recipientId]);
-
-        if(count($contactsCollections) >= 1) {
-            throw new RuntimeException(
-                'Нельзя зарегистрировать адрес с id_recipient = ' . $recipientId . '. Контакт с данным id  уже имеет адрес.'
-            );
-        }
+//        $recipientId = $addressDto->getIdRecipient();
+//
+//        $contactsCollections = $this->addressRepository->findBy(['id_recipient' => $recipientId]);
+//
+//        if(count($contactsCollections) >= 1) {
+//            throw new RuntimeException(
+//                'Нельзя зарегистрировать адрес с id_recipient = ' . $recipientId . '. Контакт с данным id  уже имеет адрес.'
+//            );
+//        }
 
         $entity = new Address(
             $this->addressRepository->nextId(),
