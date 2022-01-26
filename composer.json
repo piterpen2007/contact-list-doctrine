@@ -22,7 +22,7 @@
   "require": {
     "php" : "^7.4 || ^8.0",
     "ext-json": "*",
-    "eff-tech/framework-home" : "dev-home_work-26-01-2022"
+    "eff-tech/framework-home" : "dev-home-work-26-01-2022"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
