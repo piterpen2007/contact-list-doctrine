@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d70bd943dcfab40f731f6817a1f7ef77",
+    "content-hash": "0de07bc3f624dc81175b4115a2a6c71f",
     "packages": [
         {
             "name": "eff-tech/framework-home",
@@ -12,9 +12,11 @@
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/framework-home.git",
-                "reference": "b819e572da984616233c39ecabd16a59632145c5"
+                "reference": "9bf7805e534a648e058c3405b438ba4573f8fcb0"
             },
             "require": {
+                "eff-tech/logger": "dev-home_work_26-01-2022",
+                "eff-tech/view-template": "dev-home_work-26-01-2022",
                 "ext-json": "*",
                 "php": "^7.4 || ^8.0"
             },
@@ -47,7 +49,93 @@
             "support": {
                 "email": "popkin@yandex.ru"
             },
-            "time": "2022-01-26T03:34:04+00:00"
+            "time": "2022-01-26T04:46:41+00:00"
+        },
+        {
+            "name": "eff-tech/logger",
+            "version": "dev-home_work_26-01-2022",
+            "source": {
+                "type": "git",
+                "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/logger.git",
+                "reference": "03ca54a9dd41bcb313f2b7afcf3ba735b5fa0573"
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "9.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EfTech\\ContactList\\Infrastructure\\": "src"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Fedyancev Daniil",
+                    "role": "developer"
+                }
+            ],
+            "description": "Electronic library. An example of an application",
+            "homepage": "https://git.effective-team.ru/rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/logger",
+            "keywords": [
+                "example",
+                "framework",
+                "oop",
+                "project"
+            ],
+            "support": {
+                "email": "popkin@yandex.ru"
+            },
+            "time": "2022-01-26T04:32:42+00:00"
+        },
+        {
+            "name": "eff-tech/view-template",
+            "version": "dev-home_work-26-01-2022",
+            "source": {
+                "type": "git",
+                "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/view-template.git",
+                "reference": "8dff4c89c904ac9c1aac8931087c11557dd1f118"
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "9.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "EfTech\\ContactList\\Infrastructure\\": "src"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Fedyancev Daniil",
+                    "role": "developer"
+                }
+            ],
+            "description": "Electronic library. An example of an application",
+            "homepage": "https://git.effective-team.ru/rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/view-template",
+            "keywords": [
+                "example",
+                "framework",
+                "oop",
+                "project"
+            ],
+            "support": {
+                "email": "popkin@yandex.ru"
+            },
+            "time": "2022-01-26T04:33:23+00:00"
         }
     ],
     "packages-dev": [
