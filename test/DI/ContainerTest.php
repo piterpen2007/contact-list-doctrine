@@ -18,7 +18,7 @@ use EfTech\ContactList\Repository\RecipientJsonFileRepository;
 use EfTech\ContactList\Service\SearchRecipientsService;
 
 
-require_once __DIR__ . '/../../src/Infrastructure/Autoloader/Autoloader.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 spl_autoload_register(
     new Autoloader([

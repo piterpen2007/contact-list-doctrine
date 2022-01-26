@@ -2,7 +2,7 @@
 
 namespace EfTech\ContactListTest\Infrastructure\Controller;
 
-require_once __DIR__ . '/../../src/Infrastructure/Autoloader/Autoloader.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Entity\RecipientRepositoryInterface;

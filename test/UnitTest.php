@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../src/Infrastructure/Autoloader/Autoloader.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use EfTech\ContactList\Infrastructure\HttpApplication\App;
 use EfTech\ContactList\Config\AppConfig;
