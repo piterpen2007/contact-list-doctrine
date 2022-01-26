@@ -2,7 +2,7 @@
 
 namespace EfTech\ContactList\Infrastructure\Logger;
 
-use EfTech\ContactList\Exception\RuntimeException;
+use EfTech\ContactList\Infrastructure\Exception\RuntimeException;
 
 /**
  * Универсальный логер

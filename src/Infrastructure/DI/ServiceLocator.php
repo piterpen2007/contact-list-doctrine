@@ -2,7 +2,7 @@
 namespace EfTech\ContactList\Infrastructure\DI;
 
 
-use EfTech\ContactList\Exception\RuntimeException;
+use EfTech\ContactList\Infrastructure\Exception\RuntimeException;
 
 class ServiceLocator implements ContainerInterface
 {

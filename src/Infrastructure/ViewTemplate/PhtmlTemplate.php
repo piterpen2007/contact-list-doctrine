@@ -2,7 +2,7 @@
 
 namespace EfTech\ContactList\Infrastructure\ViewTemplate;
 
-use EfTech\ContactList\Exception\RuntimeException;
+use EfTech\ContactList\Infrastructure\Exception\RuntimeException;
 
 class PhtmlTemplate implements ViewTemplateInterface
 {

@@ -1,12 +1,11 @@
 <?php
 
-namespace EfTech\ContactList\Exception;
+namespace EfTech\ContactList\Infrastructure\Exception;
 
-use EfTech\ContactList\Infrastructure\Exception as BaseException;
 /**
  * Выбрасывает исключение, если значеине ге соответствует определенной допустимой области данных
  */
-class DomainException extends BaseException\DomainException implements ExceptionInterface
+class DomainException extends \DomainException implements ExceptionInterface
 {
 
 }

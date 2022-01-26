@@ -2,8 +2,8 @@
 
 namespace EfTech\ContactList\Infrastructure\DI;
 
-use EfTech\ContactList\Exception\DomainException;
-use EfTech\ContactList\Exception\RuntimeException;
+use EfTech\ContactList\Infrastructure\Exception\DomainException;
+use EfTech\ContactList\Infrastructure\Exception\RuntimeException;
 use Throwable;
 
 /**

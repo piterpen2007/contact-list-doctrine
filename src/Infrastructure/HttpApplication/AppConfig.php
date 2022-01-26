@@ -8,7 +8,7 @@ class AppConfig implements AppConfigInterface
     /** Скрывает сообщения о ошибках
      * @var bool
      */
-    private bool $hideErrorMsg;
+    private bool $hideErrorMsg = false;
 
     /** Возвращает флаг, который указывает что нужно скрывать сообщения о ощибках
      * @return bool

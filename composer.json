@@ -1,0 +1,38 @@
+{
+  "name" : "eff-tech/contact-list",
+  "description": "Electronic library. An example of an application",
+  "type": "project",
+  "homepage": "https://git.effective-team.ru/rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/contact-list",
+  "readme": "readme",
+  "license": "proprietary",
+  "keywords": [
+    "example",
+    "project",
+    "oop"
+  ],
+  "authors": [
+    {
+      "name": "Fedyancev Daniil",
+      "role": "developer"
+    }
+  ],
+  "support": {
+    "email": "popkin@yandex.ru"
+  },
+  "require": {
+    "php" : "^7.4 || ^8.0",
+    "ext-json": "*",
+    "eff-tech/framework-home" : "*"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require-dev": {
+    "phpunit/phpunit": "9.*"
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/framework-home.git"
+    }
+  ]
+}

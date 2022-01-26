@@ -3,7 +3,7 @@
 namespace EfTech\ContactList\Infrastructure\http;
 
 use EfTech\ContactList\Infrastructure\Uri\Uri;
-use EfTech\ContactList\Exception\RuntimeException;
+use EfTech\ContactList\Infrastructure\Exception\RuntimeException;
 use Throwable;
 
 class ServerResponseFactory

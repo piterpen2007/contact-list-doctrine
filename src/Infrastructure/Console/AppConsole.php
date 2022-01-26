@@ -2,10 +2,10 @@
 
 namespace EfTech\ContactList\Infrastructure\Console;
 
-use EfTech\ContactList\Exception\RuntimeException;
+use EfTech\ContactList\Infrastructure\Exception\RuntimeException;
 use EfTech\ContactList\Infrastructure\Console\Output\EchoOutput;
 use EfTech\ContactList\Infrastructure\Console\Output\OutputInterface;
-use EfTech\ContactList\Exception;
+use EfTech\ContactList\Infrastructure\Exception;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
 use Throwable;
 

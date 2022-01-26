@@ -2,7 +2,7 @@
 
 namespace EfTech\ContactList\Infrastructure\Session;
 
-use EfTech\ContactList\Exception\RuntimeException;
+use EfTech\ContactList\Infrastructure\Exception\RuntimeException;
 
 class SessionNative implements SessionInterface
 {

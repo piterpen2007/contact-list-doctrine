@@ -10,7 +10,7 @@ use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use Throwable;
-use EfTech\ContactList\Exception;
+use EfTech\ContactList\Infrastructure\Exception;
 /**
  * Ядро приложения
  */
