@@ -4,8 +4,8 @@ namespace EfTech\ContactList\Repository;
 
 use EfTech\ContactList\Entity\Address;
 use EfTech\ContactList\Entity\AddressRepositoryInterface;
-use EfTech\ContactList\Exception\InvalidDataStructureException;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
+use JsonException;
 
 
 class AddressJsonFileRepository implements AddressRepositoryInterface
@@ -59,21 +59,6 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
         return $this->addressData;
     }
 
-    private function extractTextDocument($v):int
-    {
-        if (false === is_array($v)) {
-            throw new InvalidDataStructureException('Данные о адресе должны быть массивом');
-        }
-        if (false === array_key_exists('id_address',$v)) {
-            throw new InvalidDataStructureException('Нету id адреса');
-        }
-        if (false === is_int($v['id_address'])) {
-            throw new InvalidDataStructureException('id адреса должен быть целым числом');
-        }
-        return $v['id_address'];
-
-    }
-
 
     public function findBy(array $criteria): array
     {
@@ -106,9 +91,11 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
         $this->loadData();
         ++$this->currentId;
         return $this->currentId;
-
     }
 
+    /**
+     * @throws JsonException
+     */
     public function add(Address $entity): Address
     {
         $this->loadData();

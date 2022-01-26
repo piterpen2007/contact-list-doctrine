@@ -1,7 +1,6 @@
 <?php
 namespace EfTech\ContactList\Entity;
 use EfTech\ContactList\Exception;
-use EfTech\ContactList\ValueObject\Balance;
 
 
 final class Customer extends Recipient

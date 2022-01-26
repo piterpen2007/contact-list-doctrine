@@ -4,13 +4,10 @@ namespace EfTech\ContactList\Service;
 
 use EfTech\ContactList\Entity\Customer;
 use EfTech\ContactList\Entity\CustomerRepositoryInterface;
-use EfTech\ContactList\Entity\RecipientRepositoryInterface;
-use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Service\SearchCustomersService\CustomerDto;
 use EfTech\ContactList\Service\SearchCustomersService\SearchCustomersCriteria;
-use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsCriteria;
-use JsonException;
+
 
 class SearchCustomersService
 {
@@ -67,7 +64,7 @@ class SearchCustomersService
         foreach ($entitiesCollection as $entity) {
             $dtoCollection[] = $this->createDto($entity);
         }
-        $this->logger->debug( 'found recipients: ' . count($entitiesCollection));
+        $this->logger->debug( 'found customers: ' . count($entitiesCollection));
         return $dtoCollection;
     }
 

@@ -39,6 +39,7 @@ class SearchContactsService
     /**
      * Создание dto контакта
      * @param object $contact
+     * @return object
      */
     private function createDto(object $contact):object
     {

@@ -6,6 +6,7 @@ use EfTech\ContactList\Entity\ContactList;
 use EfTech\ContactList\Entity\ContactListRepositoryInterface;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 use EfTech\ContactList\Service\MoveToBlacklistService\Exception\RuntimeException;
+use JsonException;
 
 class ContactListJsonRepository implements ContactListRepositoryInterface
 {
@@ -81,6 +82,9 @@ class ContactListJsonRepository implements ContactListRepositoryInterface
         return $findContactList;
     }
 
+    /**
+     * @throws JsonException
+     */
     public function save(ContactList $entity): ContactList
     {
         $this->loadData();
@@ -112,6 +116,7 @@ class ContactListJsonRepository implements ContactListRepositoryInterface
 
     /**
      * @param ContactList $entity
+     * @return array
      */
     private function buildJsonDataForContactList(ContactList $entity): array
     {

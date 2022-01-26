@@ -16,6 +16,7 @@ use EfTech\ContactList\Service\SearchAddressService;
 use EfTech\ContactList\Service\SearchAddressService\SearchAddressCriteria;
 use EfTech\ContactList\Service\SearchContactsService;
 use EfTech\ContactList\Service\SearchContactsService\SearchContactsCriteria;
+use Throwable;
 
 class AddressAdministrationController implements ControllerInterface
 {
@@ -85,7 +86,7 @@ class AddressAdministrationController implements ControllerInterface
             $context = array_merge($viewData, $resultCreationAddress);
             $template = __DIR__ . '/../../templates/address.administration.phtml';
             $httpCode = 200;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $httpCode = 500;
             $template = __DIR__ . '/../../templates/errors.phtml';
             $context = [

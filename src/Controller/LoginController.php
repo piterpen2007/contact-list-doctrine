@@ -10,6 +10,7 @@ use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Infrastructure\Uri\Uri;
 use EfTech\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface;
+use Throwable;
 
 class LoginController implements ControllerInterface
 {
@@ -40,7 +41,7 @@ class LoginController implements ControllerInterface
     {
         try {
             $response = $this->doLogin($request);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $response = $this->buildErrorResponse($e);
         }
         return $response;
@@ -48,10 +49,10 @@ class LoginController implements ControllerInterface
     }
 
     /**
-     * @param \Throwable $e
+     * @param Throwable $e
      * @return httpResponse
      */
-    private function buildErrorResponse(\Throwable $e):httpResponse
+    private function buildErrorResponse(Throwable $e):httpResponse
     {
         $httpCode = 500;
         $contex = [

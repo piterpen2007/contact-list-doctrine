@@ -4,9 +4,6 @@ namespace EfTech\ContactList\Service;
 
 use EfTech\ContactList\Entity\Address;
 use EfTech\ContactList\Entity\AddressRepositoryInterface;
-use EfTech\ContactList\Entity\ContactRepositoryInterface;
-use EfTech\ContactList\Exception\RuntimeException;
-use EfTech\ContactList\Repository\AddressJsonFileRepository;
 use EfTech\ContactList\Service\ArrivalNewAddressService\NewAddressDto;
 use EfTech\ContactList\Service\ArrivalNewAddressService\ResultRegisterNewAddressDto;
 

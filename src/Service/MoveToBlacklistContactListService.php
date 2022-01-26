@@ -10,7 +10,7 @@ use EfTech\ContactList\Service\MoveToBlacklistService\MoveToBlacklistDto;
 class MoveToBlacklistContactListService
 {
 
-    /** Репозиторий для работы с текстовыми документами
+    /** Репозиторий для работы с черным списком
      * @var ContactListRepositoryInterface
      */
     private ContactListRepositoryInterface $contactListRepository;

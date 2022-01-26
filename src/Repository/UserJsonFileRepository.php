@@ -38,6 +38,7 @@ final class UserJsonFileRepository implements UserRepositoryInterface, UserDataS
     /** Поиск сущностей по заданному критерию
      *
      * @param array $criteria
+     * @return array
      */
     public function findBy(array $criteria): array
     {

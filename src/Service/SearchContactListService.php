@@ -18,7 +18,7 @@ class SearchContactListService
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
-    /** Наш репозиторий текстовых документов
+    /** Наш репозиторий черного списка
      * @var ContactListRepositoryInterface
      */
     private ContactListRepositoryInterface $contactListRepository;

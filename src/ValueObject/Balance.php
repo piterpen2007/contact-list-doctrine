@@ -3,7 +3,7 @@
 namespace EfTech\ContactList\ValueObject;
 
 /**
- * Закупочная цена
+ * Баланс
  */
 final class Balance
 {

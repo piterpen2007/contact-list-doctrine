@@ -12,10 +12,6 @@ use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 class ContactJsonRepository implements ContactRepositoryInterface
 {
 
-    /** Данные о контактах
-     * @var array|null
-     */
-    private ?array $data = null;
     /**
      *
      *
