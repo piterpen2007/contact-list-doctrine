@@ -29,6 +29,16 @@
   "require-dev": {
     "phpunit/phpunit": "9.*"
   },
+  "autoload": {
+    "psr-4": {
+      "EfTech\\ContactList\\" : "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "EfTech\\ContactListTest\\" : "test"
+    }
+  },
   "repositories": [
     {
       "type": "git",

@@ -7,7 +7,6 @@ use EfTech\ContactList\Infrastructure\Logger\AdapterInterface;
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Entity\RecipientRepositoryInterface;
 use EfTech\ContactList\Config\AppConfig;
-use EfTech\ContactList\Infrastructure\Autoloader\Autoloader;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\DI\Container;
@@ -20,12 +19,6 @@ use EfTech\ContactList\Service\SearchRecipientsService;
 
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-spl_autoload_register(
-    new Autoloader([
-        'EfTech\\ContactList\\' => __DIR__ . '/../../src/',
-        'EfTech\\ContactListTest\\' => __DIR__ . '/../../test/'
-    ])
-);
 class ContainerTest
 {
     /**

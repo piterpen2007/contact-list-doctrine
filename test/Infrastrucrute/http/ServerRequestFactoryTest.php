@@ -2,18 +2,12 @@
 
 namespace EfTech\ConctactList\Infrastructure\http;
 
-use EfTech\ContactList\Infrastructure\Autoloader\Autoloader;
 use EfTech\ContactList\Infrastructure\http\ServerRequestFactory;
 use EfTech\ContactListTest\TestUtils;
 
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
-spl_autoload_register(
-    new Autoloader([
-        'EfTech\\ContactList\\' => __DIR__ . '/../../../src/',
-        'EfTech\\ContactListTest\\' => __DIR__ . '/../../../test/'
-    ])
-);
+
 /**
  *  Тестирует логику работу фабрики, создающий серверный http запрос
  */

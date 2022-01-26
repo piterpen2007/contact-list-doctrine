@@ -4,7 +4,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use EfTech\ContactList\Infrastructure\HttpApplication\App;
 use EfTech\ContactList\Config\AppConfig;
-use EfTech\ContactList\Infrastructure\Autoloader\Autoloader;
 use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
@@ -15,12 +14,6 @@ use EfTech\ContactList\Infrastructure\View\RenderInterface;
 use EfTech\ContactListTest\TestUtils;
 
 
-spl_autoload_register(
-    new Autoloader([
-        'EfTech\\ContactList\\' => __DIR__ . '/../src/',
-        'EfTech\\ContactListTest\\' => __DIR__ . '/../test/'
-    ])
-);
 /**
  *  Тестирование приложения
  */

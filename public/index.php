@@ -1,13 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
-//require_once __DIR__ . '/../src/Infrastructure/Autoloader/Autoloader.php';
 
-use EfTech\ContactList\Infrastructure\Autoloader\Autoloader;
-spl_autoload_register(new Autoloader([
-        'EfTech\\ContactList\\' => __DIR__ . '/../src/',
-        'EfTech\\ContactListTest\\' => __DIR__ . '/../test/'
-    ])
-);
 use EfTech\ContactList\Config\AppConfig;
 use EfTech\ContactList\Infrastructure\HttpApplication\App;
 use EfTech\ContactList\Infrastructure\DI\Container;
