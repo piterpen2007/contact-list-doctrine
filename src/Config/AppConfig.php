@@ -8,9 +8,6 @@ use \EfTech\ContactList\Infrastructure\HttpApplication\AppConfig as BaseConfig;
 class AppConfig extends BaseConfig
 {
 
-
-
-
     /** Путь до файла с данными о получателях
      * @var string
      */
