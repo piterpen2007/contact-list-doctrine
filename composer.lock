@@ -4,19 +4,19 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d79ee4ee559276ea2d8c4d42e009dbe2",
+    "content-hash": "fe884e85b9a36d5fa7a4baebd27f3c15",
     "packages": [
         {
             "name": "eff-tech/framework-home",
-            "version": "dev-home_work_28-01-2022",
+            "version": "dev-home_work_31-01-2022",
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/framework-home.git",
-                "reference": "de901d7ed6d82265fe5c4a05a052b45e58fb4e11"
+                "reference": "ffad1b6ca4652ef492edeae987fb8cb364484956"
             },
             "require": {
-                "eff-tech/logger": "dev-home_work_28-01-2022",
-                "eff-tech/view-template": "dev-home_work_28-01-2022",
+                "eff-tech/logger": "dev-home_work_31-01-2022",
+                "eff-tech/view-template": "dev-home_work_31-01-2022",
                 "ext-json": "*",
                 "php": "^7.4 || ^8.0"
             },
@@ -50,15 +50,15 @@
             "support": {
                 "email": "popkin@yandex.ru"
             },
-            "time": "2022-02-01T04:26:11+00:00"
+            "time": "2022-02-01T05:06:35+00:00"
         },
         {
             "name": "eff-tech/logger",
-            "version": "dev-home_work_28-01-2022",
+            "version": "dev-home_work_31-01-2022",
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/logger.git",
-                "reference": "d78353c0d471b97f0d8d525d37af3d4859a97100"
+                "reference": "9e8ed20bec1e5d68e74771e7ba4c21f78bc97481"
             },
             "require": {
                 "ext-json": "*",
@@ -94,15 +94,15 @@
             "support": {
                 "email": "popkin@yandex.ru"
             },
-            "time": "2022-02-01T04:26:13+00:00"
+            "time": "2022-02-01T04:56:54+00:00"
         },
         {
             "name": "eff-tech/view-template",
-            "version": "dev-home_work_28-01-2022",
+            "version": "dev-home_work_31-01-2022",
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/view-template.git",
-                "reference": "3682d8a4f5faea5edf39d442c3a51f938783b222"
+                "reference": "ff44919e1bb3dbc84e631be2a7aa816d4f81c3f1"
             },
             "require": {
                 "ext-json": "*",
@@ -138,7 +138,7 @@
             "support": {
                 "email": "popkin@yandex.ru"
             },
-            "time": "2022-02-01T04:26:12+00:00"
+            "time": "2022-02-01T04:56:53+00:00"
         }
     ],
     "packages-dev": [
