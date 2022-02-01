@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/framework-home.git",
-                "reference": "ffad1b6ca4652ef492edeae987fb8cb364484956"
+                "reference": "aec63c0649f9aa5e133324f36de9194302f78e2a"
             },
             "require": {
                 "eff-tech/logger": "dev-home_work_31-01-2022",
@@ -50,7 +50,7 @@
             "support": {
                 "email": "popkin@yandex.ru"
             },
-            "time": "2022-02-01T05:06:35+00:00"
+            "time": "2022-02-01T05:18:05+00:00"
         },
         {
             "name": "eff-tech/logger",
