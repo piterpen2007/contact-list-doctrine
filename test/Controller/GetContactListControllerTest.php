@@ -3,45 +3,52 @@
 namespace EfTech\ContactListTest\Infrastructure\Controller;
 
 use EfTech\ContactList\Config\AppConfig;
+use EfTech\ContactList\Controller\GetContactListCollectionController;
+use EfTech\ContactList\Controller\GetContactListController;
+use EfTech\ContactList\Controller\GetCustomersCollectionController;
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
 use EfTech\ContactList\Infrastructure\Logger\Logger;
 use EfTech\ContactList\Infrastructure\Uri\Uri;
+use EfTech\ContactList\Repository\ContactListJsonRepository;
+use EfTech\ContactList\Repository\CustomerJsonFileRepository;
 use EfTech\ContactList\Repository\RecipientJsonFileRepository;
+use EfTech\ContactList\Service\SearchContactListService;
+use EfTech\ContactList\Service\SearchCustomersService;
 use EfTech\ContactList\Service\SearchRecipientsService;
 use Exception;
 use JsonException;
 use PHPUnit\Framework\TestCase;
 
-class FindRecipientTest extends TestCase
+class GetContactListControllerTest extends TestCase
 {
     /** Тестирование поиска получателей по фамилии
      *
      * @throws JsonException
      * @throws Exception
      */
-    public function testSearchRecipientForFullName(): void
+    public function testSearchContactList(): void
     {
         //Arrange
         $httpRequest = new ServerRequest(
             'GET',
             '1.1',
-            '/recipient?full_name=Осипов Геннадий Иванович',
-            Uri::createFromString('http://localhost:8082/recipient?full_name=Осипов Геннадий Иванович'),
+            '/contactList?id_recipient=1',
+            Uri::createFromString('http://localhost:8082/contactList?id_recipient=1'),
             ['Content-Type' => 'application/json'],
             null
         );
         $appConfig = AppConfig::createFromArray(require __DIR__ . '/../../config/dev/config.php');
         $logger = new Logger(new NullAdapter());
 
-        $controller = new GetRecipientsCollectionController(
+        $controller = new GetContactListController(
             $logger,
-            new SearchRecipientsService(
+            new SearchContactListService(
                 $logger,
-                new RecipientJsonFileRepository(
-                    $appConfig->getPathToRecipients(),
+                new ContactListJsonRepository(
+                    $appConfig->getPathToContactList(),
                     new JsonDataLoader()
                 )
             )
@@ -51,12 +58,9 @@ class FindRecipientTest extends TestCase
         $httpResponse = $controller($httpRequest);
         $actualResult =  json_decode($httpResponse->getBody(), true, 512, JSON_THROW_ON_ERROR);
         $expected = [
-            [
-                'id_recipient' => 1,
-                'full_name' => 'Осипов Геннадий Иванович',
-                'birthday' => '15.06.1985',
-                'profession' => 'Системный администратор',
-            ]
+                "id_recipient" => 1,
+                "id_entry" => 1,
+                "blacklist" => false
         ];
 
         //Assert

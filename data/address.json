@@ -154,5 +154,23 @@
         "id_recipient": 11,
         "address": "Это адрес контакта",
         "status": "Домашний"
+    },
+    {
+        "id_address": 23,
+        "id_recipient": 11,
+        "address": "Это адрес контакта",
+        "status": "Домашний"
+    },
+    {
+        "id_address": 24,
+        "id_recipient": 11,
+        "address": "Это адрес контакта",
+        "status": "Домашний"
+    },
+    {
+        "id_address": 25,
+        "id_recipient": 11,
+        "address": "Это адрес контакта",
+        "status": "Домашний"
     }
 ]

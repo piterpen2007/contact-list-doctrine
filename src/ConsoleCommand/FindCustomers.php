@@ -41,7 +41,7 @@ class FindCustomers implements CommandInterface
      */
     public static function getShortOption(): string
     {
-        return 'n:';
+        return 'i:f:b:p:c:a:d:t';
     }
 
     /**

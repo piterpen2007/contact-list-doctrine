@@ -40,7 +40,7 @@ class FindContacts implements CommandInterface
 
     public static function getShortOption(): string
     {
-        return 'n:';
+        return 'c:';
     }
 
     public static function getLongOption(): array

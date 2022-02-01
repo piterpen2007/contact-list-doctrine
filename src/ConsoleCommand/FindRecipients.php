@@ -40,7 +40,7 @@ final class FindRecipients implements CommandInterface
      */
     public static function getShortOption(): string
     {
-        return 'n:';
+        return 'i:f:b:p';
     }
 
     /**

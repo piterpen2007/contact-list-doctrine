@@ -350,3 +350,6 @@ Content-Type: application/json
   "address": "Это адрес контакта",
   "status" : "Домашний"
 }
+
+### Поиск по списку контактов с информацией о черном списке
+GET http://localhost:8082/contactList?id_recipient=1
