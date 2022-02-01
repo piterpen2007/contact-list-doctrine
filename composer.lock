@@ -58,7 +58,7 @@
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/logger.git",
-                "reference": "9e8ed20bec1e5d68e74771e7ba4c21f78bc97481"
+                "reference": "125d6652f04eb83b29d6450710e84012438fb57c"
             },
             "require": {
                 "ext-json": "*",
@@ -68,7 +68,7 @@
                 "phpunit/phpunit": "9.*",
                 "squizlabs/php_codesniffer": "^3.6"
             },
-            "type": "framework project",
+            "type": "library",
             "autoload": {
                 "psr-4": {
                     "EfTech\\ContactList\\Infrastructure\\": "src"
@@ -94,7 +94,7 @@
             "support": {
                 "email": "popkin@yandex.ru"
             },
-            "time": "2022-02-01T04:56:54+00:00"
+            "time": "2022-02-01T06:18:13+00:00"
         },
         {
             "name": "eff-tech/view-template",
@@ -102,7 +102,7 @@
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/view-template.git",
-                "reference": "ff44919e1bb3dbc84e631be2a7aa816d4f81c3f1"
+                "reference": "9cf2872b993265c7111b19b37ecf127c4a940de9"
             },
             "require": {
                 "ext-json": "*",
@@ -112,7 +112,7 @@
                 "phpunit/phpunit": "9.*",
                 "squizlabs/php_codesniffer": "^3.6"
             },
-            "type": "framework project",
+            "type": "library",
             "autoload": {
                 "psr-4": {
                     "EfTech\\ContactList\\Infrastructure\\": "src"
@@ -138,7 +138,7 @@
             "support": {
                 "email": "popkin@yandex.ru"
             },
-            "time": "2022-02-01T04:56:53+00:00"
+            "time": "2022-02-01T06:18:13+00:00"
         }
     ],
     "packages-dev": [
