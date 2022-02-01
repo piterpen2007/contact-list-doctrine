@@ -46,24 +46,24 @@ class GetContactCollectionController implements ControllerInterface
                 (new SearchContactsCriteria())
                     ->setCategory($params['category'] ?? null)
             );
-            if(0 === count($foundContact)) {
-                $httpCode = 404;
-            $result=[
-                'status' => 'fail',
-                'message' => 'dispatch category nothing'
+        if (0 === count($foundContact)) {
+            $httpCode = 404;
+            $result = [
+            'status' => 'fail',
+            'message' => 'dispatch category nothing'
             ];
-            } else {
-                $httpCode = $this->buildHttpCode($foundContact);
-                $result = $this->buildResult($foundContact);
-            }
-        return ServerResponseFactory::createJsonResponse($httpCode,$result);
+        } else {
+            $httpCode = $this->buildHttpCode($foundContact);
+            $result = $this->buildResult($foundContact);
+        }
+        return ServerResponseFactory::createJsonResponse($httpCode, $result);
     }
 
     /** Определяет http code
      * @param array $foundRecipientsOnCategory
      * @return int
      */
-    protected function buildHttpCode(array $foundRecipientsOnCategory):int
+    protected function buildHttpCode(array $foundRecipientsOnCategory): int
     {
         return 200;
     }
@@ -72,7 +72,7 @@ class GetContactCollectionController implements ControllerInterface
      * @param array $foundRecipientsOnCategories
      * @return array|Recipient
      */
-    protected function buildResult(array $foundRecipientsOnCategories):array
+    protected function buildResult(array $foundRecipientsOnCategories): array
     {
         $result = [];
         foreach ($foundRecipientsOnCategories as $foundRecipientsOnCategory) {
@@ -86,7 +86,7 @@ class GetContactCollectionController implements ControllerInterface
      * @param object $contactDto
      * @return array
      */
-    final protected function serializeContact(object $contactDto):array
+    final protected function serializeContact(object $contactDto): array
     {
         if ($contactDto instanceof CustomerDto) {
             return [
@@ -108,7 +108,7 @@ class GetContactCollectionController implements ControllerInterface
                 'profession' => $contactDto->getProfession(),
                 'department' => $contactDto->getDepartment(),
                 'position' => $contactDto->getPosition(),
-                'room_number'=> $contactDto->getRoomNumber()
+                'room_number' => $contactDto->getRoomNumber()
             ];
         }
         if ($contactDto instanceof KinsfolkDto) {
@@ -129,7 +129,4 @@ class GetContactCollectionController implements ControllerInterface
             'profession' => $contactDto->getProfession(),
         ];
     }
-
-
-
 }

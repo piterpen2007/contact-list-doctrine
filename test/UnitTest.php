@@ -19,7 +19,7 @@ use EfTech\ContactListTest\TestUtils;
  */
 class UnitTest
 {
-    private static function testDataProvider():array
+    private static function testDataProvider(): array
     {
         $diConfig = require __DIR__ . '/../config/dev/di.php';
         $diConfig['services'][\EfTech\ContactList\Infrastructure\Logger\AdapterInterface::class] = [
@@ -30,7 +30,7 @@ class UnitTest
         ];
         return [
             [
-                'testName'=>'Тестирование поиска получателя по id',
+                'testName' => 'Тестирование поиска получателя по id',
                 'in' => [
                     'uri' => '/recipient?id_recipient=1',
                     'diConfig' => $diConfig
@@ -51,7 +51,7 @@ class UnitTest
                 'testName' => 'Тестирование ситуации когда данные о получателях не кореектны. Нет поля birthday',
                 'in' => [
                     'uri' => '/recipient?full_name=Осипов Геннадий Иванович',
-                    'diConfig' => (static function($diConfig) {
+                    'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/broken.recipient.json';
                         $diConfig['instances']['appConfig'] = $config;
@@ -70,7 +70,7 @@ class UnitTest
                 'testName' => 'Тестирование ситуации с некорректным  данными конфига приложения',
                 'in' => [
                     'uri' => '/recipient?id_recipient=1',
-                    'diConfig' => (static function($diConfig) {
+                    'diConfig' => (static function ($diConfig) {
                         $diConfig['factories'][AppConfig::class] = static function () {
                             return 'Ops!';
                         };
@@ -89,7 +89,7 @@ class UnitTest
                 'testName' => 'Тестирование ситуации с некорректным путем до файла получателями',
                 'in' => [
                     'uri' =>  '/recipient?id_recipient=1',
-                    'diConfig' => (static function($diConfig) {
+                    'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToRecipients'] = __DIR__ . '/data/unknown.recipients.json';
                         $diConfig['instances']['appConfig'] = $config;
@@ -108,7 +108,7 @@ class UnitTest
                 'testName' => 'Тестирование ситуации когда данные о клиентах некорректны. Нет поля id_recipient',
                 'in' => [
                     'uri' => '/customers?full_name=Калинин Пётр Александрович',
-                    'diConfig' => (static function($diConfig) {
+                    'diConfig' => (static function ($diConfig) {
                         $config = include __DIR__ . '/../config/dev/config.php';
                         $config['pathToCustomers'] = __DIR__ . '/data/broken.customers.json';
                         $diConfig['instances']['appConfig'] = $config;
@@ -122,9 +122,9 @@ class UnitTest
                         'message' => 'Отсутствуют обязательные элементы: id_recipient'
                     ]
                 ]
-            ,
+                ,
 
-        ],
+            ],
         ];
     }
 
@@ -134,7 +134,7 @@ class UnitTest
      * @return void
      * @throws JsonException
      */
-    public static function runTest():void
+    public static function runTest(): void
     {
         foreach (static::testDataProvider() as $testItem) {
             echo "-----{$testItem['testName']}-----\n";
@@ -151,11 +151,21 @@ class UnitTest
 
             $diConfig = $testItem['in']['diConfig'];
             $httpResponse = (new App(
-                static function(Container $di): RouterInterface {return $di->get(RouterInterface::class);},
-                static function(Container $di):LoggerInterface {return $di->get(LoggerInterface::class);},
-                static function(Container $di):AppConfig {return $di->get(AppConfig::class);},
-                static function(Container $di):RenderInterface {return $di->get(RenderInterface::class);},
-                static function() use($diConfig) :Container {return Container::createFromArray($diConfig);}
+                static function (Container $di): RouterInterface {
+                    return $di->get(RouterInterface::class);
+                },
+                static function (Container $di): LoggerInterface {
+                    return $di->get(LoggerInterface::class);
+                },
+                static function (Container $di): AppConfig {
+                    return $di->get(AppConfig::class);
+                },
+                static function (Container $di): RenderInterface {
+                    return $di->get(RenderInterface::class);
+                },
+                static function () use ($diConfig): Container {
+                    return Container::createFromArray($diConfig);
+                }
             ))->dispath($httpRequest);
 
 
@@ -163,10 +173,11 @@ class UnitTest
             if ($httpResponse->getStatusCode() === $testItem['out']['httpCode']) {
                 echo "    OK --- код ответа\n";
             } else {
-                echo "    FAIL - код ответа. Ожидалось: {$testItem['out']['httpCode']}. Актуальное значение: {$httpResponse->getStatusCode()}\n";
+                echo "    FAIL - код ответа. Ожидалось: {$testItem['out']['httpCode']}. Актуальное" .
+                    " значение: {$httpResponse->getStatusCode()}\n";
             }
 
-            $actualResult =  json_decode($httpResponse->getBody(), true, 512 , JSON_THROW_ON_ERROR);
+            $actualResult =  json_decode($httpResponse->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
             $unnecessaryElements = TestUtils::arrayDiffAssocRecursive($actualResult, $testItem['out']['result']);
             $missingElements =  TestUtils::arrayDiffAssocRecursive($testItem['out']['result'], $actualResult);
@@ -174,10 +185,16 @@ class UnitTest
             $errMsg = '';
 
             if (count($unnecessaryElements) > 0) {
-                $errMsg .= sprintf("         Есть лишние элементы %s\n", json_encode($unnecessaryElements,JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
+                $errMsg .= sprintf("         Есть лишние элементы %s\n", json_encode(
+                    $unnecessaryElements,
+                    JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE
+                ));
             }
             if (count($missingElements) > 0) {
-                $errMsg .= sprintf("         Есть лишние недостающие элементы %s\n", json_encode($missingElements,JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
+                $errMsg .= sprintf("         Есть лишние недостающие элементы %s\n", json_encode(
+                    $missingElements,
+                    JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE
+                ));
             }
 
             if ('' === $errMsg) {
@@ -185,8 +202,6 @@ class UnitTest
             } else {
                 echo "    FAIL - данные ответа валидны\n" . $errMsg;
             }
-
-
         }
     }
 }

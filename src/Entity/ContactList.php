@@ -7,7 +7,6 @@ use EfTech\ContactList\Exception\RuntimeException;
 
 class ContactList
 {
-
     /**
      * @var int id Получателя
      */
@@ -92,7 +91,7 @@ class ContactList
     /** Перенос контакта в черный список
      * @return $this
      */
-    public function moveToBlacklist():self
+    public function moveToBlacklist(): self
     {
         if (true === $this->blackList) {
             throw new RuntimeException(
@@ -109,7 +108,7 @@ class ContactList
      * @param array $data
      * @return ContactList
      */
-    public static function createFromArray(array $data):ContactList
+    public static function createFromArray(array $data): ContactList
     {
         $requiredFields = [
             'id_recipient',
@@ -117,7 +116,7 @@ class ContactList
             'blacklist'
         ];
 
-        $missingFields = array_diff($requiredFields,array_keys($data));
+        $missingFields = array_diff($requiredFields, array_keys($data));
 
         if (count($missingFields) > 0) {
             $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
@@ -130,5 +129,4 @@ class ContactList
             $data['blacklist']
         );
     }
-
 }

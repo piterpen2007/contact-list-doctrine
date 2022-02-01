@@ -1,5 +1,7 @@
 <?php
+
 namespace EfTech\ContactList\Service\SearchAddressService;
+
 class SearchAddressCriteria
 {
     private ?int $id_recipient = null;
@@ -78,6 +80,4 @@ class SearchAddressCriteria
         $this->status = $status;
         return $this;
     }
-
-
 }

@@ -10,7 +10,6 @@ use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsCriteria;
 
 class SearchRecipientsService
 {
-
     /**
      * @var RecipientRepositoryInterface
      */
@@ -26,8 +25,7 @@ class SearchRecipientsService
      * @param LoggerInterface $logger
      * @param RecipientRepositoryInterface $recipientRepository
      */
-    public function __construct(LoggerInterface $logger, RecipientRepositoryInterface $recipientRepository
-    )
+    public function __construct(LoggerInterface $logger, RecipientRepositoryInterface $recipientRepository)
     {
         $this->logger = $logger;
         $this->recipientRepository = $recipientRepository;
@@ -52,7 +50,7 @@ class SearchRecipientsService
      * @param SearchRecipientsCriteria $searchCriteria
      * @return RecipientDto[]
      */
-    public function search(SearchRecipientsCriteria $searchCriteria):array
+    public function search(SearchRecipientsCriteria $searchCriteria): array
     {
         $criteria = $this->searchCriteriaToArray($searchCriteria);
         $entitiesCollection = $this->recipientRepository->findBy($criteria);
@@ -60,7 +58,7 @@ class SearchRecipientsService
         foreach ($entitiesCollection as $entity) {
             $dtoCollection[] = $this->createDto($entity);
         }
-        $this->logger->debug( 'found recipients: ' . count($entitiesCollection));
+        $this->logger->debug('found recipients: ' . count($entitiesCollection));
         return $dtoCollection;
     }
 
@@ -72,9 +70,8 @@ class SearchRecipientsService
             'birthday' => $searchCriteria->getBirthday(),
             'profession' => $searchCriteria->getProfession()
         ];
-        return array_filter($criteriaForRepository, static function($v):bool {return null !== $v;});
-
+        return array_filter($criteriaForRepository, static function ($v): bool {
+            return null !== $v;
+        });
     }
-
-
 }

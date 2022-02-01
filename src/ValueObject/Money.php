@@ -44,7 +44,7 @@ final class Money
     public function getDecimal(): float
     {
         if (null === $this->decimal) {
-            $this->decimal = $this->amount/100;
+            $this->decimal = $this->amount / 100;
         }
         return $this->decimal;
     }
@@ -56,7 +56,4 @@ final class Money
     {
         return $this->currency;
     }
-
-
-
 }

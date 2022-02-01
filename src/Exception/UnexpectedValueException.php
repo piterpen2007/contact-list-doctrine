@@ -11,5 +11,4 @@ use EfTech\ContactList\Infrastructure\Exception as BaseException;
  */
 class UnexpectedValueException extends BaseException\UnexpectedValueException implements ExceptionInterface
 {
-
 }

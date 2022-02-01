@@ -41,11 +41,11 @@ class GetCustomersCollectionController implements ControllerInterface
      * @param ServerRequest $request
      * @return string|null
      */
-    private function validateQueryParams(ServerRequest $request):?string
+    private function validateQueryParams(ServerRequest $request): ?string
     {
         $paramValidations = [
             'id_recipient' => 'incorrect id_recipient',
-            'full_name' =>'incorrect full_name',
+            'full_name' => 'incorrect full_name',
             'birthday' => 'incorrect birthday',
             'profession' => 'incorrect profession',
             'contract_number' => ' incorrect contract_number',
@@ -53,8 +53,8 @@ class GetCustomersCollectionController implements ControllerInterface
             'discount' => 'incorrect discount',
             'time_to_call' => 'incorrect time_to_call'
         ];
-        $params = array_merge($request->getQueryParams(),$request->getAttributes());
-        return Assert::arrayElementsIsString($paramValidations,$params);
+        $params = array_merge($request->getQueryParams(), $request->getAttributes());
+        return Assert::arrayElementsIsString($paramValidations, $params);
     }
 
     /**
@@ -84,18 +84,18 @@ class GetCustomersCollectionController implements ControllerInterface
         } else {
             $httpCode = 500;
 
-            $result=[
+            $result = [
                 'status' => 'fail',
                 'message' => $resultOfParamValidation
             ];
         }
-        return ServerResponseFactory::createJsonResponse($httpCode,$result);
+        return ServerResponseFactory::createJsonResponse($httpCode, $result);
     }
     /** Определяет http code
      * @param array $foundCustomers
      * @return int
      */
-    protected function buildHttpCode(array $foundCustomers):int
+    protected function buildHttpCode(array $foundCustomers): int
     {
         return 200;
     }
@@ -118,7 +118,7 @@ class GetCustomersCollectionController implements ControllerInterface
      * @param CustomerDto $customerDto
      * @return array|Customer
      */
-    final protected function serializeCustomer(CustomerDto $customerDto):array
+    final protected function serializeCustomer(CustomerDto $customerDto): array
     {
         return [
             'id_recipient' => $customerDto->getIdRecipient(),

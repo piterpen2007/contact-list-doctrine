@@ -54,7 +54,6 @@ class AddressAdministrationController implements ControllerInterface
         LoggerInterface $logger,
         SearchContactsService $searchContactsService,
         HttpAuthProvider $httpAuthProvider
-
     ) {
         $this->arrivalAddressService = $arrivalAddressService;
         $this->addressService = $addressService;
@@ -100,7 +99,7 @@ class AddressAdministrationController implements ControllerInterface
             $context
         );
 
-        return ServerResponseFactory::createHtmlResponse($httpCode,$html);
+        return ServerResponseFactory::createHtmlResponse($httpCode, $html);
     }
 
     /** Результат создания адресов
@@ -108,10 +107,10 @@ class AddressAdministrationController implements ControllerInterface
      * @param ServerRequest $request
      * @return array - данные о ошибках у форм создания адресов
      */
-    private function creationOfAddress(ServerRequest $request):array
+    private function creationOfAddress(ServerRequest $request): array
     {
         $dataToCreate = [];
-        parse_str($request->getBody(),$dataToCreate);
+        parse_str($request->getBody(), $dataToCreate);
 
         $result = [
             'formValidationResults' => [
@@ -132,7 +131,7 @@ class AddressAdministrationController implements ControllerInterface
      * @param array $dataToCreate
      * @return void
      */
-    private function validateAddresses(array $dataToCreate):array
+    private function validateAddresses(array $dataToCreate): array
     {
         $errs = [];
 
@@ -158,11 +157,11 @@ class AddressAdministrationController implements ControllerInterface
      * @param array $dataToCreate
      * @return array
      */
-    private function validateAddress(array $dataToCreate):array
+    private function validateAddress(array $dataToCreate): array
     {
         $errs = [];
 
-        if (false === array_key_exists('address',$dataToCreate)) {
+        if (false === array_key_exists('address', $dataToCreate)) {
             throw new RuntimeException('Нет данных о адресе');
         } elseif (false === is_string($dataToCreate['address'])) {
             throw new RuntimeException('Данные о адресе должны быть строкой');
@@ -186,13 +185,13 @@ class AddressAdministrationController implements ControllerInterface
     private function validateIdRecipient(array $dataToCreate): array
     {
         $errs = [];
-        if (false === array_key_exists('id_recipient',$dataToCreate)) {
+        if (false === array_key_exists('id_recipient', $dataToCreate)) {
             throw new RuntimeException('Нет данных о id контакта');
         } elseif (false === is_string($dataToCreate['id_recipient'])) {
             throw new RuntimeException('Данные о id контакта должны быть строкой');
         } else {
             $idRecipientNumber = trim($dataToCreate['id_recipient']);
-            $idRecipientIsValid = 1 === preg_match('/^\d+$/',$idRecipientNumber);
+            $idRecipientIsValid = 1 === preg_match('/^\d+$/', $idRecipientNumber);
 
             $errsIdRecipient = [];
             if (false === $idRecipientIsValid) {
@@ -209,11 +208,11 @@ class AddressAdministrationController implements ControllerInterface
      * @param array $dataToCreate
      * @return array
      */
-    private function validateStatus(array $dataToCreate):array
+    private function validateStatus(array $dataToCreate): array
     {
         $errs = [];
 
-        if (false === array_key_exists('status',$dataToCreate)) {
+        if (false === array_key_exists('status', $dataToCreate)) {
             throw new RuntimeException('Нет данных о статусе');
         } elseif (false === is_string($dataToCreate['status'])) {
             throw new RuntimeException('Данные о статусе должны быть строкой');

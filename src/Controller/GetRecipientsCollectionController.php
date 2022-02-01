@@ -40,16 +40,16 @@ class GetRecipientsCollectionController implements ControllerInterface
      * @param ServerRequest $request
      * @return string|null
      */
-    private function validateQueryParams(ServerRequest $request):?string
+    private function validateQueryParams(ServerRequest $request): ?string
     {
         $paramValidations = [
             'id_recipient' => 'incorrect id_recipient',
-            'full_name' =>'incorrect full_name',
+            'full_name' => 'incorrect full_name',
             'birthday' => 'incorrect birthday',
             'profession' => 'incorrect profession'
         ];
-        $params = array_merge($request->getQueryParams(),$request->getAttributes());
-        return Assert::arrayElementsIsString($paramValidations,$params);
+        $params = array_merge($request->getQueryParams(), $request->getAttributes());
+        return Assert::arrayElementsIsString($paramValidations, $params);
     }
 
 
@@ -77,18 +77,18 @@ class GetRecipientsCollectionController implements ControllerInterface
         } else {
             $httpCode = 500;
 
-            $result=[
+            $result = [
                 'status' => 'fail',
                 'message' => $resultOfParamValidation
             ];
         }
-        return ServerResponseFactory::createJsonResponse($httpCode,$result);
+        return ServerResponseFactory::createJsonResponse($httpCode, $result);
     }
     /** Определяет http code
      * @param array $foundRecipients
      * @return int
      */
-    protected function buildHttpCode(array $foundRecipients):int
+    protected function buildHttpCode(array $foundRecipients): int
     {
         return 200;
     }
@@ -110,7 +110,7 @@ class GetRecipientsCollectionController implements ControllerInterface
      * @param RecipientDto $recipientDto
      * @return array
      */
-    final protected function serializeRecipient(RecipientDto $recipientDto):array
+    final protected function serializeRecipient(RecipientDto $recipientDto): array
     {
         return [
             'id_recipient' => $recipientDto->getIdRecipient(),
@@ -119,7 +119,4 @@ class GetRecipientsCollectionController implements ControllerInterface
             'profession' => $recipientDto->getProfession(),
         ];
     }
-
-
 }
-

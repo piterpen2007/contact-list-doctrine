@@ -156,9 +156,4 @@ class SearchCustomersCriteria
         $this->timeToCall = $timeToCall;
         return $this;
     }
-
-
-
-
-
 }

@@ -1,6 +1,7 @@
 <?php
 
 namespace EfTech\ContactList\Controller;
+
 /**
  * Получение информации о одном клиенте
  */
@@ -22,7 +23,5 @@ class GetCustomersController extends GetCustomersCollectionController
         return 1 === count($foundCustomers)
             ? $this->serializeCustomer(current($foundCustomers))
             : [ 'status' => 'fail', 'message' => 'entity not found'];
-
     }
-
 }

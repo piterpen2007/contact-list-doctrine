@@ -9,5 +9,5 @@ interface ContactRepositoryInterface
      * @param array $searchCriteria
      * @return array
      */
-    public function findBy(array $searchCriteria):array;
+    public function findBy(array $searchCriteria): array;
 }

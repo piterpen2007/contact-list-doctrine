@@ -38,7 +38,7 @@ class CustomerJsonFileRepository implements CustomerRepositoryInterface
     /**
      * @return array
      */
-    private function loadData():array
+    private function loadData(): array
     {
         if (null === $this->data) {
             $this->data = $this->dataLoader->loadData($this->pathToCustomers);
@@ -52,30 +52,31 @@ class CustomerJsonFileRepository implements CustomerRepositoryInterface
         $customers = $this->loadData();
         $foundCustomers = [];
         foreach ($customers as $customer) {
-            if (array_key_exists('id_recipient',$searchCriteria)) {
+            if (array_key_exists('id_recipient', $searchCriteria)) {
                 $customerMeetSearchCriteria = $searchCriteria['id_recipient'] === $customer['id_recipient'];
             } else {
                 $customerMeetSearchCriteria = true;
             }
-            if ($customerMeetSearchCriteria && array_key_exists('full_name',$searchCriteria)) {
+            if ($customerMeetSearchCriteria && array_key_exists('full_name', $searchCriteria)) {
                 $customerMeetSearchCriteria = $searchCriteria['full_name'] === $customer['full_name'];
             }
-            if ($customerMeetSearchCriteria && array_key_exists('birthday',$searchCriteria)) {
+            if ($customerMeetSearchCriteria && array_key_exists('birthday', $searchCriteria)) {
                 $customerMeetSearchCriteria = $searchCriteria['birthday'] === $customer['birthday'];
             }
-            if ($customerMeetSearchCriteria && array_key_exists('profession',$searchCriteria)) {
+            if ($customerMeetSearchCriteria && array_key_exists('profession', $searchCriteria)) {
                 $customerMeetSearchCriteria = $searchCriteria['profession'] === $customer['profession'];
             }
-            if ($customerMeetSearchCriteria && array_key_exists('contract_number',$searchCriteria)) {
+            if ($customerMeetSearchCriteria && array_key_exists('contract_number', $searchCriteria)) {
                 $customerMeetSearchCriteria = $searchCriteria['contract_number'] === $customer['contract_number'];
             }
-            if ($customerMeetSearchCriteria && array_key_exists('average_transaction_amount',$searchCriteria)) {
-                $customerMeetSearchCriteria = $searchCriteria['average_transaction_amount'] === (string)$customer['average_transaction_amount'];
+            if ($customerMeetSearchCriteria && array_key_exists('average_transaction_amount', $searchCriteria)) {
+                $customerMeetSearchCriteria = $searchCriteria['average_transaction_amount']
+                    === (string)$customer['average_transaction_amount'];
             }
-            if ($customerMeetSearchCriteria && array_key_exists('discount',$searchCriteria)) {
+            if ($customerMeetSearchCriteria && array_key_exists('discount', $searchCriteria)) {
                 $customerMeetSearchCriteria = $searchCriteria['discount'] === $customer['discount'];
             }
-            if ($customerMeetSearchCriteria && array_key_exists('time_to_call',$searchCriteria)) {
+            if ($customerMeetSearchCriteria && array_key_exists('time_to_call', $searchCriteria)) {
                 $customerMeetSearchCriteria = $searchCriteria['time_to_call'] === $customer['time_to_call'];
             }
 

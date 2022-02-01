@@ -4,7 +4,6 @@ namespace EfTech\ContactList\Service\MoveToBlacklistService;
 
 class MoveToBlacklistDto
 {
-
     /**
      * @var bool наличие в черном списке
      */
@@ -25,6 +24,4 @@ class MoveToBlacklistDto
     {
         return $this->blackList;
     }
-
-
 }

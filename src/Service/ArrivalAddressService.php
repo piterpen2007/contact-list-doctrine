@@ -9,7 +9,6 @@ use EfTech\ContactList\Service\ArrivalNewAddressService\ResultRegisterNewAddress
 
 class ArrivalAddressService
 {
-
     /** Репозиторий для работы с адресами
      *
      * @var AddressRepositoryInterface
@@ -24,7 +23,6 @@ class ArrivalAddressService
         AddressRepositoryInterface $addressRepository
     ) {
         $this->addressRepository = $addressRepository;
-
     }
 
     public function registerAddress(NewAddressDto $addressDto): ResultRegisterNewAddressDto
@@ -35,7 +33,8 @@ class ArrivalAddressService
 //
 //        if(count($contactsCollections) >= 1) {
 //            throw new RuntimeException(
-//                'Нельзя зарегистрировать адрес с id_recipient = ' . $recipientId . '. Контакт с данным id  уже имеет адрес.'
+//                'Нельзя зарегистрировать адрес с id_recipient = ' . $recipientId .
+// '. Контакт с данным id  уже имеет адрес.'
 //            );
 //        }
 
@@ -56,6 +55,4 @@ class ArrivalAddressService
             $entity->getStatus()
         );
     }
-
-
 }

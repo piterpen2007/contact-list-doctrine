@@ -39,7 +39,7 @@ class GetAddressCollectionController implements ControllerInterface
      * @param ServerRequest $request
      * @return string|null
      */
-    private function validateQueryParams(ServerRequest $request):?string
+    private function validateQueryParams(ServerRequest $request): ?string
     {
         $paramTypeValidation = [
             'id_address' => "incorrect id_address",
@@ -47,8 +47,8 @@ class GetAddressCollectionController implements ControllerInterface
             'address' => 'incorrect address',
             'status' => 'incorrect status'
         ];
-        $queryParams = array_merge($request->getQueryParams(),$request->getAttributes());
-        return Assert::arrayElementsIsString($paramTypeValidation,$queryParams);
+        $queryParams = array_merge($request->getQueryParams(), $request->getAttributes());
+        return Assert::arrayElementsIsString($paramTypeValidation, $queryParams);
     }
 
     public function __invoke(ServerRequest $request): httpResponse
@@ -63,21 +63,18 @@ class GetAddressCollectionController implements ControllerInterface
                     ->setIdAddress($params['id_address'] ?? null)
                     ->setIdRecipient(isset($params['id_recipient']) ? (int)$params['id_recipient'] : null)
                     ->setAddress($params['address'] ?? null)
-                    ->setStatus($params['status'] ?? null)
-                );
+                    ->setStatus($params['status'] ?? null));
 
             $result = $this->buildResult($foundAddresses);
             $httpCode = $this->buildHttpCode($foundAddresses);
-
-
         } else {
             $httpCode = 500;
-            $result=[
+            $result = [
                 'status' => 'fail',
                 'message' => $resultOfParamValidation
             ];
         }
-        return ServerResponseFactory::createJsonResponse($httpCode,$result);
+        return ServerResponseFactory::createJsonResponse($httpCode, $result);
     }
 
     /** Подготавливает данные для ответа
@@ -91,7 +88,6 @@ class GetAddressCollectionController implements ControllerInterface
             $result[] = $this->serializeAddress($foundAddress);
         }
         return $result;
-
     }
 
 
@@ -99,7 +95,7 @@ class GetAddressCollectionController implements ControllerInterface
      * @param array $foundAddresses
      * @return int
      */
-    protected function buildHttpCode(array $foundAddresses):int
+    protected function buildHttpCode(array $foundAddresses): int
     {
         return 200;
     }
@@ -108,7 +104,7 @@ class GetAddressCollectionController implements ControllerInterface
      * @param SearchAddressService\AddressDto $addressDto
      * @return array
      */
-    final protected function serializeAddress(AddressDto $addressDto):array
+    final protected function serializeAddress(AddressDto $addressDto): array
     {
         return [
             'id_address' => $addressDto->getIdAddress(),
@@ -117,5 +113,4 @@ class GetAddressCollectionController implements ControllerInterface
             'status' => $addressDto->getStatus()
         ];
     }
-
 }

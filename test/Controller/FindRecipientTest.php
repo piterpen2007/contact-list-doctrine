@@ -30,15 +30,15 @@ class FindRecipientTest
      * @return void
      * @throws \JsonException
      */
-    public static function testSearchAuthorsBySurname():void
+    public static function testSearchAuthorsBySurname(): void
     {
         echo "-------------------Тестирование поиска автора по фамилии-----------------------\n";
-        $httpRequest = new ServerRequest (
+        $httpRequest = new ServerRequest(
             'GET',
             '1.1',
             '/recipient?full_name=Осипов Геннадий Иванович',
             Uri::createFromString('http://localhost:8082/recipient?full_name=Осипов Геннадий Иванович'),
-            ['Content-Type'=> 'application/json'],
+            ['Content-Type' => 'application/json'],
             null
         );
         $appConfig = AppConfig::createFromArray(require __DIR__ . '/../../config/dev/config.php');
@@ -84,14 +84,14 @@ class FindRecipientTest
         }
         $expected = [
             [
-                'id_recipient'=> 1,
-                'full_name'=> 'Осипов Геннадий Иванович',
-                'birthday'=>'15.06.1985',
-                'profession'=> 'Системный администратор',
+                'id_recipient' => 1,
+                'full_name' => 'Осипов Геннадий Иванович',
+                'birthday' => '15.06.1985',
+                'profession' => 'Системный администратор',
             ]
         ];
 
-        $actualResult =  json_decode($httpResponse->getBody(), true, 512 , JSON_THROW_ON_ERROR);
+        $actualResult =  json_decode($httpResponse->getBody(), true, 512, JSON_THROW_ON_ERROR);
 
         $unnecessaryElements = TestUtils::arrayDiffAssocRecursive($actualResult, $expected);
         $missingElements =  TestUtils::arrayDiffAssocRecursive($expected, $actualResult);
@@ -99,10 +99,16 @@ class FindRecipientTest
         $errMsg = '';
 
         if (count($unnecessaryElements) > 0) {
-            $errMsg .= sprintf("         Есть лишние элементы %s\n", json_encode($unnecessaryElements,JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
+            $errMsg .= sprintf("         Есть лишние элементы %s\n", json_encode(
+                $unnecessaryElements,
+                JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE
+            ));
         }
         if (count($missingElements) > 0) {
-            $errMsg .= sprintf("         Есть лишние недостающие элементы %s\n", json_encode($missingElements,JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE));
+            $errMsg .= sprintf("         Есть лишние недостающие элементы %s\n", json_encode(
+                $missingElements,
+                JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE
+            ));
         }
 
         if ('' === $errMsg) {
@@ -110,7 +116,6 @@ class FindRecipientTest
         } else {
             echo "    FAIL - данные ответа валидны\n" . $errMsg;
         }
-
     }
 }
 FindRecipientTest::testSearchAuthorsBySurname();

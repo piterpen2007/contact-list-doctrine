@@ -14,10 +14,8 @@ use EfTech\ContactList\Service\SearchContactsService\KinsfolkDto;
 use EfTech\ContactList\Service\SearchContactsService\SearchContactsCriteria;
 use EfTech\ContactList\Service\SearchContactsService\RecipientDto;
 
-
 class SearchContactsService
 {
-
     private ContactRepositoryInterface $contactRepository;
     /**
      *
@@ -41,7 +39,7 @@ class SearchContactsService
      * @param object $contact
      * @return object
      */
-    private function createDto(object $contact):object
+    private function createDto(object $contact): object
     {
         if ($contact instanceof Customer) {
             return new CustomerDto(
@@ -91,7 +89,7 @@ class SearchContactsService
      * @param SearchContactsCriteria $searchCriteria
      * @return ContactDto[]
      */
-    public function search(SearchContactsCriteria $searchCriteria):array
+    public function search(SearchContactsCriteria $searchCriteria): array
     {
         $criteria = $this->searchCriteriaToArray($searchCriteria);
         $entitiesCollection = $this->contactRepository->findBy($criteria);
@@ -99,7 +97,7 @@ class SearchContactsService
         foreach ($entitiesCollection as $entity) {
             $dtoCollection[] = $this->createDto($entity);
         }
-        $this->logger->debug( 'found contacts: ' . count($entitiesCollection));
+        $this->logger->debug('found contacts: ' . count($entitiesCollection));
         return $dtoCollection;
     }
 
@@ -108,12 +106,8 @@ class SearchContactsService
         $criteriaForRepository = [
             'category' => $searchCriteria->getCategory()
         ];
-        return array_filter($criteriaForRepository, static function($v):bool {return null !== $v;});
-
+        return array_filter($criteriaForRepository, static function ($v): bool {
+            return null !== $v;
+        });
     }
-
-
-
-
-
 }

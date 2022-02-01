@@ -1,7 +1,8 @@
 <?php
-namespace EfTech\ContactList\Entity;
-use EfTech\ContactList\Exception;
 
+namespace EfTech\ContactList\Entity;
+
+use EfTech\ContactList\Exception;
 
 final class Customer extends Recipient
 {
@@ -28,8 +29,17 @@ final class Customer extends Recipient
      * @param string $discount
      * @param string $timeToCall
      */
-    public function __construct(int $id_recipient, string $full_name, string $birthday, string $profession,array $balance,string $contractNumber, int $averageTransactionAmount, string $discount, string $timeToCall)
-    {
+    public function __construct(
+        int $id_recipient,
+        string $full_name,
+        string $birthday,
+        string $profession,
+        array $balance,
+        string $contractNumber,
+        int $averageTransactionAmount,
+        string $discount,
+        string $timeToCall
+    ) {
         parent::__construct($id_recipient, $full_name, $birthday, $profession, $balance);
         $this->contractNumber = $contractNumber;
         $this->averageTransactionAmount = $averageTransactionAmount;
@@ -109,7 +119,7 @@ final class Customer extends Recipient
         $this->timeToCall = $time_to_call;
         return $this;
     }
-    public static function createFromArray(array $data):Customer
+    public static function createFromArray(array $data): Customer
     {
 
         $requiredFields = [
@@ -124,7 +134,7 @@ final class Customer extends Recipient
             'time_to_call'
         ];
 
-        $missingFields = array_diff($requiredFields,array_keys($data));
+        $missingFields = array_diff($requiredFields, array_keys($data));
 
         if (count($missingFields) > 0) {
             $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
@@ -142,5 +152,4 @@ final class Customer extends Recipient
             $data['time_to_call']
         );
     }
-
 }

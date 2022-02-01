@@ -94,7 +94,4 @@ class KinsfolkDto
     {
         return $this->hotkey;
     }
-
-
-
 }

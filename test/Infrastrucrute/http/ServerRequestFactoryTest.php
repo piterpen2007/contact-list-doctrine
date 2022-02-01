@@ -13,7 +13,7 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
  */
 final class ServerRequestFactoryTest
 {
-    public static function testCreateFromGlobals():void
+    public static function testCreateFromGlobals(): void
     {
 
         echo "-----------Тестирует логику работу фабрики, создающий серверный http запрос----------\n";
@@ -33,13 +33,14 @@ final class ServerRequestFactoryTest
         ];
         $expectedBody = 'test';
         //Act
-        $httpServerRequest = ServerRequestFactory::createFromGlobals($servers,$expectedBody);
+        $httpServerRequest = ServerRequestFactory::createFromGlobals($servers, $expectedBody);
         //Assert
-        $expected = 'http://localhost:80/samhtml/ssylki/absolyutnye-i-otnositelnye-ssylki?query=value1#fragment-example';
+        $expected = 'http://localhost:80/samhtml/ssylki' .
+            '/absolyutnye-i-otnositelnye-ssylki?query=value1#fragment-example';
         $actual = (string)$httpServerRequest->getUri();
 
         //Assert
-        if($expected === $actual) {
+        if ($expected === $actual) {
             echo "      ОК - объект ServerRequestFactory корректно создан\n";
         } else {
             echo  "      FAIL - объект ServerRequestFactory не корректно создан, ожидалось $expected.\n
@@ -90,10 +91,16 @@ final class ServerRequestFactoryTest
         $errMsg = '';
 
         if (count($unnecessaryQueryParams) > 0) {
-            $errMsg .= sprintf("         Есть лишние элементы %s\n", json_encode($unnecessaryQueryParams,JSON_UNESCAPED_UNICODE));
+            $errMsg .= sprintf(
+                "         Есть лишние элементы %s\n",
+                json_encode($unnecessaryQueryParams, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE)
+            );
         }
         if (count($missingQueryParams) > 0) {
-            $errMsg .= sprintf("         Есть лишние недостающие элементы %s\n", json_encode($missingQueryParams,JSON_UNESCAPED_UNICODE));
+            $errMsg .= sprintf(
+                "         Есть лишние недостающие элементы %s\n",
+                json_encode($missingQueryParams, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE)
+            );
         }
 
         if ('' === $errMsg) {

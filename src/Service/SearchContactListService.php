@@ -2,8 +2,6 @@
 
 namespace EfTech\ContactList\Service;
 
-
-
 use EfTech\ContactList\Entity\ContactList;
 use EfTech\ContactList\Entity\ContactListRepositoryInterface;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
@@ -52,7 +50,7 @@ class SearchContactListService
      * @param SearchContactListCriteria $searchCriteria
      * @return ContactListDto[]
      */
-    public function search(SearchContactListCriteria $searchCriteria):array
+    public function search(SearchContactListCriteria $searchCriteria): array
     {
         $criteria = $this->searchCriteriaToArray($searchCriteria);
         $entitiesCollection = $this->contactListRepository->findBy($criteria);
@@ -68,15 +66,15 @@ class SearchContactListService
      * @param SearchContactListCriteria $searchCriteria
      * @return array
      */
-    private function searchCriteriaToArray(SearchContactListCriteria $searchCriteria):array
+    private function searchCriteriaToArray(SearchContactListCriteria $searchCriteria): array
     {
         $criteriaForRepository = [
             'id_recipient' => $searchCriteria->getIdRecipient(),
             'id_entry' => $searchCriteria->getIdEntry(),
             'blacklist' => $searchCriteria->getBlacklist()
         ];
-        return array_filter($criteriaForRepository, static function($v):bool {return null !== $v;});
-
+        return array_filter($criteriaForRepository, static function ($v): bool {
+            return null !== $v;
+        });
     }
-
 }

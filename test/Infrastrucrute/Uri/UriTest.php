@@ -2,7 +2,6 @@
 
 namespace EfTech\ContactList\Infrastructure\Uri;
 
-
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
 
@@ -14,11 +13,12 @@ final class UriTest
     /** Тестирование преобразования объекта URI в строку
      *
      */
-    public static function testUriToString():void
+    public static function testUriToString(): void
     {
         echo "-------- Тестирование преобразования объекта Uri в строку --------\n";
         // Arrange
-        $expected = 'http://and:mypassword@htmlbook.ru:80/samhtml/ssylki/absolyutnye-i-otnositelnye-ssylki?query=value1#fragment-example';
+        $expected = 'http://and:mypassword@htmlbook.ru:80' .
+            '/samhtml/ssylki/absolyutnye-i-otnositelnye-ssylki?query=value1#fragment-example';
         $uri = new Uri(
             'http',
             'htmlbook.ru',
@@ -32,22 +32,23 @@ final class UriTest
         $actual = (string)$uri;
 
         //Assert
-        if($expected === $actual) {
+        if ($expected === $actual) {
             echo "      ОК - объект uri корректно преобразован в строку\n";
         } else {
-            echo  "      FAIL - объект uri не корректно преобразован в строку, ожидалось $expected.\n Актуальное значение $actual\n";
-
+            echo  "      FAIL - объект uri не корректно преобразован в строку" .
+                ", ожидалось $expected.\n Актуальное значение $actual\n";
         }
     }
 
     /** Тестирование создание объекта URI из строки
      *
      */
-    public static function testCreateFromString():void
+    public static function testCreateFromString(): void
     {
         echo "-------- Тестирование создание объекта URI из строки --------\n";
         // Arrange
-        $expected = 'http://and:mypassword@htmlbook.ru:80/samhtml/ssylki/absolyutnye-i-otnositelnye-ssylki?query=value1#fragment-example';
+        $expected = 'http://and:mypassword@htmlbook.ru:80/samhtml' .
+            '/ssylki/absolyutnye-i-otnositelnye-ssylki?query=value1#fragment-example';
 
         //Act
         $uri = Uri::createFromString($expected);
@@ -55,11 +56,11 @@ final class UriTest
 
 
         //Assert
-        if($expected === $actual) {
+        if ($expected === $actual) {
             echo "      ОК - объект uri корректно создан из строки\n";
         } else {
-            echo  "      FAIL - объект uri не корректно создан из строки, ожидалось $expected.\n Актуальное значение $actual\n";
-
+            echo  "      FAIL - объект uri не корректно создан из строки" .
+                ", ожидалось $expected.\n Актуальное значение $actual\n";
         }
     }
 }

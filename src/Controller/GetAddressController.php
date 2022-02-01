@@ -20,6 +20,5 @@ class GetAddressController extends GetAddressCollectionController
         return 1 === count($foundAddresses)
             ? $this->serializeAddress(current($foundAddresses))
             : [ 'status' => 'fail', 'message' => 'entity not found'];
-
     }
 }

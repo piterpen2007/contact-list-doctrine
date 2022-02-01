@@ -9,5 +9,4 @@ use EfTech\ContactList\Infrastructure\Exception as BaseException;
  */
 class InvalidDataStructureException extends BaseException\InvalidDataStructureException implements ExceptionInterface
 {
-
 }

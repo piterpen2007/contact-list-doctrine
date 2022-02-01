@@ -1,4 +1,5 @@
 <?php
+
 namespace EfTech\ContactList\Service\ArrivalNewAddressService;
 
 class NewAddressDto
@@ -6,8 +7,7 @@ class NewAddressDto
     private int $id_recipient;
     private string $address;
     private string $status;
-
-    /**
+/**
      * @param int $id_recipient
      * @param string $address
      * @param string $status
@@ -42,6 +42,4 @@ class NewAddressDto
     {
         return $this->status;
     }
-
-
 }

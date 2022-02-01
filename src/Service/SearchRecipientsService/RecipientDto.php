@@ -1,4 +1,5 @@
 <?php
+
 namespace EfTech\ContactList\Service\SearchRecipientsService;
 
 /**
@@ -17,21 +18,17 @@ class RecipientDto
      * @param string $fullName
      * @param string $birthday
      * @param string $profession
-     * @param array $balance
      */
     public function __construct(
         int $id_recipient,
         string $fullName,
         string $birthday,
         string $profession
-
-    )
-    {
+    ) {
         $this->id_recipient = $id_recipient;
         $this->fullName = $fullName;
         $this->birthday = $birthday;
         $this->profession = $profession;
-
     }
 
     /**
@@ -65,7 +62,4 @@ class RecipientDto
     {
         return $this->profession;
     }
-
-
-
 }

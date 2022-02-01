@@ -7,5 +7,4 @@ namespace EfTech\ContactList\Service\MoveToBlacklistService\Exception;
  */
 class ContactListNotFoundException extends RuntimeException
 {
-
 }

@@ -40,15 +40,15 @@ class GetContactListCollectionController implements ControllerInterface
      * @param ServerRequest $request
      * @return string|null
      */
-    private function validateQueryParams(ServerRequest $request):?string
+    private function validateQueryParams(ServerRequest $request): ?string
     {
         $paramTypeValidation = [
             'id_recipient' => "incorrect id_recipient",
             'id_entry' => 'incorrect id_entry',
             'blacklist' => 'incorrect blacklist'
         ];
-        $queryParams = array_merge($request->getQueryParams(),$request->getAttributes());
-        return Assert::arrayElementsIsString($paramTypeValidation,$queryParams);
+        $queryParams = array_merge($request->getQueryParams(), $request->getAttributes());
+        return Assert::arrayElementsIsString($paramTypeValidation, $queryParams);
     }
 
     /** Реализация поиска контактов по списку
@@ -67,22 +67,18 @@ class GetContactListCollectionController implements ControllerInterface
                 ->search((new SearchContactListCriteria())
                     ->setIdRecipient($params['id_recipient'] ?? null)
                     ->setIdEntry($params['id_entry'] ?? null)
-                    ->setBlacklist($params['blacklist'] ?? null)
-                );
+                    ->setBlacklist($params['blacklist'] ?? null));
 
             $result = $this->buildResult($foundContactLists);
             $httpCode = $this->buildHttpCode($foundContactLists);
-
-
         } else {
             $httpCode = 500;
-            $result=[
+            $result = [
                 'status' => 'fail',
                 'message' => $resultOfParamValidation
             ];
         }
-        return ServerResponseFactory::createJsonResponse($httpCode,$result);
-
+        return ServerResponseFactory::createJsonResponse($httpCode, $result);
     }
 
     /** Подготавливает данные для ответа
@@ -96,14 +92,13 @@ class GetContactListCollectionController implements ControllerInterface
             $result[] = $this->serializeContactList($foundContactList);
         }
         return $result;
-
     }
 
     /** Подготавливает http code
      * @param array $foundContactList
      * @return int
      */
-    protected function buildHttpCode(array $foundContactList):int
+    protected function buildHttpCode(array $foundContactList): int
     {
         return 200;
     }
@@ -112,7 +107,7 @@ class GetContactListCollectionController implements ControllerInterface
      * @param ContactListDto $contactListDto
      * @return array
      */
-    final protected function serializeContactList(ContactListDto $contactListDto):array
+    final protected function serializeContactList(ContactListDto $contactListDto): array
     {
         return [
             'id_recipient' => $contactListDto->getIdRecipient(),

@@ -11,7 +11,6 @@ use EfTech\ContactList\Service\SearchContactsService\KinsfolkDto;
 use EfTech\ContactList\Service\SearchContactsService\RecipientDto;
 use EfTech\ContactList\Service\SearchContactsService\SearchContactsCriteria;
 
-
 class FindContacts implements CommandInterface
 {
     /**
@@ -58,9 +57,11 @@ class FindContacts implements CommandInterface
                 ->setCategory($params['category'] ?? null)
         );
         $jsonData = $this->buildJsonData($dtoCollection);
-        $this->output->print(json_encode($jsonData,
+        $this->output->print(json_encode(
+            $jsonData,
             JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT |
-            JSON_UNESCAPED_UNICODE));
+            JSON_UNESCAPED_UNICODE
+        ));
     }
 
     /**
@@ -68,7 +69,7 @@ class FindContacts implements CommandInterface
      *
      * @return array
      */
-    private function buildJsonData(array $dtoCollection):array
+    private function buildJsonData(array $dtoCollection): array
     {
         $result = [];
         foreach ($dtoCollection as $contactDto) {
@@ -92,7 +93,7 @@ class FindContacts implements CommandInterface
                     'profession' => $contactDto->getProfession(),
                     'department' => $contactDto->getDepartment(),
                     'position' => $contactDto->getPosition(),
-                    'room_number'=> $contactDto->getRoomNumber()
+                    'room_number' => $contactDto->getRoomNumber()
                 ];
             }
             if ($contactDto instanceof KinsfolkDto) {

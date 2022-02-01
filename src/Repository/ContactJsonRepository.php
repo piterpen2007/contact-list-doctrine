@@ -11,7 +11,6 @@ use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 
 class ContactJsonRepository implements ContactRepositoryInterface
 {
-
     /**
      *
      *
@@ -68,9 +67,9 @@ class ContactJsonRepository implements ContactRepositoryInterface
     /** Загружает данные о контактах по категориям
      * @return array
      */
-    private function loadData():array
+    private function loadData(): array
     {
-        $customers =$this->dataLoader->loadData($this->pathToCustomers);
+        $customers = $this->dataLoader->loadData($this->pathToCustomers);
         $recipients = $this->dataLoader->loadData($this->pathToRecipients);
         $kinsfolk = $this->dataLoader->loadData($this->pathToKinsfolk);
         $colleague = $this->dataLoader->loadData($this->pathToColleagues);
@@ -88,7 +87,7 @@ class ContactJsonRepository implements ContactRepositoryInterface
     {
         $foundRecipientsOnCategory = [];
         $recipientsOnCategory = $this->loadData();
-        if (array_key_exists('category',$searchCriteria)) {
+        if (array_key_exists('category', $searchCriteria)) {
             if ($searchCriteria['category'] === 'customers') {
                 foreach ($recipientsOnCategory['customers'] as $customer) {
                     $foundRecipientsOnCategory[] = Customer::createFromArray($customer);

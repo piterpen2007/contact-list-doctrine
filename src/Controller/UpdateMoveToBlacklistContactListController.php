@@ -2,7 +2,6 @@
 
 namespace EfTech\ContactList\Controller;
 
-
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
 use EfTech\ContactList\Infrastructure\http\httpResponse;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
@@ -15,7 +14,6 @@ use Throwable;
 
 class UpdateMoveToBlacklistContactListController implements ControllerInterface
 {
-
     /**
      * @var MoveToBlacklistContactListService
      */
@@ -33,13 +31,12 @@ class UpdateMoveToBlacklistContactListController implements ControllerInterface
     {
         try {
             $attributes = $request->getAttributes();
-            if (false === array_key_exists('id_recipient',$attributes)) {
+            if (false === array_key_exists('id_recipient', $attributes)) {
                 throw new RuntimeException('there is no information about the id of the text document');
             }
             $resultDto = $this->moveToBlacklistContactListService->move((int)$attributes['id_recipient']);
             $httpCode = 200;
             $jsonData = $this->buildJsonData($resultDto);
-
         } catch (ContactListNotFoundException $e) {
             $httpCode = 404;
             $jsonData = ['status' => 'fail', 'message' => $e->getMessage()];
@@ -55,7 +52,7 @@ class UpdateMoveToBlacklistContactListController implements ControllerInterface
      * @param MoveToBlacklistDto $resultDto
      * @return array
      */
-    private function buildJsonData(MoveToBlacklistDto $resultDto):array
+    private function buildJsonData(MoveToBlacklistDto $resultDto): array
     {
         return [
             'blacklist' => $resultDto->isBlackList()

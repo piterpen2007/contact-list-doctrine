@@ -1,4 +1,5 @@
 <?php
+
 namespace EfTech\ContactList\Repository;
 
 use EfTech\ContactList\Entity\Recipient;
@@ -42,7 +43,7 @@ class RecipientJsonFileRepository implements RecipientRepositoryInterface
     /**
      * @return array
      */
-    private function loadData():array
+    private function loadData(): array
     {
         if (null === $this->data) {
             $this->data = $this->dataLoader->loadData($this->pathToRecipients);
@@ -56,18 +57,18 @@ class RecipientJsonFileRepository implements RecipientRepositoryInterface
         $recipients = $this->loadData();
         $findRecipient = [];
         foreach ($recipients as $recipient) {
-            if (array_key_exists('id_recipient',$searchCriteria)) {
+            if (array_key_exists('id_recipient', $searchCriteria)) {
                 $recipientMeetSearchCriteria = $searchCriteria['id_recipient'] === $recipient['id_recipient'];
             } else {
                 $recipientMeetSearchCriteria = true;
             }
-            if ($recipientMeetSearchCriteria && array_key_exists('full_name',$searchCriteria)) {
+            if ($recipientMeetSearchCriteria && array_key_exists('full_name', $searchCriteria)) {
                 $recipientMeetSearchCriteria = $searchCriteria['full_name'] === $recipient['full_name'];
             }
-            if ($recipientMeetSearchCriteria && array_key_exists('birthday',$searchCriteria)) {
+            if ($recipientMeetSearchCriteria && array_key_exists('birthday', $searchCriteria)) {
                 $recipientMeetSearchCriteria = $searchCriteria['birthday'] === $recipient['birthday'];
             }
-            if ($recipientMeetSearchCriteria && array_key_exists('profession',$searchCriteria)) {
+            if ($recipientMeetSearchCriteria && array_key_exists('profession', $searchCriteria)) {
                 $recipientMeetSearchCriteria = $searchCriteria['profession'] === $recipient['profession'];
             }
             if ($recipientMeetSearchCriteria) {
@@ -79,12 +80,12 @@ class RecipientJsonFileRepository implements RecipientRepositoryInterface
     }
 
 
-    private function createBalanceData($balances):Balance
+    private function createBalanceData($balances): Balance
     {
         if (false === is_array($balances)) {
             throw new InvalidDataStructureException('Данные о балансе имеют невалидный формат');
         }
-        if (false === array_key_exists('amount',$balances)) {
+        if (false === array_key_exists('amount', $balances)) {
             throw new InvalidDataStructureException('Отсутствуют данные о деньгах на балансе');
         }
         if (false === is_int($balances['amount'])) {
@@ -111,12 +112,12 @@ class RecipientJsonFileRepository implements RecipientRepositoryInterface
      *
      * @return Balance[]
      */
-    private function createBalancesData(array $recipients):array
+    private function createBalancesData(array $recipients): array
     {
-        if(false === array_key_exists('balance',$recipients)) {
+        if (false === array_key_exists('balance', $recipients)) {
             throw new InvalidDataStructureException('Нет данных о балансе');
         }
-        if(false === is_array($recipients['balance'])) {
+        if (false === is_array($recipients['balance'])) {
             throw new InvalidDataStructureException('Данные о балансе имею неверный формат');
         }
         $balancesData = [];

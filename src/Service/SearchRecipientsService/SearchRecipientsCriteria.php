@@ -80,5 +80,4 @@ class SearchRecipientsCriteria
         $this->profession = $profession;
         return $this;
     }
-
 }

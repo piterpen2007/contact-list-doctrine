@@ -178,8 +178,4 @@ class ContactDto
     {
         return $this->room_number;
     }
-
-
-
-
 }

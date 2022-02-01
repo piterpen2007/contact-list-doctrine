@@ -50,7 +50,7 @@ class SearchAddressService
      * @param SearchAddressCriteria $addressCriteria
      * @return AddressDto[]
      */
-    public function search(SearchAddressCriteria $addressCriteria):array
+    public function search(SearchAddressCriteria $addressCriteria): array
     {
         $criteria = $this->searchCriteriaToArray($addressCriteria);
         $entitiesCollection = $this->addressRepository->findBy($criteria);
@@ -66,7 +66,7 @@ class SearchAddressService
      * @param SearchAddressCriteria $addressCriteria
      * @return array
      */
-    private function searchCriteriaToArray(SearchAddressCriteria $addressCriteria):array
+    private function searchCriteriaToArray(SearchAddressCriteria $addressCriteria): array
     {
         $criteriaForRepository = [
             'id_address' => $addressCriteria->getIdAddress(),
@@ -74,8 +74,8 @@ class SearchAddressService
             'address' => $addressCriteria->getAddress(),
             'status' => $addressCriteria->getStatus()
         ];
-        return array_filter($criteriaForRepository, static function($v):bool {return null !== $v;});
-
+        return array_filter($criteriaForRepository, static function ($v): bool {
+            return null !== $v;
+        });
     }
-
 }

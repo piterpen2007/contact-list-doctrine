@@ -28,7 +28,4 @@ final class Balance
     {
         return $this->money;
     }
-
-
-
 }

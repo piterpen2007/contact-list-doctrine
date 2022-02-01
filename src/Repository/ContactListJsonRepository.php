@@ -10,7 +10,6 @@ use JsonException;
 
 class ContactListJsonRepository implements ContactListRepositoryInterface
 {
-
     /**
      *
      *
@@ -46,12 +45,14 @@ class ContactListJsonRepository implements ContactListRepositoryInterface
     /**
      * @return array
      */
-    private function loadData():array
+    private function loadData(): array
     {
         if (null === $this->contactListData) {
             $this->contactListData = $this->dataLoader->loadData($this->pathToContactList);
             $this->contactListIdToIndex = array_combine(
-                array_map(static function(array $v) {return $v['id_recipient'];}, $this->contactListData),
+                array_map(static function (array $v) {
+                    return $v['id_recipient'];
+                }, $this->contactListData),
                 array_keys($this->contactListData)
             );
         }
@@ -64,15 +65,15 @@ class ContactListJsonRepository implements ContactListRepositoryInterface
         $contactLists = $this->loadData();
         $findContactList = [];
         foreach ($contactLists as $contactList) {
-            if (array_key_exists('id_recipient',$searchCriteria)) {
+            if (array_key_exists('id_recipient', $searchCriteria)) {
                 $contactListMeetSearchCriteria = $searchCriteria['id_recipient'] === $contactList['id_recipient'];
             } else {
                 $contactListMeetSearchCriteria = true;
             }
-            if ($contactListMeetSearchCriteria && array_key_exists('id_entry',$searchCriteria)) {
+            if ($contactListMeetSearchCriteria && array_key_exists('id_entry', $searchCriteria)) {
                 $contactListMeetSearchCriteria = $searchCriteria['id_entry'] === $contactList['id_entry'];
             }
-            if ($contactListMeetSearchCriteria && array_key_exists('blacklist',$searchCriteria)) {
+            if ($contactListMeetSearchCriteria && array_key_exists('blacklist', $searchCriteria)) {
                 $contactListMeetSearchCriteria = $searchCriteria['blacklist'] === (bool)$contactList['blacklist'];
             }
             if ($contactListMeetSearchCriteria) {
@@ -104,7 +105,7 @@ class ContactListJsonRepository implements ContactListRepositoryInterface
      * @param ContactList $entity
      * @return int
      */
-    private function getItemIndex(ContactList $entity):int
+    private function getItemIndex(ContactList $entity): int
     {
         $id = $entity->getIdEntry();
         $contactListIdToIndex = $this->contactListIdToIndex;
@@ -126,6 +127,4 @@ class ContactListJsonRepository implements ContactListRepositoryInterface
             'blacklist' => $entity->isBlackList()
         ];
     }
-
-
 }

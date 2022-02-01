@@ -1,5 +1,7 @@
 <?php
+
 namespace EfTech\ContactList\Entity;
+
 use EfTech\ContactList\Exception;
 use EfTech\ContactList\Exception\DomainException;
 use EfTech\ContactList\ValueObject\Balance;
@@ -34,13 +36,13 @@ class Recipient
      * @param string $birthday
      * @param string $profession
      */
-    public function __construct(int $id_recipient,
+    public function __construct(
+        int $id_recipient,
         string $full_name,
         string $birthday,
         string $profession,
         array $balances
-    )
-    {
+    ) {
         $this->id_recipient = $id_recipient;
         $this->full_name = $full_name;
         $this->birthday = $birthday;
@@ -137,7 +139,7 @@ class Recipient
      * @param array $data
      * @return Recipient
      */
-    public static function createFromArray(array $data):Recipient
+    public static function createFromArray(array $data): Recipient
     {
         $requiredFields = [
             'id_recipient',
@@ -147,18 +149,19 @@ class Recipient
             'balance'
         ];
 
-        $missingFields = array_diff($requiredFields,array_keys($data));
+        $missingFields = array_diff($requiredFields, array_keys($data));
 
         if (count($missingFields) > 0) {
             $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
             throw new Exception\InvalidDataStructureException($errMsg);
         }
 
-        return new Recipient($data['id_recipient'],
+        return new Recipient(
+            $data['id_recipient'],
             $data['full_name'],
-            $data['birthday'] ,
+            $data['birthday'],
             $data['profession'],
-            $data['balance']);
+            $data['balance']
+        );
     }
-
 }

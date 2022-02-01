@@ -1,13 +1,15 @@
 <?php
+
 namespace EfTech\ContactList\Config;
+
 use EfTech\ContactList\Exception\ErrorCreateAppConfigException;
-use \EfTech\ContactList\Infrastructure\HttpApplication\AppConfig as BaseConfig;
+use EfTech\ContactList\Infrastructure\HttpApplication\AppConfig as BaseConfig;
+
 /**
  *  Конфиг приложения
  */
 class AppConfig extends BaseConfig
 {
-
     /** Путь до файла с данными о получателях
      * @var string
      */
@@ -15,15 +17,15 @@ class AppConfig extends BaseConfig
     /** Путь до файла с данными о родне
      * @var string
      */
-    private string $pathToKinsfolk =__DIR__ . '/../../data/kinsfolk.json';
+    private string $pathToKinsfolk = __DIR__ . '/../../data/kinsfolk.json';
     /** Путь до файла с данными о клиентах
      * @var string
      */
-    private string $pathToCustomers =__DIR__ . '/../../data/customers.json';
+    private string $pathToCustomers = __DIR__ . '/../../data/customers.json';
     /** Путь до файла с данными о коллегах
      * @var string
      */
-    private string $pathToColleagues =__DIR__ . '/../../data/colleagues.json';
+    private string $pathToColleagues = __DIR__ . '/../../data/colleagues.json';
     /** Путь до файла с данными о черном списке
      * @var string
      */
@@ -226,16 +228,10 @@ class AppConfig extends BaseConfig
      * @param string $path
      * @return void
      */
-    private function validateFilePath(string $path):void
+    private function validateFilePath(string $path): void
     {
-        if(false === file_exists($path)) {
-           throw new ErrorCreateAppConfigException('Некорректный путь до файла с данными');
+        if (false === file_exists($path)) {
+            throw new ErrorCreateAppConfigException('Некорректный путь до файла с данными');
         }
     }
-
-
-
-
-
-
 }

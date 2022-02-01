@@ -54,6 +54,4 @@ class ResultRegisterNewAddressDto
     {
         return $this->status;
     }
-
-
 }

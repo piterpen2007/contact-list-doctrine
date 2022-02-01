@@ -11,11 +11,11 @@ interface UserRepositoryInterface
      *
      * @param array $criteria
      */
-    public function findBy(array $criteria):array;
+    public function findBy(array $criteria): array;
 
-    /** Поиск пользователя по логину 
+    /** Поиск пользователя по логину
      * @param string $login
      * @return User|null
      */
-    public function findUserByLogin(string $login):?User;
+    public function findUserByLogin(string $login): ?User;
 }

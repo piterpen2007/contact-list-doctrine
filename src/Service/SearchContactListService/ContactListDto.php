@@ -52,7 +52,4 @@ class ContactListDto
     {
         return $this->blacklist;
     }
-
-
-
 }

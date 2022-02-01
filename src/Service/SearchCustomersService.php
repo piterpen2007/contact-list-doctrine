@@ -8,7 +8,6 @@ use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Service\SearchCustomersService\CustomerDto;
 use EfTech\ContactList\Service\SearchCustomersService\SearchCustomersCriteria;
 
-
 class SearchCustomersService
 {
     /**
@@ -56,7 +55,7 @@ class SearchCustomersService
      * @param SearchCustomersCriteria $searchCriteria
      * @return CustomerDto[]
      */
-    public function search(SearchCustomersCriteria $searchCriteria):array
+    public function search(SearchCustomersCriteria $searchCriteria): array
     {
         $criteria = $this->searchCriteriaToArray($searchCriteria);
         $entitiesCollection = $this->customerRepository->findBy($criteria);
@@ -64,7 +63,7 @@ class SearchCustomersService
         foreach ($entitiesCollection as $entity) {
             $dtoCollection[] = $this->createDto($entity);
         }
-        $this->logger->debug( 'found customers: ' . count($entitiesCollection));
+        $this->logger->debug('found customers: ' . count($entitiesCollection));
         return $dtoCollection;
     }
 
@@ -80,8 +79,8 @@ class SearchCustomersService
             'discount' => $searchCriteria->getDiscount(),
             'time_to_call' => $searchCriteria->getTimeToCall()
         ];
-        return array_filter($criteriaForRepository, static function($v):bool {return null !== $v;});
-
+        return array_filter($criteriaForRepository, static function ($v): bool {
+            return null !== $v;
+        });
     }
-
 }

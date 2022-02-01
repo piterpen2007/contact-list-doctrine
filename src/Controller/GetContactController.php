@@ -22,5 +22,4 @@ class GetContactController extends GetContactCollectionController
 //            : ['status' => 'fail', 'message' => 'entity not found'];
 //
 //    }
-
 }

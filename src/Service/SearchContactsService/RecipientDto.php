@@ -1,4 +1,5 @@
 <?php
+
 namespace EfTech\ContactList\Service\SearchContactsService;
 
 /**
@@ -10,8 +11,7 @@ class RecipientDto
     private string $fullName;
     private string $birthday;
     private string $profession;
-
-    /**
+/**
      * @param int $id_recipient
      * @param string $fullName
      * @param string $birthday
@@ -56,6 +56,4 @@ class RecipientDto
     {
         return $this->profession;
     }
-
-
 }

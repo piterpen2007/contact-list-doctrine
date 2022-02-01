@@ -10,10 +10,10 @@ use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
 
 (new AppConsole(
     require __DIR__ . '/../config/console.handlers.php',
-    static function(ContainerInterface $di):OutputInterface {
+    static function (ContainerInterface $di): OutputInterface {
         return $di->get(OutputInterface::class);
     },
-    static function():ContainerInterface {
+    static function (): ContainerInterface {
         return Container::createFromArray(require __DIR__ . '/../config/dev/di.php');
     }
 ))->dispatch();

@@ -1,4 +1,5 @@
 <?php
+
 namespace EfTech\ContactList\Service\SearchContactListService;
 
 class SearchContactListCriteria
@@ -60,8 +61,4 @@ class SearchContactListCriteria
         $this->blacklist = $blacklist;
         return $this;
     }
-
-
-
-
 }

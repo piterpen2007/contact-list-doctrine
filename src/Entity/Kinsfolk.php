@@ -1,5 +1,7 @@
 <?php
+
 namespace EfTech\ContactList\Entity;
+
 use EfTech\ContactList\Exception;
 use EfTech\ContactList\ValueObject\Balance;
 
@@ -23,8 +25,16 @@ final class Kinsfolk extends Recipient
      * @param string $ringtone
      * @param string $hotkey
      */
-    public function __construct(int $id_recipient, string $full_name, string $birthday, string $profession, array $balance, string $status, string $ringtone, string $hotkey)
-    {
+    public function __construct(
+        int $id_recipient,
+        string $full_name,
+        string $birthday,
+        string $profession,
+        array $balance,
+        string $status,
+        string $ringtone,
+        string $hotkey
+    ) {
         parent::__construct($id_recipient, $full_name, $birthday, $profession, $balance);
         $this->status = $status;
         $this->ringtone = $ringtone;
@@ -35,7 +45,7 @@ final class Kinsfolk extends Recipient
     /** Возвращает статус родственника
      * @return string
      */
-   final public function getStatus(): string
+    final public function getStatus(): string
     {
         return $this->status;
     }
@@ -86,7 +96,7 @@ final class Kinsfolk extends Recipient
         return $this;
     }
 
-    public static function createFromArray(array $data):Kinsfolk
+    public static function createFromArray(array $data): Kinsfolk
     {
 
         $requiredFields = [
@@ -100,7 +110,7 @@ final class Kinsfolk extends Recipient
             'hotkey'
         ];
 
-        $missingFields = array_diff($requiredFields,array_keys($data));
+        $missingFields = array_diff($requiredFields, array_keys($data));
 
         if (count($missingFields) > 0) {
             $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
@@ -117,6 +127,4 @@ final class Kinsfolk extends Recipient
             $data['hotkey']
         );
     }
-
-
 }

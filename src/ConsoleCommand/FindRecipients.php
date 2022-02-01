@@ -1,4 +1,5 @@
 <?php
+
 namespace EfTech\ContactList\ConsoleCommand;
 
 use EfTech\ContactList\Infrastructure\Console\Output\OutputInterface;
@@ -67,19 +68,20 @@ final class FindRecipients implements CommandInterface
                 ->setFullName($params['full_name'] ?? null)
                 ->setBirthday($params['birthday'] ?? null)
                 ->setProfession($params['profession'] ?? null)
-
         );
         $jsonData = $this->buildJsonData($dtoCollection);
-        $this->output->print(json_encode($jsonData,
+        $this->output->print(json_encode(
+            $jsonData,
             JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT |
-            JSON_UNESCAPED_UNICODE));
+            JSON_UNESCAPED_UNICODE
+        ));
     }
     /**
      * @param RecipientDto[] $dtoCollection
      *
      * @return array
      */
-    private function buildJsonData(array $dtoCollection):array
+    private function buildJsonData(array $dtoCollection): array
     {
         $result = [];
         foreach ($dtoCollection as $recipientDto) {

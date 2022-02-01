@@ -2,7 +2,6 @@
 
 namespace EfTech\ContactList\Entity;
 
-
 use EfTech\ContactList\Exception\InvalidDataStructureException;
 
 class Address
@@ -122,7 +121,7 @@ class Address
      * @param array $data
      * @return Address
      */
-    public static function createFromArray(array $data):Address
+    public static function createFromArray(array $data): Address
     {
         $requiredFields = [
             'id_address',
@@ -131,7 +130,7 @@ class Address
             'status'
         ];
 
-        $missingFields = array_diff($requiredFields,array_keys($data));
+        $missingFields = array_diff($requiredFields, array_keys($data));
 
         if (count($missingFields) > 0) {
             $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
@@ -145,6 +144,4 @@ class Address
             $data['status']
         );
     }
-
-
 }

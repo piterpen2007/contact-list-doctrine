@@ -1,5 +1,7 @@
 <?php
+
 namespace EfTech\ContactList\Entity;
+
 use EfTech\ContactList\ValueObject\Balance;
 use EfTech\ContactList\Exception;
 
@@ -19,13 +21,26 @@ final class Colleague extends Recipient
     private string $roomNumber;
 
     /**
+     * @param int $id_recipient
+     * @param string $full_name
+     * @param string $birthday
+     * @param string $profession
+     * @param array $balance
      * @param string $department
      * @param string $position
      * @param string $roomNumber
      */
-    public function __construct(int $id_recipient, string $full_name, string $birthday, string $profession,array $balance,string $department, string $position, string $roomNumber)
-    {
-        parent::__construct($id_recipient,$full_name, $birthday, $profession, $balance);
+    public function __construct(
+        int $id_recipient,
+        string $full_name,
+        string $birthday,
+        string $profession,
+        array $balance,
+        string $department,
+        string $position,
+        string $roomNumber
+    ) {
+        parent::__construct($id_recipient, $full_name, $birthday, $profession, $balance);
         $this->department = $department;
         $this->position = $position;
         $this->roomNumber = $roomNumber;
@@ -99,7 +114,7 @@ final class Colleague extends Recipient
             'room_number'
         ];
 
-        $missingFields = array_diff($requiredFields,array_keys($data));
+        $missingFields = array_diff($requiredFields, array_keys($data));
 
         if (count($missingFields) > 0) {
             $errMsg = sprintf('Отсутствуют обязательные элементы: %s', implode(',', $missingFields));
@@ -113,7 +128,7 @@ final class Colleague extends Recipient
             $data['balance'],
             $data['department'],
             $data['position'],
-            $data['room_number']);
+            $data['room_number']
+        );
     }
-
 }

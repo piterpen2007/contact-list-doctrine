@@ -24,10 +24,10 @@ class LoginController implements ControllerInterface
      * @param ViewTemplateInterface $template
      * @param HttpAuthProvider $authProvider
      */
-    public function __construct(ViewTemplateInterface $template,
+    public function __construct(
+        ViewTemplateInterface $template,
         HttpAuthProvider $authProvider
-    )
-    {
+    ) {
         $this->template = $template;
         $this->authProvider = $authProvider;
     }
@@ -45,14 +45,13 @@ class LoginController implements ControllerInterface
             $response = $this->buildErrorResponse($e);
         }
         return $response;
-
     }
 
     /**
      * @param Throwable $e
      * @return httpResponse
      */
-    private function buildErrorResponse(Throwable $e):httpResponse
+    private function buildErrorResponse(Throwable $e): httpResponse
     {
         $httpCode = 500;
         $contex = [
@@ -64,22 +63,21 @@ class LoginController implements ControllerInterface
             __DIR__ . '/../../templates/errors.phtml',
             $contex
         );
-        return ServerResponseFactory::createHtmlResponse($httpCode,$html);
+        return ServerResponseFactory::createHtmlResponse($httpCode, $html);
     }
 
-    private function doLogin(ServerRequest $request):httpResponse
+    private function doLogin(ServerRequest $request): httpResponse
     {
         $response = null;
         $contex = [];
         if ('POST' === $request->getMethod()) {
-
             $authData = [];
-            parse_str($request->getBody(),$authData);
+            parse_str($request->getBody(), $authData);
 
             $this->validateAuthData($authData);
-            if ($this->isAuth($authData['login'],$authData['password'])) {
+            if ($this->isAuth($authData['login'], $authData['password'])) {
                 $queryParams = $request->getQueryParams();
-                $redirect = array_key_exists('redirect',$queryParams)
+                $redirect = array_key_exists('redirect', $queryParams)
                     ? Uri::createFromString($queryParams['redirect'])
                     : Uri::createFromString($queryParams['/']);
                 $response = ServerResponseFactory::redirect($redirect);
@@ -92,8 +90,8 @@ class LoginController implements ControllerInterface
 //            }
         }
         if (null === $response) {
-            $html = $this->template->render(__DIR__ . '/../../templates/login.phtml',$contex);
-            $response = ServerResponseFactory::createHtmlResponse(200,$html);
+            $html = $this->template->render(__DIR__ . '/../../templates/login.phtml', $contex);
+            $response = ServerResponseFactory::createHtmlResponse(200, $html);
         }
         return $response;
     }
@@ -101,22 +99,21 @@ class LoginController implements ControllerInterface
     /** Логика валидации данных формы аутификации
      * @param array $authData
      */
-    private function validateAuthData(array $authData):void
+    private function validateAuthData(array $authData): void
     {
-        if (false === array_key_exists('login',$authData)) {
+        if (false === array_key_exists('login', $authData)) {
             throw new RuntimeException('Отсутствует логин');
         }
         if (false === is_string($authData['login'])) {
             throw new RuntimeException('Логин имеет неверный формат');
         }
 
-        if (false === array_key_exists('password',$authData)) {
+        if (false === array_key_exists('password', $authData)) {
             throw new RuntimeException('Отсутствует password');
         }
         if (false === is_string($authData['password'])) {
             throw new RuntimeException('password имеет неверный формат');
         }
-
     }
 
     /** Проводит аутентификацию пользователя
@@ -124,8 +121,8 @@ class LoginController implements ControllerInterface
      * @param string $password
      * @return bool
      */
-    private function isAuth(string $login,string $password):bool
+    private function isAuth(string $login, string $password): bool
     {
-        return $this->authProvider->auth($login,$password);
+        return $this->authProvider->auth($login, $password);
     }
 }

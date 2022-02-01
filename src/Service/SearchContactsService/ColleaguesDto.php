@@ -94,8 +94,4 @@ class ColleaguesDto
     {
         return $this->room_number;
     }
-
-
-
-
 }

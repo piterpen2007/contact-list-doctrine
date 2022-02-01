@@ -23,5 +23,4 @@ class SearchContactsCriteria
         $this->category = $category;
         return $this;
     }
-
 }

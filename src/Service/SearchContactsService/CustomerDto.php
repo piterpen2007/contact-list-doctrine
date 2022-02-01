@@ -1,17 +1,17 @@
 <?php
+
 namespace EfTech\ContactList\Service\SearchContactsService;
 
 class CustomerDto
 {
-   private int $id_recipient;
-   private string $fullName;
-   private string $birthday;
-   private string $profession;
-   private string $contactNumber;
-   private int $averageTransactionAmount;
-   private string $discount;
-   private string $timeToCall;
-
+    private int $id_recipient;
+    private string $fullName;
+    private string $birthday;
+    private string $profession;
+    private string $contactNumber;
+    private int $averageTransactionAmount;
+    private string $discount;
+    private string $timeToCall;
     public function __construct(
         int $id_recipient,
         string $fullName,
@@ -21,8 +21,7 @@ class CustomerDto
         int $averageTransactionAmount,
         string $discount,
         string $timeToCall
-    )
-    {
+    ) {
         $this->id_recipient = $id_recipient;
         $this->fullName = $fullName;
         $this->birthday = $birthday;
@@ -96,8 +95,4 @@ class CustomerDto
     {
         return $this->timeToCall;
     }
-
-
-
-
 }

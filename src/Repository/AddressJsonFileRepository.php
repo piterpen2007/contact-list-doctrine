@@ -7,7 +7,6 @@ use EfTech\ContactList\Entity\AddressRepositoryInterface;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 use JsonException;
 
-
 class AddressJsonFileRepository implements AddressRepositoryInterface
 {
     /** Текущее значение идентификатора адреса
@@ -45,13 +44,15 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
     /**
      * @return array
      */
-    private function loadData():array
+    private function loadData(): array
     {
         if (null === $this->addressData) {
             $this->addressData = $this->dataLoader->loadData($this->pathToAddress);
             $this->currentId = max(
                 array_map(
-                    static function (array $v) {return $v['id_address'];},
+                    static function (array $v) {
+                        return $v['id_address'];
+                    },
                     $this->addressData
                 )
             );
@@ -65,18 +66,18 @@ class AddressJsonFileRepository implements AddressRepositoryInterface
         $addresses = $this->loadData();
         $findAddress = [];
         foreach ($addresses as $address) {
-            if (array_key_exists('id_address',$criteria)) {
+            if (array_key_exists('id_address', $criteria)) {
                 $addressMeetSearchCriteria = $criteria['id_address'] === $address['id_address'];
             } else {
                 $addressMeetSearchCriteria = true;
             }
-            if ($addressMeetSearchCriteria && array_key_exists('id_recipient',$criteria)) {
+            if ($addressMeetSearchCriteria && array_key_exists('id_recipient', $criteria)) {
                 $addressMeetSearchCriteria = $criteria['id_recipient'] === $address['id_recipient'];
             }
-            if ($addressMeetSearchCriteria && array_key_exists('address',$criteria)) {
+            if ($addressMeetSearchCriteria && array_key_exists('address', $criteria)) {
                 $addressMeetSearchCriteria = $criteria['address'] === $address['address'];
             }
-            if ($addressMeetSearchCriteria && array_key_exists('status',$criteria)) {
+            if ($addressMeetSearchCriteria && array_key_exists('status', $criteria)) {
                 $addressMeetSearchCriteria = $criteria['status'] === $address['status'];
             }
             if ($addressMeetSearchCriteria) {

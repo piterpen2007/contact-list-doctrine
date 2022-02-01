@@ -47,6 +47,4 @@ final class Currency
     {
         return $this->name;
     }
-
-
 }

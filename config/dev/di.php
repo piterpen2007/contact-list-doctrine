@@ -336,18 +336,18 @@ return [
 
 
     'factories' => [
-        'loginUri' => static function(ContainerInterface $c): Uri {
+        'loginUri' => static function (ContainerInterface $c): Uri {
             /** @var AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return Uri::createFromString($appConfig->getLoginUri());
         },
-        SessionInterface::class => static function(ContainerInterface $c) {
+        SessionInterface::class => static function (ContainerInterface $c) {
             return SessionNative::create();
         },
-        ContainerInterface::class => static function(ContainerInterface $c):ContainerInterface {
+        ContainerInterface::class => static function (ContainerInterface $c): ContainerInterface {
             return $c;
         },
-        'pathToUsers' => static function(ContainerInterface $c):string {
+        'pathToUsers' => static function (ContainerInterface $c): string {
             /** @var AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToUsers();
@@ -367,22 +367,22 @@ return [
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToLogFile();
         },
-        'pathToCustomers' => static function(ContainerInterface $c):string {
+        'pathToCustomers' => static function (ContainerInterface $c): string {
             /** @var AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToCustomers();
         },
-        'pathToRecipients' => static function(ContainerInterface $c):string {
+        'pathToRecipients' => static function (ContainerInterface $c): string {
             /** @var AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToRecipients();
         },
-        'pathToKinsfolk' => static function(ContainerInterface $c):string {
+        'pathToKinsfolk' => static function (ContainerInterface $c): string {
             /** @var AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToKinsfolk();
         },
-        'pathToColleagues' => static function(ContainerInterface $c):string {
+        'pathToColleagues' => static function (ContainerInterface $c): string {
             /** @var AppConfig $appConfig */
             $appConfig = $c->get(AppConfig::class);
             return $appConfig->getPathToColleagues();

@@ -18,7 +18,7 @@ final class UserJsonFileRepository implements UserRepositoryInterface, UserDataS
      * @var string
      */
     private string $pathToUsers;
-    private DataLoaderInterface  $dataLoader;
+    private DataLoaderInterface $dataLoader;
     /** загруженные данные о пользователях
      * @var array|null
      */
@@ -48,12 +48,12 @@ final class UserJsonFileRepository implements UserRepositoryInterface, UserDataS
             if (false === is_array($user)) {
                 throw new RuntimeException('Данные о пользователях должны быть массивом');
             }
-            if (array_key_exists('login',$criteria)) {
+            if (array_key_exists('login', $criteria)) {
                 $userMeetsSearchCriteria = $criteria['login'] === $user['login'];
             } else {
                 $userMeetsSearchCriteria = true;
             }
-            if ($userMeetsSearchCriteria && array_key_exists('id',$criteria)) {
+            if ($userMeetsSearchCriteria && array_key_exists('id', $criteria)) {
                 $userMeetsSearchCriteria = $criteria['id'] === $user['id'];
             }
             if ($userMeetsSearchCriteria) {
@@ -82,7 +82,7 @@ final class UserJsonFileRepository implements UserRepositoryInterface, UserDataS
     /** загружает данные
      * @return array
      */
-    private function loadData():array
+    private function loadData(): array
     {
         if (null === $this->data) {
             $this->data = $this->dataLoader->loadData($this->pathToUsers);
@@ -91,10 +91,9 @@ final class UserJsonFileRepository implements UserRepositoryInterface, UserDataS
             }
         }
         return $this->data;
-
     }
 
-    private function createUSer(array $user):User
+    private function createUSer(array $user): User
     {
         $this->validateUserItem($user);
         return new UserDataProvider(
@@ -104,15 +103,15 @@ final class UserJsonFileRepository implements UserRepositoryInterface, UserDataS
         );
     }
 
-    private function validateUserItem(array $user):void
+    private function validateUserItem(array $user): void
     {
-        if (false === array_key_exists('id',$user)) {
+        if (false === array_key_exists('id', $user)) {
             throw new RuntimeException('Нету id пользователя');
         }
-        if (false === array_key_exists('login',$user)) {
+        if (false === array_key_exists('login', $user)) {
             throw new RuntimeException('Нету login пользователя');
         }
-        if (false === array_key_exists('password',$user)) {
+        if (false === array_key_exists('password', $user)) {
             throw new RuntimeException('Нету password пользователя');
         }
         if (false === is_int($user['id'])) {

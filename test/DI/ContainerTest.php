@@ -16,7 +16,6 @@ use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Repository\RecipientJsonFileRepository;
 use EfTech\ContactList\Service\SearchRecipientsService;
 
-
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 class ContainerTest
@@ -24,13 +23,13 @@ class ContainerTest
     /**
      * Тестирование получения сервиса
      */
-    public static function testGetService():void
+    public static function testGetService(): void
     {
         echo "------------------Тестирование получения сервиса---------------\n";
         //Arrange
         $diConfig = [
-            'instances'=> [
-                'appConfig' =>require __DIR__ . '/../../config/dev/config.php'
+            'instances' => [
+                'appConfig' => require __DIR__ . '/../../config/dev/config.php'
             ],
             'services' => [
                 SearchRecipientsService::class => [
@@ -69,16 +68,16 @@ class ContainerTest
 
             ],
             'factories' => [
-                'pathToLogFile' => static function(ContainerInterface $c):string {
+                'pathToLogFile' => static function (ContainerInterface $c): string {
                     /** @var AppConfig $appConfig */
                     $appConfig = $c->get(AppConfig::class);
                     return $appConfig->getPathToLogFile();
                 },
-                AppConfig::class => static function(ContainerInterface $c): AppConfig {
+                AppConfig::class => static function (ContainerInterface $c): AppConfig {
                     $appConfig = $c->get('appConfig');
                     return AppConfig::createFromArray($appConfig);
                 },
-                'pathToRecipients' => static function(ContainerInterface $c):string {
+                'pathToRecipients' => static function (ContainerInterface $c): string {
                     /** @var AppConfig $appConfig */
                     $appConfig = $c->get(AppConfig::class);
                     return $appConfig->getPathToRecipients();
@@ -98,7 +97,6 @@ class ContainerTest
             echo "     FAIL - di контейнер отработал корректно";
         }
     }
-
 }
 
 ContainerTest::testGetService();

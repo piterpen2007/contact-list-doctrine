@@ -26,7 +26,7 @@ class CreateAddressController implements ControllerInterface
     public function __invoke(ServerRequest $request): httpResponse
     {
         try {
-            $requestData = json_decode($request->getBody(), true,512,JSON_THROW_ON_ERROR);
+            $requestData = json_decode($request->getBody(), true, 512, JSON_THROW_ON_ERROR);
             $validationResult = $this->validateData($requestData);
 
             if (0 === count($validationResult)) {
@@ -36,18 +36,17 @@ class CreateAddressController implements ControllerInterface
                 $jsonData = $this->buildJsonData($responseDto);
             } else {
                 $httpCode = 400;
-                $jsonData = ['status' => 'fail','message'=> implode('.',$validationResult)];
+                $jsonData = ['status' => 'fail','message' => implode('.', $validationResult)];
             }
-
         } catch (\Throwable $e) {
             $httpCode = 500;
-            $jsonData = ['status' => 'fail','message'=>$e->getMessage()];
+            $jsonData = ['status' => 'fail','message' => $e->getMessage()];
         }
 
-        return ServerResponseFactory::createJsonResponse($httpCode,$jsonData);
+        return ServerResponseFactory::createJsonResponse($httpCode, $jsonData);
     }
 
-    private function runService(array $requestData):ResultRegisterNewAddressDto
+    private function runService(array $requestData): ResultRegisterNewAddressDto
     {
         $requestDto = new NewAddressDto(
             $requestData['id_recipient'],
@@ -62,7 +61,7 @@ class CreateAddressController implements ControllerInterface
      * @param ResultRegisterNewAddressDto $responseDto
      * @return array
      */
-    private function buildJsonData(ResultRegisterNewAddressDto $responseDto):array
+    private function buildJsonData(ResultRegisterNewAddressDto $responseDto): array
     {
         return [
             'id_address' => $responseDto->getIdAddress(),
@@ -76,13 +75,13 @@ class CreateAddressController implements ControllerInterface
      * @param $requestData
      * @return array
      */
-    private function validateData($requestData):array
+    private function validateData($requestData): array
     {
         $err = [];
         if (false === is_array($requestData)) {
             $err[] = 'Данные о новом адресе не являются масивом';
         } else {
-            if (false === array_key_exists('address',$requestData)) {
+            if (false === array_key_exists('address', $requestData)) {
                 $err[] = 'Отсутствует информация о адресе';
             } elseif (false === is_string($requestData['address'])) {
                 $err[] = 'адрес должен быть строкой';
@@ -90,7 +89,7 @@ class CreateAddressController implements ControllerInterface
                 $err[] = 'адрес не может быть пустой строкой';
             }
 
-            if (false === array_key_exists('status',$requestData)) {
+            if (false === array_key_exists('status', $requestData)) {
                 $err[] = 'Отсутствует информация о статусе';
             } elseif (false === is_string($requestData['status'])) {
                 $err[] = 'статус должен быть строкой';
@@ -98,14 +97,13 @@ class CreateAddressController implements ControllerInterface
                 $err[] = 'статус не может быть пустой строкой';
             }
 
-            if (false === array_key_exists('id_recipient',$requestData)) {
+            if (false === array_key_exists('id_recipient', $requestData)) {
                 $err[] = 'Отсутствует информация о id контакта';
             } elseif (false === is_int($requestData['id_recipient'])) {
                 $err[] = 'id контакта должен быть целым числом';
             } elseif ($requestData['id_recipient'] <= 0) {
                 $err[] = 'id контакта не может быть меньше или равен нуля';
             }
-
         }
 
         return $err;

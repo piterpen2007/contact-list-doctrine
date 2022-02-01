@@ -20,6 +20,5 @@ class GetContactListController extends GetContactListCollectionController
         return 1 === count($foundContactLists)
             ? $this->serializeContactList(current($foundContactLists))
             : [ 'status' => 'fail', 'message' => 'entity not found'];
-
     }
 }
