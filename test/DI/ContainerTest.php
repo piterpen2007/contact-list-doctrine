@@ -2,30 +2,28 @@
 
 namespace EfTech\ContactListTest\Infrastructure\DI;
 
-use EfTech\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
-use EfTech\ContactList\Infrastructure\Logger\AdapterInterface;
+use EfTech\ContactList\Config\AppConfig;
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Entity\RecipientRepositoryInterface;
-use EfTech\ContactList\Config\AppConfig;
 use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
+use EfTech\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
+use EfTech\ContactList\Infrastructure\Logger\AdapterInterface;
 use EfTech\ContactList\Infrastructure\Logger\Logger;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Repository\RecipientJsonFileRepository;
 use EfTech\ContactList\Service\SearchRecipientsService;
+use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/../../vendor/autoload.php';
-
-class ContainerTest
+class ContainerTest extends TestCase
 {
     /**
      * Тестирование получения сервиса
      */
-    public static function testGetService(): void
+    public function testGetService(): void
     {
-        echo "------------------Тестирование получения сервиса---------------\n";
         //Arrange
         $diConfig = [
             'instances' => [
@@ -87,16 +85,15 @@ class ContainerTest
 
         ];
         $di = Container::createFromArray($diConfig);
+
         //Act
         $controller = $di->get(GetRecipientsCollectionController::class);
 
         //Assert
-        if ($controller instanceof GetRecipientsCollectionController) {
-            echo "     ОК - di контейнер отработал корректно";
-        } else {
-            echo "     FAIL - di контейнер отработал корректно";
-        }
+        $this->assertInstanceOf(
+            GetRecipientsCollectionController::class,
+            $controller,
+            'Ошибка создания контейнера'
+        );
     }
 }
-
-ContainerTest::testGetService();

@@ -1,25 +1,29 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+namespace EfTech\ContactListTest;
 
-use EfTech\ContactList\Infrastructure\HttpApplication\App;
 use EfTech\ContactList\Config\AppConfig;
 use EfTech\ContactList\Infrastructure\DI\Container;
+use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
+use EfTech\ContactList\Infrastructure\HttpApplication\App;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Router\RouterInterface;
 use EfTech\ContactList\Infrastructure\Uri\Uri;
 use EfTech\ContactList\Infrastructure\View\NullRender;
 use EfTech\ContactList\Infrastructure\View\RenderInterface;
-use EfTech\ContactListTest\TestUtils;
-
+use JsonException;
+use PHPUnit\Framework\TestCase;
 
 /**
  *  Тестирование приложения
  */
-class UnitTest
+class UnitTest extends TestCase
 {
-    private static function testDataProvider(): array
+    /** Поставщик данных для тестирования приложения
+     * @return array
+     */
+    public static function dataProvider(): array
     {
         $diConfig = require __DIR__ . '/../config/dev/di.php';
         $diConfig['services'][\EfTech\ContactList\Infrastructure\Logger\AdapterInterface::class] = [
@@ -29,26 +33,24 @@ class UnitTest
             'class' => NullRender::class
         ];
         return [
-            [
-                'testName' => 'Тестирование поиска получателя по id',
+            'Тестирование поиска получателя по id' => [
                 'in' => [
                     'uri' => '/recipient?id_recipient=1',
                     'diConfig' => $diConfig
-                    ],
+                ],
                 'out' => [
                     'httpCode' => 200,
                     'result' => [
                         [
-                        'id_recipient' => 1,
-                        'full_name' => 'Осипов Геннадий Иванович',
-                        'birthday' => '15.06.1985',
-                        'profession' => 'Системный администратор'
+                            'id_recipient' => 1,
+                            'full_name' => 'Осипов Геннадий Иванович',
+                            'birthday' => '15.06.1985',
+                            'profession' => 'Системный администратор'
                         ],
                     ],
                 ]
             ],
-            [
-                'testName' => 'Тестирование ситуации когда данные о получателях не кореектны. Нет поля birthday',
+            'Тестирование ситуации когда данные о получателях не кореектны. Нет поля birthday' => [
                 'in' => [
                     'uri' => '/recipient?full_name=Осипов Геннадий Иванович',
                     'diConfig' => (static function ($diConfig) {
@@ -66,8 +68,7 @@ class UnitTest
                     ]
                 ]
             ],
-            [
-                'testName' => 'Тестирование ситуации с некорректным  данными конфига приложения',
+            'Тестирование ситуации с некорректным  данными конфига приложения' => [
                 'in' => [
                     'uri' => '/recipient?id_recipient=1',
                     'diConfig' => (static function ($diConfig) {
@@ -85,8 +86,7 @@ class UnitTest
                     ]
                 ]
             ],
-            [
-                'testName' => 'Тестирование ситуации с некорректным путем до файла получателями',
+            'Тестирование ситуации с некорректным путем до файла получателями' => [
                 'in' => [
                     'uri' =>  '/recipient?id_recipient=1',
                     'diConfig' => (static function ($diConfig) {
@@ -104,8 +104,7 @@ class UnitTest
                     ]
                 ]
             ],
-            [
-                'testName' => 'Тестирование ситуации когда данные о клиентах некорректны. Нет поля id_recipient',
+            'Тестирование ситуации когда данные о клиентах некорректны. Нет поля id_recipient' => [
                 'in' => [
                     'uri' => '/customers?full_name=Калинин Пётр Александрович',
                     'diConfig' => (static function ($diConfig) {
@@ -122,87 +121,51 @@ class UnitTest
                         'message' => 'Отсутствуют обязательные элементы: id_recipient'
                     ]
                 ]
-                ,
-
-            ],
+            ]
         ];
     }
 
-    /**
-     * Запускает тест
-     *
-     * @return void
+    /** Запускает тест
+     * @param array $in - входные данные
+     * @param array $out
+     * @dataProvider  dataProvider
      * @throws JsonException
      */
-    public static function runTest(): void
+    public function testApp(array $in, array $out): void
     {
-        foreach (static::testDataProvider() as $testItem) {
-            echo "-----{$testItem['testName']}-----\n";
-
-            $httpRequest = new ServerRequest(
-                'GET',
-                '1.1',
-                $testItem['in']['uri'],
-                Uri::createFromString($testItem['in']['uri']),
-                ['Content-Type' => 'application/json'],
-                null
-            );
-            //Arrange и Act
-
-            $diConfig = $testItem['in']['diConfig'];
-            $httpResponse = (new App(
-                static function (Container $di): RouterInterface {
-                    return $di->get(RouterInterface::class);
-                },
-                static function (Container $di): LoggerInterface {
-                    return $di->get(LoggerInterface::class);
-                },
-                static function (Container $di): AppConfig {
-                    return $di->get(AppConfig::class);
-                },
-                static function (Container $di): RenderInterface {
-                    return $di->get(RenderInterface::class);
-                },
-                static function () use ($diConfig): Container {
-                    return Container::createFromArray($diConfig);
-                }
-            ))->dispath($httpRequest);
-
-
-            //Assert
-            if ($httpResponse->getStatusCode() === $testItem['out']['httpCode']) {
-                echo "    OK --- код ответа\n";
-            } else {
-                echo "    FAIL - код ответа. Ожидалось: {$testItem['out']['httpCode']}. Актуальное" .
-                    " значение: {$httpResponse->getStatusCode()}\n";
+        $httpRequest = new ServerRequest(
+            'GET',
+            '1.1',
+            $in['uri'],
+            Uri::createFromString($in['uri']),
+            ['Content-Type' => 'application/json'],
+            null
+        );
+        //Arrange и Act
+        $diConfig = $in['diConfig'];
+        $httpResponse = (new App(
+            static function (ContainerInterface $di): RouterInterface {
+                return $di->get(RouterInterface::class);
+            },
+            static function (ContainerInterface $di): LoggerInterface {
+                return $di->get(LoggerInterface::class);
+            },
+            static function (ContainerInterface $di): AppConfig {
+                return $di->get(AppConfig::class);
+            },
+            static function (ContainerInterface $di): RenderInterface {
+                return $di->get(RenderInterface::class);
+            },
+            static function () use ($diConfig): ContainerInterface {
+                return Container::createFromArray($diConfig);
             }
-
-            $actualResult =  json_decode($httpResponse->getBody(), true, 512, JSON_THROW_ON_ERROR);
-
-            $unnecessaryElements = TestUtils::arrayDiffAssocRecursive($actualResult, $testItem['out']['result']);
-            $missingElements =  TestUtils::arrayDiffAssocRecursive($testItem['out']['result'], $actualResult);
-
-            $errMsg = '';
-
-            if (count($unnecessaryElements) > 0) {
-                $errMsg .= sprintf("         Есть лишние элементы %s\n", json_encode(
-                    $unnecessaryElements,
-                    JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE
-                ));
-            }
-            if (count($missingElements) > 0) {
-                $errMsg .= sprintf("         Есть лишние недостающие элементы %s\n", json_encode(
-                    $missingElements,
-                    JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE
-                ));
-            }
-
-            if ('' === $errMsg) {
-                echo "    ОК- данные ответа валидны\n";
-            } else {
-                echo "    FAIL - данные ответа валидны\n" . $errMsg;
-            }
-        }
+        ))->dispath($httpRequest);
+        // Assert
+        $this->assertEquals($out['httpCode'], $httpResponse->getStatusCode(), 'код ответа');
+        $this->assertEquals(
+            $out['result'],
+            $actualResult =  json_decode($httpResponse->getBody(), true, 512, JSON_THROW_ON_ERROR),
+            'структура ответа'
+        );
     }
 }
-UnitTest::runTest();

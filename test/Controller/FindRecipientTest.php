@@ -2,37 +2,29 @@
 
 namespace EfTech\ContactListTest\Infrastructure\Controller;
 
-require_once __DIR__ . '/../../vendor/autoload.php';
-
-use EfTech\ContactList\Controller\GetRecipientsCollectionController;
-use EfTech\ContactList\Entity\RecipientRepositoryInterface;
 use EfTech\ContactList\Config\AppConfig;
-use EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface;
+use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
-use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
 use EfTech\ContactList\Infrastructure\Logger\Logger;
-use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Uri\Uri;
 use EfTech\ContactList\Repository\RecipientJsonFileRepository;
 use EfTech\ContactList\Service\SearchRecipientsService;
-use EfTech\ContactListTest\TestUtils;
+use Exception;
+use JsonException;
+use PHPUnit\Framework\TestCase;
 
-
-
-/**
- * Тестирование контроллера FindAuthors
- */
-class FindRecipientTest
+class FindRecipientTest extends TestCase
 {
-    /** Тестирование поиска авторов по фамилии
-     * @return void
-     * @throws \JsonException
+    /** Тестирование поиска получателей по фамилии
+     *
+     * @throws JsonException
+     * @throws Exception
      */
-    public static function testSearchAuthorsBySurname(): void
+    public function testSearchRecipientForFullName(): void
     {
-        echo "-------------------Тестирование поиска автора по фамилии-----------------------\n";
+        //Arrange
         $httpRequest = new ServerRequest(
             'GET',
             '1.1',
@@ -42,46 +34,22 @@ class FindRecipientTest
             null
         );
         $appConfig = AppConfig::createFromArray(require __DIR__ . '/../../config/dev/config.php');
-        $diContainer = new Container(
-            [
-                LoggerInterface::class => new Logger(new NullAdapter()),
-                'pathToRecipients' => $appConfig->getPathToRecipients()
-            ],
-            [
-                GetRecipientsCollectionController::class => [
-                    'args' => [
-                        'logger' => LoggerInterface::class,
-                        'searchRecipientsService' => SearchRecipientsService::class
-                    ]
-                ],
-                SearchRecipientsService::class => [
-                    'args' => [
-                        'logger' => LoggerInterface::class,
-                        'recipientRepository' => RecipientRepositoryInterface::class
-                    ]
+        $logger = new Logger(new NullAdapter());
 
-                ],
-                RecipientRepositoryInterface::class => [
-                    'class' => RecipientJsonFileRepository::class,
-                    'args' => [
-                        'pathToRecipients' => 'pathToRecipients',
-                        'dataLoader' => DataLoaderInterface::class
-                    ]
-                ],
-                DataLoaderInterface::class => [
-                    'class' => JsonDataLoader::class
-                ],
-            ]
+        $controller = new GetRecipientsCollectionController(
+            $logger,
+            new SearchRecipientsService(
+                $logger,
+                new RecipientJsonFileRepository(
+                    $appConfig->getPathToRecipients(),
+                    new JsonDataLoader()
+                )
+            )
         );
 
-        $findRecipients = $diContainer->get(GetRecipientsCollectionController::class);
-        $httpResponse = $findRecipients($httpRequest);
-        //Assert
-        if ($httpResponse->getStatusCode() === 200) {
-            echo "    OK --- код ответа\n";
-        } else {
-            echo "    FAIL - код ответа. Ожидалось: 200. Актуальное значение: {$httpResponse->getStatusCode()}\n";
-        }
+        //Act
+        $httpResponse = $controller($httpRequest);
+        $actualResult =  json_decode($httpResponse->getBody(), true, 512, JSON_THROW_ON_ERROR);
         $expected = [
             [
                 'id_recipient' => 1,
@@ -91,31 +59,8 @@ class FindRecipientTest
             ]
         ];
 
-        $actualResult =  json_decode($httpResponse->getBody(), true, 512, JSON_THROW_ON_ERROR);
-
-        $unnecessaryElements = TestUtils::arrayDiffAssocRecursive($actualResult, $expected);
-        $missingElements =  TestUtils::arrayDiffAssocRecursive($expected, $actualResult);
-
-        $errMsg = '';
-
-        if (count($unnecessaryElements) > 0) {
-            $errMsg .= sprintf("         Есть лишние элементы %s\n", json_encode(
-                $unnecessaryElements,
-                JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE
-            ));
-        }
-        if (count($missingElements) > 0) {
-            $errMsg .= sprintf("         Есть лишние недостающие элементы %s\n", json_encode(
-                $missingElements,
-                JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE
-            ));
-        }
-
-        if ('' === $errMsg) {
-            echo "    ОК- данные ответа валидны\n";
-        } else {
-            echo "    FAIL - данные ответа валидны\n" . $errMsg;
-        }
+        //Assert
+        $this->assertEquals(200, $httpResponse->getStatusCode(), 'код http ответа не корректен');
+        $this->assertEquals($expected, $actualResult, 'Данные ответа не валидны');
     }
 }
-FindRecipientTest::testSearchAuthorsBySurname();
