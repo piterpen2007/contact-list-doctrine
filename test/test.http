@@ -1,5 +1,5 @@
 ### Тестирование поиска даты рождения и профессии знакомых по id
-GET http://localhost:8082/recipient?id_recipient=1
+GET http://localhost:8082/recipients?id_recipient=1
 
 > {%
    client.test('Тестирование поиска даты рождения и профессии знакомых по id', function () {
@@ -13,7 +13,7 @@ GET http://localhost:8082/recipient?id_recipient=1
  %}
 
 ### Тестирование поиска даты рождения и профессии знакомых по полному имени
-GET http://localhost:8082/recipient?full_name=Осипов Геннадий Иванович
+GET http://localhost:8082/recipients?full_name=Осипов Геннадий Иванович
 
 
 > {%
@@ -140,7 +140,7 @@ GET http://localhost:8082/hhh?param=ru
 
 
 ### Тестирование ситуации, когда передали некорректное id получателя в поиске по знакомым
-GET http://localhost:8082/recipient?id_recipient[]=1
+GET http://localhost:8082/recipients?id_recipient[]=1
 
 > {%
      client.test("Тестирование ситуации, когда передали некорректное id получателя в поиске по знакомым", function () {
@@ -152,7 +152,7 @@ GET http://localhost:8082/recipient?id_recipient[]=1
  %}
 
 ### Тестирование ситуации, когда передали некорректное full_name получателя в поиске по знакомым
-GET http://localhost:8082/recipient?full_name[]=Осипов Геннадий Иванович
+GET http://localhost:8082/recipients?full_name[]=Осипов Геннадий Иванович
 
 > {%
      client.test("Тестирование ситуации, когда передали некорректное full_name получателя в поиске по знакомым", function () {

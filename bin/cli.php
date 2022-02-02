@@ -6,6 +6,7 @@ use EfTech\ContactList\Infrastructure\Console\AppConsole;
 use EfTech\ContactList\Infrastructure\Console\Output\OutputInterface;
 use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
+use EfTech\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
 
 
 (new AppConsole(
@@ -13,7 +14,10 @@ use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
     static function (ContainerInterface $di): OutputInterface {
         return $di->get(OutputInterface::class);
     },
-    static function (): ContainerInterface {
-        return Container::createFromArray(require __DIR__ . '/../config/dev/di.php');
-    }
+    new SymfonyDiContainerInit(
+        __DIR__ . '/../config/dev/di.xml',
+        [
+            'kernel.project_dir' => __DIR__ . '/../'
+        ]
+    )
 ))->dispatch();
