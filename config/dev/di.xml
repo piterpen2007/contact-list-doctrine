@@ -4,12 +4,71 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
 >
 
+    <imports>
+        <import resource="request.handlers.xml"/>
+        <import resource="reqExp.handlers.xml"/>
+        <import resource="app.config.xml"/>
+    </imports>
+    <parameters>
+        <parameter key="controllerNs">EfTech\ContactList\Controller</parameter>
+    </parameters>
 <services>
-    <service id="EfTech\ContactList\ConsoleCommand\HashStr" public="true">
-        <argument key="$output"
-                  type="service"
-                  id="EfTech\ContactList\Infrastructure\Console\Output\OutputInterface"/>
-    </service>
+    <defaults autowire="true" public="false">
+        <bind key="string $pathToRecipients"
+              type="expression">service(
+            'EfTech\\ContactList\\Config\\AppConfig'
+            ).getPathToRecipients()
+        </bind>
+        <bind key="string $pathToKinsfolk"
+              type="expression">service(
+            'EfTech\\ContactList\\Config\\AppConfig'
+            ).getPathToKinsfolk()
+        </bind>
+        <bind key="string $pathToCustomers"
+              type="expression">service(
+            'EfTech\\ContactList\\Config\\AppConfig'
+            ).getPathToCustomers()
+        </bind>
+        <bind key="string $pathToColleagues"
+              type="expression">service(
+            'EfTech\\ContactList\\Config\\AppConfig'
+            ).getPathToColleagues()
+        </bind>
+        <bind key="string $pathToContactList"
+              type="expression">service(
+            'EfTech\\ContactList\\Config\\AppConfig'
+            ).getPathToContactList()
+        </bind>
+        <bind key="string $pathToAddress"
+              type="expression">service(
+            'EfTech\\ContactList\\Config\\AppConfig'
+            ).getPathToAddresses()
+        </bind>
+        <bind key="string $pathToUsers"
+              type="expression">service(
+            'EfTech\\ContactList\\Config\\AppConfig'
+            ).getPathToUsers()
+        </bind>
+        <bind key="string $pathToFile"
+              type="expression">service(
+            'EfTech\\ContactList\\Config\\AppConfig'
+            ).getPathToLogFile()
+        </bind>
+        <bind key="string $controllerNs">%controllerNs%</bind>
+    </defaults>
+
+
+
+
+    <prototype namespace="EfTech\ContactList\" resource="./../../src"/>
+    <prototype namespace="EfTech\ContactList\Infrastructure\" resource="./../../vendor/eff-tech/framework-home/src"/>
+    <instanceof id="EfTech\ContactList\Infrastructure\Controller\ControllerInterface" public="true"/>
+    <instanceof id="EfTech\ContactList\Infrastructure\Router\RouterInterface" public="true"/>
+    <instanceof id="EfTech\ContactList\Infrastructure\Console\CommandInterface" public="true"/>
+
+
+
+
 
     <service
             id="EfTech\ContactList\Infrastructure\Console\Output\OutputInterface"
@@ -19,343 +78,89 @@
 
     <service id="EfTech\ContactList\Config\AppConfig" public="true">
         <factory class="EfTech\ContactList\Config\AppConfig" method="createFromArray"/>
-        <argument key="$config" type="collection">
-            <argument key="pathToRecipients">%kernel.project_dir%/data/recipient.json</argument>
-            <argument key="pathToKinsfolk">%kernel.project_dir%/data/kinsfolk.json</argument>
-            <argument key="pathToCustomers">%kernel.project_dir%/data/customers.json</argument>
-            <argument key="pathToColleagues">%kernel.project_dir%/data/colleagues.json</argument>
-            <argument key="pathToContactList">%kernel.project_dir%/data/contact_list.json</argument>
-            <argument key="pathToAddresses">%kernel.project_dir%/data/address.json</argument>
-            <argument key="pathToLogFile">%kernel.project_dir%/var/log/app.log</argument>
-            <argument key="pathToUsers">%kernel.project_dir%/data/users.json</argument>
-            <argument key="loginUri">/login</argument>
-            <argument key="hideErrorMsg">false</argument>
-        </argument>
+        <argument key="$config">%app.configs%</argument>
     </service>
-    <service id="EfTech\ContactList\Infrastructure\Auth\HttpAuthProvider"
-             public="false"
-    >
-        <argument key="$userDataStorage" type="service"
-                  id="EfTech\ContactList\Infrastructure\Auth\UserDataStorageInterface"/>
-        <argument key="$session" type="service" id="EfTech\ContactList\Infrastructure\Session\SessionInterface"/>
+
+
+
+    <service id="EfTech\ContactList\Infrastructure\Auth\HttpAuthProvider">
         <argument key="$loginUri" type="service">
             <service>
                 <factory class="EfTech\ContactList\Infrastructure\Uri\Uri" method="createFromString"/>
-                <argument key="$uri" type="service">
-                    <service>
-                        <factory service="EfTech\ContactList\Config\AppConfig" method="getLoginUri"/>
-                    </service>
-                </argument>
+                <argument key="$uri" type="expression">service('EfTech\\ContactList\\Config\\AppConfig').getLoginUri()</argument>
             </service>
         </argument>
-
 </service>
 
     <service
             id="EfTech\ContactList\Infrastructure\Auth\UserDataStorageInterface"
-            public="false"
-            class="EfTech\ContactList\Repository\UserJsonFileRepository"
-    >
-        <argument key="$pathToUsers" type="service">
-            <service>
-                <factory service="EfTech\ContactList\Config\AppConfig" method="getPathToUsers" />
-            </service>
-        </argument>
-        <argument key="$dataLoader" type="service" id="EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface"/>
+            class="EfTech\ContactList\Repository\UserJsonFileRepository">
     </service>
 
-    <service id="EfTech\ContactList\Controller\LoginController"
-             public="true"
-    >
-        <argument key="$template" type="service" id="EfTech\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface"/>
-        <argument key="$authProvider" type="service" id="EfTech\ContactList\Infrastructure\Auth\HttpAuthProvider"/>
-
-    </service>
     <service id="EfTech\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface"
-             public="false"
              class="EfTech\ContactList\Infrastructure\ViewTemplate\PhtmlTemplate"/>
-    <service id="EfTech\ContactList\Infrastructure\Session\SessionInterface" public="false">
+
+    <service id="EfTech\ContactList\Infrastructure\Session\SessionInterface">
         <factory class="EfTech\ContactList\Infrastructure\Session\SessionNative" method="create"/>
     </service>
-<service id="EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface"
-         class="EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader"
-         public="false"/>
 
-    <service id="EfTech\ContactList\Controller\AddressAdministrationController"
-             public="true"
-    >
-        <argument key="$arrivalAddressService" type="service" id="EfTech\ContactList\Service\ArrivalAddressService"/>
-        <argument key="$addressService" type="service" id="EfTech\ContactList\Service\SearchAddressService"/>
-        <argument key="$viewTemplate" type="service" id="EfTech\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface"/>
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"/>
-        <argument key="$searchContactsService" type="service" id="EfTech\ContactList\Service\SearchContactsService"/>
-        <argument key="$httpAuthProvider" type="service" id="EfTech\ContactList\Infrastructure\Auth\HttpAuthProvider"/>
-    </service>
+<service id="EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface"
+         class="EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader"/>
 
     <service id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"
              public="true"
              class="EfTech\ContactList\Infrastructure\Logger\Logger">
-        <argument key="$adapter" type="service" id="EfTech\ContactList\Infrastructure\Logger\AdapterInterface"/>
     </service>
     <service id="EfTech\ContactList\Infrastructure\Logger\AdapterInterface"
-             public="false"
              class="EfTech\ContactList\Infrastructure\Logger\Adapter\FileAdapter"
     >
-        <argument key="$pathToFile" type="service">
-            <service>
-                <factory service="EfTech\ContactList\Config\AppConfig" method="getPathToLogFile"/>
-            </service>
-        </argument>
-    </service>
-    <service id="EfTech\ContactList\Service\SearchAddressService"
-             public="false">
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"/>
-        <argument key="$addressRepository" type="service" id="EfTech\ContactList\Entity\AddressRepositoryInterface"/>
-    </service>
-    <service id="EfTech\ContactList\Entity\AddressRepositoryInterface"
-    class="EfTech\ContactList\Repository\AddressJsonFileRepository"
-             public="false"
-    >
-        <argument key="$pathToAddress" type="service">
-            <service>
-                <factory service="EfTech\ContactList\Config\AppConfig" method="getPathToAddresses"/>
-            </service>
-        </argument>
-        <argument key="$dataLoader" type="service" id="EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface"/>
-    </service>
-    <service id="EfTech\ContactList\Service\ArrivalAddressService"
-             public="false"
-    >
-        <argument key="$addressRepository" type="service" id="EfTech\ContactList\Entity\AddressRepositoryInterface"/>
-    </service>
-
-    <service id="EfTech\ContactList\Service\SearchContactsService"
-             public="false"
-    >
-        <argument key="$contactRepository" type="service" id="EfTech\ContactList\Entity\ContactRepositoryInterface"/>
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"/>
     </service>
 
     <service id="EfTech\ContactList\Entity\ContactRepositoryInterface"
              class="EfTech\ContactList\Repository\ContactJsonRepository"
-             public="false"
     >
-        <argument key="$pathToRecipients" type="service">
-            <service>
-                <factory service="EfTech\ContactList\Config\AppConfig" method="getPathToRecipients"/>
-            </service>
-        </argument>
-        <argument key="$pathToCustomers" type="service">
-            <service>
-                <factory service="EfTech\ContactList\Config\AppConfig" method="getPathToCustomers"/>
-            </service>
-        </argument>
-        <argument key="$pathToKinsfolk" type="service">
-            <service>
-                <factory service="EfTech\ContactList\Config\AppConfig" method="getPathToKinsfolk"/>
-            </service>
-        </argument>
-        <argument key="$pathToColleagues" type="service">
-            <service>
-                <factory service="EfTech\ContactList\Config\AppConfig" method="getPathToColleagues"/>
-            </service>
-        </argument>
-        <argument key="$dataLoader" type="service" id="EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface"/>
-    </service>
-    <service id="EfTech\ContactList\Controller\CreateAddressController"
-             public="true"
-    >
-        <argument key="$addressService" type="service" id="EfTech\ContactList\Service\ArrivalAddressService"/>
     </service>
 
-<service id="EfTech\ContactList\Controller\UpdateMoveToBlacklistContactListController"
-         public="true"
->
-    <argument key="$moveToBlacklistContactListService" type="service" id="EfTech\ContactList\Service\MoveToBlacklistContactListService"/>
-</service>
-
-<service id="EfTech\ContactList\Service\MoveToBlacklistContactListService"
-         public="false"
->
-    <argument key="$contactListRepository" type="service" id="EfTech\ContactList\Entity\ContactListRepositoryInterface"/>
-</service>
 
     <service id="EfTech\ContactList\Entity\ContactListRepositoryInterface"
-             public="false"
              class="EfTech\ContactList\Repository\ContactListJsonRepository"
     >
-        <argument key="$pathToContactList" type="service">
-            <service>
-                <factory service="EfTech\ContactList\Config\AppConfig" method="getPathToContactList"/>
-            </service>
-        </argument>
-        <argument key="$dataLoader" type="service" id="EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface"/>
     </service>
+
 
     <service id="EfTech\ContactList\Entity\CustomerRepositoryInterface"
-             public="false"
              class="EfTech\ContactList\Repository\CustomerJsonFileRepository"
     >
-        <argument key="$pathToCustomers" type="service">
-            <service>
-                <factory service="EfTech\ContactList\Config\AppConfig" method="getPathToCustomers"/>
-            </service>
-        </argument>
-        <argument key="$dataLoader" type="service" id="EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface"/>
     </service>
+
+
 
     <service id="EfTech\ContactList\Entity\RecipientRepositoryInterface"
-             public="false"
              class="EfTech\ContactList\Repository\RecipientJsonFileRepository"
     >
-        <argument key="$pathToRecipients" type="service">
-            <service>
-                <factory service="EfTech\ContactList\Config\AppConfig" method="getPathToRecipients"/>
-            </service>
-        </argument>
-        <argument key="$dataLoader" type="service" id="EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface"/>
     </service>
 
-    <service id="EfTech\ContactList\Controller\GetAddressCollectionController"
-             public="true"
-    >
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"/>
-        <argument key="$contactListService" type="service" id="EfTech\ContactList\Service\SearchAddressService"/>
-    </service>
-    <service id="EfTech\ContactList\Controller\GetAddressController"
-             public="true"
-    >
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"/>
-        <argument key="$contactListService" type="service" id="EfTech\ContactList\Service\SearchAddressService"/>
-    </service>
 
-    <service id="EfTech\ContactList\Controller\GetContactListCollectionController"
-             public="true"
-    >
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"/>
-        <argument key="$contactListService" type="service" id="EfTech\ContactList\Service\SearchContactListService"/>
-    </service>
-
-    <service id="EfTech\ContactList\Controller\GetContactListController"
-             public="true"
-    >
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"/>
-        <argument key="$contactListService" type="service" id="EfTech\ContactList\Service\SearchContactListService"/>
-    </service>
-
-    <service id="EfTech\ContactList\Service\SearchContactListService"
-             public="false"
-    >
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface" />
-        <argument key="$contactListRepository" type="service" id="EfTech\ContactList\Entity\ContactListRepositoryInterface"/>
-    </service>
-
-    <service id="EfTech\ContactList\Controller\GetContactCollectionController"
-             public="true"
-    >
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"/>
-        <argument key="$searchContactsService" type="service" id="EfTech\ContactList\Service\SearchContactsService"/>
-    </service>
-
-    <service id="EfTech\ContactList\Service\SearchRecipientsService"
-             public="false"
-    >
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface" />
-        <argument key="$recipientRepository" type="service" id="EfTech\ContactList\Entity\RecipientRepositoryInterface"/>
-    </service>
-
-    <service id="EfTech\ContactList\Controller\GetRecipientsCollectionController"
-             public="true"
-    >
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"/>
-        <argument key="$searchRecipientsService" type="service" id="EfTech\ContactList\Service\SearchRecipientsService"/>
-    </service>
-
-    <service id="EfTech\ContactList\Controller\GetRecipientsController"
-             public="true"
-    >
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"/>
-        <argument key="$searchRecipientsService" type="service" id="EfTech\ContactList\Service\SearchRecipientsService"/>
-    </service>
-
-    <service id="EfTech\ContactList\Service\SearchCustomersService"
-             public="false"
-    >
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface" />
-        <argument key="$customerRepository" type="service" id="EfTech\ContactList\Entity\CustomerRepositoryInterface"/>
-    </service>
-
-    <service id="EfTech\ContactList\Controller\GetCustomersCollectionController"
-             public="true"
-    >
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"/>
-        <argument key="$searchCustomersService" type="service" id="EfTech\ContactList\Service\SearchCustomersService"/>
-    </service>
-
-    <service id="EfTech\ContactList\Controller\GetCustomersController"
-             public="true"
-    >
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"/>
-        <argument key="$searchCustomersService" type="service" id="EfTech\ContactList\Service\SearchCustomersService"/>
-    </service>
-
-    <service id="EfTech\ContactList\Controller\GetContactController"
-             public="true"
-    >
-        <argument key="$logger" type="service" id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"/>
-        <argument key="$searchContactsService" type="service" id="EfTech\ContactList\Service\SearchContactsService"/>
-    </service>
-
-    <service id="EfTech\ContactList\ConsoleCommand\FindCustomers"
-             public="true"
-    >
-        <argument key="$output" type="service" id="EfTech\ContactList\Infrastructure\Console\Output\OutputInterface"/>
-        <argument key="$searchCustomersService" type="service" id="EfTech\ContactList\Service\SearchCustomersService"/>
-
-    </service>
-    <service id="EfTech\ContactList\ConsoleCommand\FindRecipients"
-             public="true"
-    >
-        <argument key="$output" type="service" id="EfTech\ContactList\Infrastructure\Console\Output\OutputInterface"/>
-        <argument key="$searchRecipientsService" type="service" id="EfTech\ContactList\Service\SearchRecipientsService"/>
-
-    </service>
-    <service id="EfTech\ContactList\ConsoleCommand\FindContacts"
-             public="true"
-    >
-        <argument key="$output" type="service" id="EfTech\ContactList\Infrastructure\Console\Output\OutputInterface"/>
-        <argument key="$searchContactsService" type="service" id="EfTech\ContactList\Service\SearchContactsService"/>
-
-    </service>
 
     <service id="EfTech\ContactList\Infrastructure\View\RenderInterface"
              class="EfTech\ContactList\Infrastructure\View\DefaultRender"
              public="true"
     />
 
-    <service id="EfTech\ContactList\Infrastructure\Router\ControllerFactory" public="false">
+    <service id="EfTech\ContactList\Infrastructure\Router\ControllerFactory">
         <argument key="$diContainer" type="service" id="service_container"/>
     </service>
 
-    <service id="EfTech\ContactList\Infrastructure\Router\DefaultRouter" public="true">
-        <argument key="$controllerFactory" type="service" id="EfTech\ContactList\Infrastructure\Router\ControllerFactory"/>
-        <argument key="$handlers" type="collection">
-            <argument key="/address-add/administration">EfTech\ContactList\Controller\AddressAdministrationController</argument>
-            <argument key="/login">EfTech\ContactList\Controller\LoginController</argument>
-        </argument>
+    <service id="EfTech\ContactList\Infrastructure\Router\DefaultRouter">
+        <argument key="$handlers">%request.handlers%</argument>
     </service>
 
-    <service id="EfTech\ContactList\Infrastructure\Router\RegExpRouter" public="true">
-        <argument key="$controllerFactory" type="service" id="EfTech\ContactList\Infrastructure\Router\ControllerFactory"/>
-        <argument key="$handlers" type="collection"/>
+    <service id="EfTech\ContactList\Infrastructure\Router\RegExpRouter">
+        <argument key="$handlers">%reqExp.handlers%</argument>
     </service>
-    <service id="EfTech\ContactList\Infrastructure\Router\UniversalRouter" public="true">
-        <argument key="$controllerFactory" type="service" id="EfTech\ContactList\Infrastructure\Router\ControllerFactory"/>
-        <argument key="$controllerNs">EfTech\ContactList\Controller</argument>
-    </service>
+
     <service id="EfTech\ContactList\Infrastructure\Router\RouterInterface"
              class="EfTech\ContactList\Infrastructure\Router\ChainRouters"
-             public="true"
     >
         <argument type="service" id="EfTech\ContactList\Infrastructure\Router\DefaultRouter"/>
         <argument type="service" id="EfTech\ContactList\Infrastructure\Router\RegExpRouter"/>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+    <parameters>
+        <parameter key="request.handlers" type="collection">
+            <parameter key="/address-add/administration">EfTech\ContactList\Controller\AddressAdministrationController</parameter>
+            <parameter key="/login">EfTech\ContactList\Controller\LoginController</parameter>
+        </parameter>
+    </parameters>
+</container>

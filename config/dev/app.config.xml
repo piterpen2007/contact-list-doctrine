@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
+>
+    <parameters>
+        <parameter key="app.configs" type="collection">
+            <parameter key="pathToRecipients">%kernel.project_dir%/data/recipient.json</parameter>
+            <parameter key="pathToKinsfolk">%kernel.project_dir%/data/kinsfolk.json</parameter>
+            <parameter key="pathToCustomers">%kernel.project_dir%/data/customers.json</parameter>
+            <parameter key="pathToColleagues">%kernel.project_dir%/data/colleagues.json</parameter>
+            <parameter key="pathToContactList">%kernel.project_dir%/data/contact_list.json</parameter>
+            <parameter key="pathToAddresses">%kernel.project_dir%/data/address.json</parameter>
+            <parameter key="pathToLogFile">%kernel.project_dir%/var/log/app.log</parameter>
+            <parameter key="pathToUsers">%kernel.project_dir%/data/users.json</parameter>
+            <parameter key="loginUri">/login</parameter>
+            <parameter key="hideErrorMsg">false</parameter>
+        </parameter>
+    </parameters>
+</container>
