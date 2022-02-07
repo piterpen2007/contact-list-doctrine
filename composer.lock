@@ -8,7 +8,7 @@
     "packages": [
         {
             "name": "eff-tech/framework-home",
-            "version": "dev-home_work_02-02-2022",
+            "version": "dev-home_work_07-02-2022",
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/framework-home.git",
