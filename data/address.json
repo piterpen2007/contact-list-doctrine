@@ -196,5 +196,11 @@
         "id_recipient": 11,
         "address": "Это адрес контакта",
         "status": "Домашний"
+    },
+    {
+        "id_address": 30,
+        "id_recipient": 11,
+        "address": "Это адрес контакта",
+        "status": "Домашний"
     }
 ]
