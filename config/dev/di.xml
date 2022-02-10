@@ -61,13 +61,13 @@
 
 
     <prototype namespace="EfTech\ContactList\" resource="./../../src"/>
-    <prototype namespace="EfTech\ContactList\Infrastructure\" resource="./../../vendor/eff-tech/framework-home/src"/>
+    <prototype namespace="EfTech\ContactList\Infrastructure\"
+               resource="./../../vendor/eff-tech/framework-home/src"
+               exclude="./../../vendor/eff-tech/framework-home/src/Router"
+    />
     <instanceof id="EfTech\ContactList\Infrastructure\Controller\ControllerInterface" public="true"/>
     <instanceof id="EfTech\ContactList\Infrastructure\Router\RouterInterface" public="true"/>
     <instanceof id="EfTech\ContactList\Infrastructure\Console\CommandInterface" public="true"/>
-
-
-
 
 
     <service
@@ -96,10 +96,6 @@
             id="EfTech\ContactList\Infrastructure\Auth\UserDataStorageInterface"
             class="EfTech\ContactList\Repository\UserJsonFileRepository">
     </service>
-
-    <service id="EfTech\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface"
-             class="EfTech\ContactList\Infrastructure\ViewTemplate\PhtmlTemplate"/>
-
     <service id="EfTech\ContactList\Infrastructure\Session\SessionInterface">
         <factory class="EfTech\ContactList\Infrastructure\Session\SessionNative" method="create"/>
     </service>
@@ -107,14 +103,6 @@
 <service id="EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface"
          class="EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader"/>
 
-    <service id="EfTech\ContactList\Infrastructure\Logger\LoggerInterface"
-             public="true"
-             class="EfTech\ContactList\Infrastructure\Logger\Logger">
-    </service>
-    <service id="EfTech\ContactList\Infrastructure\Logger\AdapterInterface"
-             class="EfTech\ContactList\Infrastructure\Logger\Adapter\FileAdapter"
-    >
-    </service>
 
     <service id="EfTech\ContactList\Entity\ContactRepositoryInterface"
              class="EfTech\ContactList\Repository\ContactJsonRepository"
@@ -147,24 +135,7 @@
              public="true"
     />
 
-    <service id="EfTech\ContactList\Infrastructure\Router\ControllerFactory">
-        <argument key="$diContainer" type="service" id="service_container"/>
-    </service>
 
-    <service id="EfTech\ContactList\Infrastructure\Router\DefaultRouter">
-        <argument key="$handlers">%request.handlers%</argument>
-    </service>
 
-    <service id="EfTech\ContactList\Infrastructure\Router\RegExpRouter">
-        <argument key="$handlers">%reqExp.handlers%</argument>
-    </service>
-
-    <service id="EfTech\ContactList\Infrastructure\Router\RouterInterface"
-             class="EfTech\ContactList\Infrastructure\Router\ChainRouters"
-    >
-        <argument type="service" id="EfTech\ContactList\Infrastructure\Router\DefaultRouter"/>
-        <argument type="service" id="EfTech\ContactList\Infrastructure\Router\RegExpRouter"/>
-        <argument type="service" id="EfTech\ContactList\Infrastructure\Router\UniversalRouter"/>
-    </service>
 </services>
 </container>

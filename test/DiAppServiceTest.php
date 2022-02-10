@@ -3,6 +3,7 @@
 namespace EfTech\ContactListTest;
 
 use EfTech\ContactList\Config\AppConfig;
+use EfTech\ContactList\Config\ContainerExtensions;
 use EfTech\ContactList\ConsoleCommand\FindContacts;
 use EfTech\ContactList\ConsoleCommand\FindCustomers;
 use EfTech\ContactList\ConsoleCommand\FindRecipients;
@@ -161,10 +162,13 @@ class DiAppServiceTest extends TestCase
     {
         //Arrange
         $diContainerFactory = new SymfonyDiContainerInit(
-            __DIR__ . '/../config/dev/di.xml',
-            [
-                'kernel.project_dir' => __DIR__ . '/../'
-            ]
+            new SymfonyDiContainerInit\ContainerParams(
+                __DIR__ . '/../config/dev/di.xml',
+                [
+                    'kernel.project_dir' => __DIR__ . '/../'
+                ],
+                ContainerExtensions::httpAppContainerExtension()
+            )
         );
         $diContainer = $diContainerFactory();
 

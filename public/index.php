@@ -3,10 +3,10 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use EfTech\ContactList\Config\AppConfig;
+use EfTech\ContactList\Config\ContainerExtensions;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
 use EfTech\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
 use EfTech\ContactList\Infrastructure\HttpApplication\App;
-use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\http\ServerRequestFactory;
 use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Router\RouterInterface;
@@ -27,14 +27,16 @@ $httpResponse = (new App(
         return $di->get(RenderInterface::class);
     },
     new SymfonyDiContainerInit(
-        __DIR__ . '/../config/dev/di.xml',
-        [
-            'kernel.project_dir' => __DIR__ . '/../'
-        ],
+        new SymfonyDiContainerInit\ContainerParams(
+            __DIR__ . '/../config/dev/di.xml',
+            [
+                'kernel.project_dir' => __DIR__ . '/../'
+            ],
+            ContainerExtensions::httpAppContainerExtension()
+        ),
         new SymfonyDiContainerInit\CacheParams(
             'DEV' !== getenv('ENV_TYPE'),
-            __DIR__ . '/../var/cache/di-symfony/EfTechBookLibraryCachedContainer.php'
+            __DIR__ . '/../var/cache/di-symfony/EfTechContactListCachedContainer.php'
         )
-
     )
 ))->dispath(ServerRequestFactory::createFromGlobals($_SERVER, file_get_contents('php://input')));

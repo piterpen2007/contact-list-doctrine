@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:e_rtr="https://effective-group.ru/schema/dic/eff_tech_infrastructure_router"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
+>
+    <e_rtr:config>
+        <e_rtr:universalRouter>
+            <e_rtr:controllerNamespace>EfTech\ContactList\Controller</e_rtr:controllerNamespace>
+        </e_rtr:universalRouter>
+        <e_rtr:defaultRouter>
+            <e_rtr:route pattern="/address-add/administration">EfTech\ContactList\Controller\AddressAdministrationController</e_rtr:route>
+            <e_rtr:route pattern="/login">EfTech\ContactList\Controller\LoginController</e_rtr:route>
+        </e_rtr:defaultRouter>
+        <e_rtr:regExpRouter/>
+    </e_rtr:config>
+</container>

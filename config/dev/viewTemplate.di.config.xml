@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:e_vtmplt="https://effective-group.ru/schema/dic/eff_tech_infrastructure_view_template"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <e_vtmplt:config>
+        <e_vtmplt:phtml_template>
+        </e_vtmplt:phtml_template>
+    </e_vtmplt:config>
+    <services>
+        <service id="EfTech\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface"
+                 alias="EfTech\ContactList\Infrastructure\ViewTemplate\PhtmlTemplate"/>
+    </services>
+</container>

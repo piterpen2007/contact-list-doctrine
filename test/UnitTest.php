@@ -3,6 +3,7 @@
 namespace EfTech\ContactListTest;
 
 use EfTech\ContactList\Config\AppConfig;
+use EfTech\ContactList\Config\ContainerExtensions;
 use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
 use EfTech\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
@@ -36,17 +37,16 @@ class UnitTest extends TestCase
     private static function createDiContainer(): ContainerBuilder
     {
         $containerBuilder = SymfonyDiContainerInit::createContainerBuilder(
-            __DIR__ . '/../config/dev/di.xml',
-            [
-                'kernel.project_dir' => __DIR__ . '/../'
-            ]
+            new SymfonyDiContainerInit\ContainerParams(
+                __DIR__ . '/../config/dev/di.xml',
+                [
+                    'kernel.project_dir' => __DIR__ . '/../'
+                ],
+                ContainerExtensions::httpAppContainerExtension()
+            )
         );
-        $containerBuilder->getDefinition(AdapterInterface::class)
-            ->setClass(NullAdapter::class)
-            ->addArgument([]);
-        $containerBuilder->getDefinition(RenderInterface::class)
-            ->setClass(NullRender::class)
-            ->addArgument([]);
+        $containerBuilder->removeAlias(AdapterInterface::class);
+        $containerBuilder->setAlias(AdapterInterface::class, NullAdapter::class);
         return $containerBuilder;
     }
 
