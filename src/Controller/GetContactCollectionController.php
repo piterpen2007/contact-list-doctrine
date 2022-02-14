@@ -4,18 +4,19 @@ namespace EfTech\ContactList\Controller;
 
 use EfTech\ContactList\Entity\Recipient;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
-use EfTech\ContactList\Infrastructure\http\httpResponse;
-use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
-use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use EfTech\ContactList\Service\SearchContactsService\ColleaguesDto;
 use EfTech\ContactList\Service\SearchContactsService\CustomerDto;
 use EfTech\ContactList\Service\SearchContactsService\KinsfolkDto;
 use EfTech\ContactList\Service\SearchContactsService\SearchContactsCriteria;
 use EfTech\ContactList\Service\SearchContactsService;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class GetContactCollectionController implements ControllerInterface
 {
+    private ServerResponseFactory $serverResponseFactory;
     /**
      *
      *
@@ -30,14 +31,19 @@ class GetContactCollectionController implements ControllerInterface
     /**
      * @param LoggerInterface $logger
      * @param SearchContactsService $searchContactsService
+     * @param ServerResponseFactory $serverResponseFactory
      */
-    public function __construct(LoggerInterface $logger, SearchContactsService $searchContactsService)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        SearchContactsService $searchContactsService,
+        \EfTech\ContactList\Infrastructure\http\ServerResponseFactory $serverResponseFactory
+    ) {
         $this->logger = $logger;
         $this->searchContactsService = $searchContactsService;
+        $this->serverResponseFactory = $serverResponseFactory;
     }
 
-    public function __invoke(ServerRequest $request): httpResponse
+    public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         $this->logger->info("Ветка contact");
         $params = array_merge($request->getQueryParams(), $request->getAttributes());
@@ -56,7 +62,7 @@ class GetContactCollectionController implements ControllerInterface
             $httpCode = $this->buildHttpCode($foundContact);
             $result = $this->buildResult($foundContact);
         }
-        return ServerResponseFactory::createJsonResponse($httpCode, $result);
+        return $this->serverResponseFactory->createJsonResponse($httpCode, $result);
     }
 
     /** Определяет http code

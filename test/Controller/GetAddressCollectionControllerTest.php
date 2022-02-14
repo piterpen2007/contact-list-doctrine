@@ -4,10 +4,12 @@ namespace EfTech\ContactListTest\Infrastructure\Controller;
 
 use EfTech\ContactList\Config\AppConfig;
 use EfTech\ContactList\Controller\GetAddressCollectionController;
+use EfTech\ContactList\Controller\GetAddressController;
 use EfTech\ContactList\Controller\GetCustomersCollectionController;
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
+use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
 use EfTech\ContactList\Infrastructure\Logger\Logger;
 use EfTech\ContactList\Infrastructure\Uri\Uri;
@@ -19,7 +21,9 @@ use EfTech\ContactList\Service\SearchCustomersService;
 use EfTech\ContactList\Service\SearchRecipientsService;
 use Exception;
 use JsonException;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class GetAddressCollectionControllerTest extends TestCase
 {
@@ -31,16 +35,17 @@ class GetAddressCollectionControllerTest extends TestCase
     public function testSearchAddress(): void
     {
         //Arrange
-        $httpRequest = new ServerRequest(
+        $httpRequest = new \Nyholm\Psr7\ServerRequest(
             'GET',
-            '1.1',
-            '/address?id_address=2',
-            Uri::createFromString('http://localhost:8082/address?id_address=2'),
+            new \Nyholm\Psr7\Uri('http://localhost:8082/address?id_address=2'),
             ['Content-Type' => 'application/json'],
-            null
         );
+        $queryParams = [];
+        parse_str($httpRequest->getUri()->getQuery(), $queryParams);
+        $httpRequest = $httpRequest->withQueryParams($queryParams);
+        $psr17Factory = new Psr17Factory();
         $appConfig = AppConfig::createFromArray(require __DIR__ . '/../../config/dev/config.php');
-        $logger = new Logger(new NullAdapter());
+        $logger = new NullLogger();
 
         $controller = new GetAddressCollectionController(
             $logger,
@@ -50,7 +55,8 @@ class GetAddressCollectionControllerTest extends TestCase
                     $appConfig->getPathToAddresses(),
                     new JsonDataLoader()
                 )
-            )
+            ),
+            new ServerResponseFactory($psr17Factory, $psr17Factory)
         );
 
         //Act

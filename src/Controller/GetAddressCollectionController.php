@@ -4,16 +4,17 @@ namespace EfTech\ContactList\Controller;
 
 use EfTech\ContactList\Entity\Address;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
-use EfTech\ContactList\Infrastructure\http\httpResponse;
-use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
-use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Validator\Assert;
 use EfTech\ContactList\Service\SearchAddressService;
 use EfTech\ContactList\Service\SearchAddressService\AddressDto;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class GetAddressCollectionController implements ControllerInterface
 {
+    private ServerResponseFactory $serverResponseFactory;
     /** Логгер
      * @var LoggerInterface
      */
@@ -28,18 +29,23 @@ class GetAddressCollectionController implements ControllerInterface
     /**
      * @param LoggerInterface $logger
      * @param SearchAddressService $contactListService
+     * @param ServerResponseFactory $serverResponseFactory
      */
-    public function __construct(LoggerInterface $logger, SearchAddressService $contactListService)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        SearchAddressService $contactListService,
+        \EfTech\ContactList\Infrastructure\http\ServerResponseFactory $serverResponseFactory
+    ) {
         $this->logger = $logger;
         $this->contactListService = $contactListService;
+        $this->serverResponseFactory = $serverResponseFactory;
     }
 
     /**  Валдирует параматры запроса
-     * @param ServerRequest $request
+     * @param ServerRequestInterface $request
      * @return string|null
      */
-    private function validateQueryParams(ServerRequest $request): ?string
+    private function validateQueryParams(ServerRequestInterface $request): ?string
     {
         $paramTypeValidation = [
             'id_address' => "incorrect id_address",
@@ -51,7 +57,7 @@ class GetAddressCollectionController implements ControllerInterface
         return Assert::arrayElementsIsString($paramTypeValidation, $queryParams);
     }
 
-    public function __invoke(ServerRequest $request): httpResponse
+    public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         $this->logger->info("Ветка contact-list");
         $resultOfParamValidation = $this->validateQueryParams($request);
@@ -74,7 +80,7 @@ class GetAddressCollectionController implements ControllerInterface
                 'message' => $resultOfParamValidation
             ];
         }
-        return ServerResponseFactory::createJsonResponse($httpCode, $result);
+        return $this->serverResponseFactory->createJsonResponse($httpCode, $result);
     }
 
     /** Подготавливает данные для ответа

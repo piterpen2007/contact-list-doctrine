@@ -4,18 +4,18 @@ namespace EfTech\ContactList\Controller;
 
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
-use EfTech\ContactList\Infrastructure\http\httpResponse;
-use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\Validator\Assert;
-use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use EfTech\ContactList\Service\SearchRecipientsService\RecipientDto;
 use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsCriteria;
 use EfTech\ContactList\Service\SearchRecipientsService;
-use JsonException;
 use Exception;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class GetRecipientsCollectionController implements ControllerInterface
 {
+    private ServerResponseFactory $serverResponseFactory;
     /**
      *
      *
@@ -30,17 +30,23 @@ class GetRecipientsCollectionController implements ControllerInterface
     /**
      * @param LoggerInterface $logger
      * @param SearchRecipientsService $searchRecipientsService
+     * @param ServerResponseFactory $serverResponseFactory
      */
-    public function __construct(LoggerInterface $logger, SearchRecipientsService $searchRecipientsService)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        SearchRecipientsService $searchRecipientsService,
+        ServerResponseFactory $serverResponseFactory
+    ) {
         $this->logger = $logger;
         $this->searchRecipientsService = $searchRecipientsService;
+        $this->serverResponseFactory = $serverResponseFactory;
     }
+
     /**  Валдирует параматры запроса
-     * @param ServerRequest $request
+     * @param ServerRequestInterface $request
      * @return string|null
      */
-    private function validateQueryParams(ServerRequest $request): ?string
+    private function validateQueryParams(ServerRequestInterface $request): ?string
     {
         $paramValidations = [
             'id_recipient' => 'incorrect id_recipient',
@@ -56,7 +62,7 @@ class GetRecipientsCollectionController implements ControllerInterface
     /**
      * @throws Exception
      */
-    public function __invoke(ServerRequest $request): httpResponse
+    public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         $this->logger->info("Ветка recipient");
 
@@ -82,7 +88,7 @@ class GetRecipientsCollectionController implements ControllerInterface
                 'message' => $resultOfParamValidation
             ];
         }
-        return ServerResponseFactory::createJsonResponse($httpCode, $result);
+        return $this->serverResponseFactory->createJsonResponse($httpCode, $result);
     }
     /** Определяет http code
      * @param array $foundRecipients

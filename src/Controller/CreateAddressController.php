@@ -3,27 +3,32 @@
 namespace EfTech\ContactList\Controller;
 
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
-use EfTech\ContactList\Infrastructure\http\httpResponse;
-use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Service\ArrivalAddressService;
 use EfTech\ContactList\Service\ArrivalNewAddressService\NewAddressDto;
 use EfTech\ContactList\Service\ArrivalNewAddressService\ResultRegisterNewAddressDto;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class CreateAddressController implements ControllerInterface
 {
+    private ServerResponseFactory $serverResponseFactory;
     private ArrivalAddressService $addressService;
 
     /**
      * @param ArrivalAddressService $addressService
+     * @param ServerResponseFactory $serverResponseFactory
      */
-    public function __construct(ArrivalAddressService $addressService)
-    {
+    public function __construct(
+        ArrivalAddressService $addressService,
+        \EfTech\ContactList\Infrastructure\http\ServerResponseFactory $serverResponseFactory
+    ) {
         $this->addressService = $addressService;
+        $this->serverResponseFactory = $serverResponseFactory;
     }
 
 
-    public function __invoke(ServerRequest $request): httpResponse
+    public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         try {
             $requestData = json_decode($request->getBody(), true, 512, JSON_THROW_ON_ERROR);
@@ -43,7 +48,7 @@ class CreateAddressController implements ControllerInterface
             $jsonData = ['status' => 'fail','message' => $e->getMessage()];
         }
 
-        return ServerResponseFactory::createJsonResponse($httpCode, $jsonData);
+        return $this->serverResponseFactory->createJsonResponse($httpCode, $jsonData);
     }
 
     private function runService(array $requestData): ResultRegisterNewAddressDto

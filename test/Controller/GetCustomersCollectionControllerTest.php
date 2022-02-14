@@ -4,19 +4,19 @@ namespace EfTech\ContactListTest\Infrastructure\Controller;
 
 use EfTech\ContactList\Config\AppConfig;
 use EfTech\ContactList\Controller\GetCustomersCollectionController;
-use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
-use EfTech\ContactList\Infrastructure\http\ServerRequest;
+use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
 use EfTech\ContactList\Infrastructure\Logger\Logger;
-use EfTech\ContactList\Infrastructure\Uri\Uri;
 use EfTech\ContactList\Repository\CustomerJsonFileRepository;
-use EfTech\ContactList\Repository\RecipientJsonFileRepository;
 use EfTech\ContactList\Service\SearchCustomersService;
-use EfTech\ContactList\Service\SearchRecipientsService;
 use Exception;
 use JsonException;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7\ServerRequest;
+use Nyholm\Psr7\Uri;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class GetCustomersCollectionControllerTest extends TestCase
 {
@@ -30,15 +30,15 @@ class GetCustomersCollectionControllerTest extends TestCase
         //Arrange
         $httpRequest = new ServerRequest(
             'GET',
-            '1.1',
-            '/customers?full_name=Васин Роман Александрович',
-            Uri::createFromString('http://localhost:8082/customers?full_name=Васин Роман Александрович'),
+            new Uri('http://localhost:8082/customers?full_name=Васин Роман Александрович'),
             ['Content-Type' => 'application/json'],
-            null
         );
+        $queryParams = [];
+        parse_str($httpRequest->getUri()->getQuery(), $queryParams);
+        $httpRequest = $httpRequest->withQueryParams($queryParams);
         $appConfig = AppConfig::createFromArray(require __DIR__ . '/../../config/dev/config.php');
-        $logger = new Logger(new NullAdapter());
-
+        $logger = new NullLogger();
+        $psr17Factory = new Psr17Factory();
         $controller = new GetCustomersCollectionController(
             $logger,
             new SearchCustomersService(
@@ -47,8 +47,11 @@ class GetCustomersCollectionControllerTest extends TestCase
                     new JsonDataLoader()
                 ),
                 $logger
-            )
+            ),
+            new ServerResponseFactory($psr17Factory, $psr17Factory)
         );
+
+
 
         //Act
         $httpResponse = $controller($httpRequest);

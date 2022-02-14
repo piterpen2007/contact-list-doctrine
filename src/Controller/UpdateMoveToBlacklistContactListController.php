@@ -3,17 +3,18 @@
 namespace EfTech\ContactList\Controller;
 
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
-use EfTech\ContactList\Infrastructure\http\httpResponse;
-use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Service\MoveToBlacklistContactListService;
 use EfTech\ContactList\Service\MoveToBlacklistService\Exception\ContactListNotFoundException;
 use EfTech\ContactList\Service\MoveToBlacklistService\Exception\RuntimeException;
 use EfTech\ContactList\Service\MoveToBlacklistService\MoveToBlacklistDto;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 
 class UpdateMoveToBlacklistContactListController implements ControllerInterface
 {
+    private ServerResponseFactory $serverResponseFactory;
     /**
      * @var MoveToBlacklistContactListService
      */
@@ -21,13 +22,17 @@ class UpdateMoveToBlacklistContactListController implements ControllerInterface
 
     /**
      * @param MoveToBlacklistContactListService $moveToBlacklistContactListService
+     * @param ServerResponseFactory $serverResponseFactory
      */
-    public function __construct(MoveToBlacklistContactListService $moveToBlacklistContactListService)
-    {
+    public function __construct(
+        MoveToBlacklistContactListService $moveToBlacklistContactListService,
+        \EfTech\ContactList\Infrastructure\http\ServerResponseFactory $serverResponseFactory
+    ) {
         $this->moveToBlacklistContactListService = $moveToBlacklistContactListService;
+        $this->serverResponseFactory = $serverResponseFactory;
     }
 
-    public function __invoke(ServerRequest $request): httpResponse
+    public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         try {
             $attributes = $request->getAttributes();
@@ -45,7 +50,7 @@ class UpdateMoveToBlacklistContactListController implements ControllerInterface
             $jsonData = ['status' => 'fail', 'message' => $e->getMessage()];
         }
 
-        return ServerResponseFactory::createJsonResponse($httpCode, $jsonData);
+        return $this->serverResponseFactory->createJsonResponse($httpCode, $jsonData);
     }
 
     /** Подготавливает данные для успешного ответа на основе dto сервиса

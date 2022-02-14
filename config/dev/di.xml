@@ -5,8 +5,6 @@
 >
 
     <imports>
-        <import resource="request.handlers.xml"/>
-        <import resource="reqExp.handlers.xml"/>
         <import resource="app.config.xml"/>
     </imports>
     <parameters>
@@ -63,11 +61,17 @@
     <prototype namespace="EfTech\ContactList\" resource="./../../src"/>
     <prototype namespace="EfTech\ContactList\Infrastructure\"
                resource="./../../vendor/eff-tech/framework-home/src"
-               exclude="./../../vendor/eff-tech/framework-home/src/Router"
+               exclude="./../../vendor/eff-tech/framework-home/src/{Router,http}"
     />
+
     <instanceof id="EfTech\ContactList\Infrastructure\Controller\ControllerInterface" public="true"/>
-    <instanceof id="EfTech\ContactList\Infrastructure\Router\RouterInterface" public="true"/>
     <instanceof id="EfTech\ContactList\Infrastructure\Console\CommandInterface" public="true"/>
+
+    <service id="Nyholm\Psr7\Factory\Psr17Factory"/>
+
+    <service id="Psr\Http\Message\UriFactoryInterface" alias="Nyholm\Psr7\Factory\Psr17Factory"/>
+    <service id="Psr\Http\Message\ResponseFactoryInterface" alias="Nyholm\Psr7\Factory\Psr17Factory"/>
+    <service id="Psr\Http\Message\StreamFactoryInterface" alias="Nyholm\Psr7\Factory\Psr17Factory"/>
 
 
     <service
@@ -85,8 +89,7 @@
 
     <service id="EfTech\ContactList\Infrastructure\Auth\HttpAuthProvider">
         <argument key="$loginUri" type="service">
-            <service>
-                <factory class="EfTech\ContactList\Infrastructure\Uri\Uri" method="createFromString"/>
+            <service class="Nyholm\Psr7\Uri">
                 <argument key="$uri" type="expression">service('EfTech\\ContactList\\Config\\AppConfig').getLoginUri()</argument>
             </service>
         </argument>

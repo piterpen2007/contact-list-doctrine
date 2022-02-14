@@ -64,10 +64,6 @@ class DiAppServiceTest extends TestCase
                 'serviceId' => AddressAdministrationController::class,
                 'expectedServiceClass' => AddressAdministrationController::class
             ],
-            LoggerInterface::class => [
-                'serviceId' => LoggerInterface::class,
-                'expectedServiceClass' => Logger::class
-            ],
             CreateAddressController::class => [
                 'serviceId' => CreateAddressController::class,
                 'expectedServiceClass' => CreateAddressController::class

@@ -4,7 +4,7 @@ namespace EfTech\ContactList\Service;
 
 use EfTech\ContactList\Entity\ContactList;
 use EfTech\ContactList\Entity\ContactListRepositoryInterface;
-use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use EfTech\ContactList\Service\SearchContactListService\ContactListDto;
 use EfTech\ContactList\Service\SearchContactListService\SearchContactListCriteria;
 

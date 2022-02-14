@@ -10,11 +10,19 @@ use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Infrastructure\Uri\Uri;
 use EfTech\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\UriFactoryInterface;
 use Throwable;
 
 class LoginController implements ControllerInterface
 {
+    private ServerResponseFactory $serverResponseFactory;
     private HttpAuthProvider $authProvider;
+    /** Фабрика для создания ури
+     * @var UriFactoryInterface
+     */
+    private UriFactoryInterface $uriFactory;
     /** шаблонизатор
      * @var ViewTemplateInterface
      */
@@ -23,21 +31,27 @@ class LoginController implements ControllerInterface
     /**
      * @param ViewTemplateInterface $template
      * @param HttpAuthProvider $authProvider
+     * @param ServerResponseFactory $serverResponseFactory
+     * @param UriFactoryInterface $uriFactory
      */
     public function __construct(
         ViewTemplateInterface $template,
-        HttpAuthProvider $authProvider
+        HttpAuthProvider $authProvider,
+        \EfTech\ContactList\Infrastructure\http\ServerResponseFactory $serverResponseFactory,
+        \Psr\Http\Message\UriFactoryInterface $uriFactory
     ) {
         $this->template = $template;
         $this->authProvider = $authProvider;
+        $this->serverResponseFactory = $serverResponseFactory;
+        $this->uriFactory = $uriFactory;
     }
 
 
     /** Обработка http запроса
-     * @param ServerRequest $request
-     * @return httpResponse
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
      */
-    public function __invoke(ServerRequest $request): httpResponse
+    public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         try {
             $response = $this->doLogin($request);
@@ -49,9 +63,9 @@ class LoginController implements ControllerInterface
 
     /**
      * @param Throwable $e
-     * @return httpResponse
+     * @return ResponseInterface
      */
-    private function buildErrorResponse(Throwable $e): httpResponse
+    private function buildErrorResponse(Throwable $e): ResponseInterface
     {
         $httpCode = 500;
         $contex = [
@@ -63,10 +77,10 @@ class LoginController implements ControllerInterface
             __DIR__ . '/../../templates/errors.phtml',
             $contex
         );
-        return ServerResponseFactory::createHtmlResponse($httpCode, $html);
+        return $this->serverResponseFactory->createHtmlResponse($httpCode, $html);
     }
 
-    private function doLogin(ServerRequest $request): httpResponse
+    private function doLogin(ServerRequestInterface $request): ResponseInterface
     {
         $response = null;
         $contex = [];
@@ -78,9 +92,9 @@ class LoginController implements ControllerInterface
             if ($this->isAuth($authData['login'], $authData['password'])) {
                 $queryParams = $request->getQueryParams();
                 $redirect = array_key_exists('redirect', $queryParams)
-                    ? Uri::createFromString($queryParams['redirect'])
-                    : Uri::createFromString($queryParams['/']);
-                $response = ServerResponseFactory::redirect($redirect);
+                    ? $this->uriFactory->createUri(($queryParams['redirect']))
+                    : $this->uriFactory->createUri($queryParams['/']);
+                $response = $this->serverResponseFactory->redirect($redirect);
             } else {
                 $contex['errMsg'] = 'Логин и пароль не подходят';
             }
@@ -91,7 +105,7 @@ class LoginController implements ControllerInterface
         }
         if (null === $response) {
             $html = $this->template->render(__DIR__ . '/../../templates/login.phtml', $contex);
-            $response = ServerResponseFactory::createHtmlResponse(200, $html);
+            $response = $this->serverResponseFactory->createHtmlResponse(200, $html);
         }
         return $response;
     }

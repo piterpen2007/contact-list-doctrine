@@ -8,6 +8,7 @@ use EfTech\ContactList\Controller\GetCustomersController;
 use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
 use EfTech\ContactList\Infrastructure\http\ServerRequest;
+use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
 use EfTech\ContactList\Infrastructure\Logger\Logger;
 use EfTech\ContactList\Infrastructure\Uri\Uri;
@@ -17,7 +18,9 @@ use EfTech\ContactList\Service\SearchCustomersService;
 use EfTech\ContactList\Service\SearchRecipientsService;
 use Exception;
 use JsonException;
+use Nyholm\Psr7\Factory\Psr17Factory;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class GetCustomersControllerTest extends TestCase
 {
@@ -29,17 +32,19 @@ class GetCustomersControllerTest extends TestCase
     public function testSearchCustomersForFullName(): void
     {
         //Arrange
-        $httpRequest = new ServerRequest(
+        $httpRequest = new \Nyholm\Psr7\ServerRequest(
             'GET',
-            '1.1',
-            '/customers?full_name=Васин Роман Александрович',
-            Uri::createFromString('http://localhost:8082/customers?full_name=Васин Роман Александрович'),
+            new \Nyholm\Psr7\Uri('http://localhost:8082/customers?full_name=Васин Роман Александрович'),
             ['Content-Type' => 'application/json'],
-            null
         );
-        $appConfig = AppConfig::createFromArray(require __DIR__ . '/../../config/dev/config.php');
-        $logger = new Logger(new NullAdapter());
 
+        $queryParams = [];
+        parse_str($httpRequest->getUri()->getQuery(), $queryParams);
+        $httpRequest = $httpRequest->withQueryParams($queryParams);
+
+        $appConfig = AppConfig::createFromArray(require __DIR__ . '/../../config/dev/config.php');
+        $logger = new NullLogger();
+        $psr17Factory = new Psr17Factory();
         $controller = new GetCustomersController(
             $logger,
             new SearchCustomersService(
@@ -48,7 +53,8 @@ class GetCustomersControllerTest extends TestCase
                     new JsonDataLoader()
                 ),
                 $logger
-            )
+            ),
+            new ServerResponseFactory($psr17Factory, $psr17Factory)
         );
 
         //Act

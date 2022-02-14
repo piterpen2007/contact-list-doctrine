@@ -11,6 +11,7 @@ use EfTech\ContactList\Repository\CustomerJsonFileRepository;
 use EfTech\ContactList\Service\SearchCustomersService;
 use JsonException;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class FindCustomersTest extends TestCase
 {
@@ -136,7 +137,7 @@ class FindCustomersTest extends TestCase
                     __DIR__ . '/../data/customers.json',
                     new JsonDataLoader()
                 ),
-                new Logger(new NullAdapter())
+                new NullLogger()
             )
         );
         $findCustomers($in['params']);

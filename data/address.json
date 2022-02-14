@@ -364,5 +364,35 @@
         "id_recipient": 11,
         "address": "Это адрес контакта",
         "status": "Домашний"
+    },
+    {
+        "id_address": 58,
+        "id_recipient": 11,
+        "address": "Это адрес контакта",
+        "status": "Домашний"
+    },
+    {
+        "id_address": 59,
+        "id_recipient": 11,
+        "address": "Это адрес контакта",
+        "status": "Домашний"
+    },
+    {
+        "id_address": 60,
+        "id_recipient": 11,
+        "address": "Это адрес контакта",
+        "status": "Домашний"
+    },
+    {
+        "id_address": 61,
+        "id_recipient": 11,
+        "address": "Это адрес контакта",
+        "status": "Домашний"
+    },
+    {
+        "id_address": 62,
+        "id_recipient": 11,
+        "address": "Это адрес контакта",
+        "status": "Домашний"
     }
 ]

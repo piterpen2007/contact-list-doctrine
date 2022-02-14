@@ -4,22 +4,21 @@ namespace EfTech\ContactListTest;
 
 use EfTech\ContactList\Config\AppConfig;
 use EfTech\ContactList\Config\ContainerExtensions;
-use EfTech\ContactList\Infrastructure\DI\Container;
 use EfTech\ContactList\Infrastructure\DI\ContainerInterface;
 use EfTech\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
-use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\HttpApplication\App;
-use EfTech\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
-use EfTech\ContactList\Infrastructure\Logger\AdapterInterface;
-use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Router\RouterInterface;
-use EfTech\ContactList\Infrastructure\Uri\Uri;
 use EfTech\ContactList\Infrastructure\View\NullRender;
 use EfTech\ContactList\Infrastructure\View\RenderInterface;
 use Exception;
 use JsonException;
+use Nyholm\Psr7\ServerRequest;
+use Nyholm\Psr7\Uri;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  *  Тестирование приложения
@@ -45,8 +44,14 @@ class UnitTest extends TestCase
                 ContainerExtensions::httpAppContainerExtension()
             )
         );
-        $containerBuilder->removeAlias(AdapterInterface::class);
-        $containerBuilder->setAlias(AdapterInterface::class, NullAdapter::class);
+        $containerBuilder->removeAlias(LoggerInterface::class);
+        $containerBuilder->setDefinition(NullLogger::class, new Definition());
+        $containerBuilder->setAlias(LoggerInterface::class, NullLogger::class)->setPublic(true);
+
+
+        $containerBuilder->getDefinition(RenderInterface::class)
+            ->setClass(NullRender::class)
+            ->setArguments([]);
         return $containerBuilder;
     }
 
@@ -307,12 +312,13 @@ class UnitTest extends TestCase
     {
         $httpRequest = new ServerRequest(
             'GET',
-            '1.1',
-            $in['uri'],
-            Uri::createFromString($in['uri']),
+            new Uri($in['uri']),
             ['Content-Type' => 'application/json'],
-            null
         );
+        $queryParams = [];
+        parse_str($httpRequest->getUri()->getQuery(), $queryParams);
+        $httpRequest = $httpRequest->withQueryParams($queryParams);
+
         //Arrange и Act
         $diContainer = $in['diContainer'];
         $httpResponse = (new App(

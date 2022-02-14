@@ -5,10 +5,8 @@ namespace EfTech\ContactList\Controller;
 use EfTech\ContactList\Infrastructure\Auth\HttpAuthProvider;
 use EfTech\ContactList\Exception\RuntimeException;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
-use EfTech\ContactList\Infrastructure\http\httpResponse;
-use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
-use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use EfTech\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface;
 use EfTech\ContactList\Service\ArrivalAddressService;
 use EfTech\ContactList\Service\ArrivalNewAddressService\NewAddressDto;
@@ -16,10 +14,13 @@ use EfTech\ContactList\Service\SearchAddressService;
 use EfTech\ContactList\Service\SearchAddressService\SearchAddressCriteria;
 use EfTech\ContactList\Service\SearchContactsService;
 use EfTech\ContactList\Service\SearchContactsService\SearchContactsCriteria;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 
 class AddressAdministrationController implements ControllerInterface
 {
+    private ServerResponseFactory $serverResponseFactory;
     private HttpAuthProvider $httpAuthProvider;
     /** Сервис добавлениянового адреса
      * @var ArrivalAddressService
@@ -46,6 +47,7 @@ class AddressAdministrationController implements ControllerInterface
      * @param LoggerInterface $logger
      * @param SearchContactsService $searchContactsService
      * @param HttpAuthProvider $httpAuthProvider
+     * @param ServerResponseFactory $serverResponseFactory
      */
     public function __construct(
         ArrivalAddressService $arrivalAddressService,
@@ -53,7 +55,8 @@ class AddressAdministrationController implements ControllerInterface
         ViewTemplateInterface $viewTemplate,
         LoggerInterface $logger,
         SearchContactsService $searchContactsService,
-        HttpAuthProvider $httpAuthProvider
+        HttpAuthProvider $httpAuthProvider,
+        \EfTech\ContactList\Infrastructure\http\ServerResponseFactory $serverResponseFactory
     ) {
         $this->arrivalAddressService = $arrivalAddressService;
         $this->addressService = $addressService;
@@ -61,10 +64,11 @@ class AddressAdministrationController implements ControllerInterface
         $this->logger = $logger;
         $this->searchContactsService = $searchContactsService;
         $this->httpAuthProvider = $httpAuthProvider;
+        $this->serverResponseFactory = $serverResponseFactory;
     }
 
 
-    public function __invoke(ServerRequest $request): httpResponse
+    public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         try {
             if (false === $this->httpAuthProvider->isAuth()) {
@@ -99,15 +103,15 @@ class AddressAdministrationController implements ControllerInterface
             $context
         );
 
-        return ServerResponseFactory::createHtmlResponse($httpCode, $html);
+        return $this->serverResponseFactory->createJsonResponse($httpCode, $html);
     }
 
     /** Результат создания адресов
      *
-     * @param ServerRequest $request
+     * @param ServerRequestInterface $request
      * @return array - данные о ошибках у форм создания адресов
      */
-    private function creationOfAddress(ServerRequest $request): array
+    private function creationOfAddress(ServerRequestInterface $request): array
     {
         $dataToCreate = [];
         parse_str($request->getBody(), $dataToCreate);

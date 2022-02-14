@@ -11,6 +11,7 @@ use EfTech\ContactList\Repository\RecipientJsonFileRepository;
 use EfTech\ContactList\Service\SearchRecipientsService;
 use JsonException;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class FindRecipientTest extends TestCase
 {
@@ -112,7 +113,7 @@ class FindRecipientTest extends TestCase
         $findRecipient = new FindRecipients(
             $buffer,
             new SearchRecipientsService(
-                new Logger(new NullAdapter()),
+                new NullLogger(),
                 new RecipientJsonFileRepository(
                     __DIR__ . '/../data/recipient.json',
                     new JsonDataLoader()

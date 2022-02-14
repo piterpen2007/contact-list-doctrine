@@ -12,14 +12,18 @@
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/framework-home.git",
-                "reference": "8c900b5b6da04776d69841112155357194022943"
+                "reference": "87ab40fc9ca930da81de596e5f7e21fb89141f52"
             },
             "require": {
-                "eff-tech/logger": "dev-home_work_09-02-2022",
-                "eff-tech/view-template": "dev-home_work_09-02-2022",
+                "eff-tech/logger": "dev-home_work_14-02-2022",
+                "eff-tech/view-template": "dev-home_work_14-02-2022",
                 "ext-json": "*",
                 "php": "^7.4 || ^8.0",
                 "psr/container": "^1.1.2",
+                "psr/http-factory": "^1.0",
+                "psr/http-factory-implementation": "^1.0",
+                "psr/http-message-implementation": "^1.0",
+                "psr/log": "^1.1",
                 "symfony/config": "^5.4",
                 "symfony/dependency-injection": "^5.4",
                 "symfony/expression-language": "^5.4"
@@ -57,11 +61,11 @@
             "support": {
                 "email": "popkin@yandex.ru"
             },
-            "time": "2022-02-10T19:05:54+00:00"
+            "time": "2022-02-14T04:30:52+00:00"
         },
         {
             "name": "eff-tech/logger",
-            "version": "dev-home_work_09-02-2022",
+            "version": "dev-home_work_14-02-2022",
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/logger.git",
@@ -105,7 +109,7 @@
         },
         {
             "name": "eff-tech/view-template",
-            "version": "dev-home_work_09-02-2022",
+            "version": "dev-home_work_14-02-2022",
             "source": {
                 "type": "git",
                 "url": "git@git.effective-team.ru:rnd/educational-projects/interns/2021-flow-1/fedyancev.d.a/view-template.git",

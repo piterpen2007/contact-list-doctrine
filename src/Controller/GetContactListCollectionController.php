@@ -4,17 +4,18 @@ namespace EfTech\ContactList\Controller;
 
 use EfTech\ContactList\Entity\ContactList;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
-use EfTech\ContactList\Infrastructure\http\httpResponse;
-use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
-use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Validator\Assert;
 use EfTech\ContactList\Service\SearchContactListService;
 use EfTech\ContactList\Service\SearchContactListService\ContactListDto;
 use EfTech\ContactList\Service\SearchContactListService\SearchContactListCriteria;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class GetContactListCollectionController implements ControllerInterface
 {
+    private ServerResponseFactory $serverResponseFactory;
     /** Логгер
      * @var LoggerInterface
      */
@@ -29,18 +30,23 @@ class GetContactListCollectionController implements ControllerInterface
     /**
      * @param LoggerInterface $logger
      * @param SearchContactListService $contactListService
+     * @param ServerResponseFactory $serverResponseFactory
      */
-    public function __construct(LoggerInterface $logger, SearchContactListService $contactListService)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        SearchContactListService $contactListService,
+        \EfTech\ContactList\Infrastructure\http\ServerResponseFactory $serverResponseFactory
+    ) {
         $this->logger = $logger;
         $this->contactListService = $contactListService;
+        $this->serverResponseFactory = $serverResponseFactory;
     }
 
     /**  Валдирует параматры запроса
-     * @param ServerRequest $request
+     * @param ServerRequestInterface $request
      * @return string|null
      */
-    private function validateQueryParams(ServerRequest $request): ?string
+    private function validateQueryParams(ServerRequestInterface $request): ?string
     {
         $paramTypeValidation = [
             'id_recipient' => "incorrect id_recipient",
@@ -52,11 +58,10 @@ class GetContactListCollectionController implements ControllerInterface
     }
 
     /** Реализация поиска контактов по списку
-     * @param ServerRequest $request - серверный объект запроса
-     * @return httpResponse - объект http ответа
-
+     * @param ServerRequestInterface $request - серверный объект запроса
+     * @return ResponseInterface - объект http ответа
      */
-    public function __invoke(ServerRequest $request): HttpResponse
+    public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         $this->logger->info("Ветка contact-list");
         $resultOfParamValidation = $this->validateQueryParams($request);
@@ -78,7 +83,7 @@ class GetContactListCollectionController implements ControllerInterface
                 'message' => $resultOfParamValidation
             ];
         }
-        return ServerResponseFactory::createJsonResponse($httpCode, $result);
+        return $this->serverResponseFactory->createJsonResponse($httpCode, $result);
     }
 
     /** Подготавливает данные для ответа

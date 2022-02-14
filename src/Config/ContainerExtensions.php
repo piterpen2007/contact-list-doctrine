@@ -2,6 +2,7 @@
 
 namespace EfTech\ContactList\Config;
 
+use EfTech\ContactList\Infrastructure\http\SymfonyDi\DiHttpExt;
 use EfTech\ContactList\Infrastructure\Logger\SymfonyDi\DiLoggerExt;
 use EfTech\ContactList\Infrastructure\Router\SymfonyDi\DiRouterExt;
 use EfTech\ContactList\Infrastructure\ViewTemplate\SymfonyDi\DiViewTemplateExt;
@@ -15,8 +16,9 @@ final class ContainerExtensions
     {
         return [
             new DiRouterExt(),
-            new DiLoggerExt(),
-            new DiViewTemplateExt()
+            //new DiLoggerExt(),
+            new DiViewTemplateExt(),
+            new DiHttpExt()
         ];
     }
 
@@ -27,7 +29,7 @@ final class ContainerExtensions
     {
         return [
             new DiRouterExt(),
-            new DiLoggerExt()
+            //new DiLoggerExt()
         ];
     }
 }

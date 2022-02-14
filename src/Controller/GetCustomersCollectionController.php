@@ -4,18 +4,19 @@ namespace EfTech\ContactList\Controller;
 
 use EfTech\ContactList\Entity\Customer;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
-use EfTech\ContactList\Infrastructure\http\httpResponse;
-use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
-use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Validator\Assert;
 use EfTech\ContactList\Service\SearchCustomersService\CustomerDto;
 use EfTech\ContactList\Service\SearchCustomersService\SearchCustomersCriteria;
 use EfTech\ContactList\Service\SearchCustomersService;
 use Exception;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class GetCustomersCollectionController implements ControllerInterface
 {
+    private ServerResponseFactory $serverResponseFactory;
     /**
      *
      *
@@ -30,18 +31,23 @@ class GetCustomersCollectionController implements ControllerInterface
     /**
      * @param LoggerInterface $logger
      * @param SearchCustomersService $searchCustomersService
+     * @param ServerResponseFactory $serverResponseFactory
      */
-    public function __construct(LoggerInterface $logger, SearchCustomersService $searchCustomersService)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        SearchCustomersService $searchCustomersService,
+        \EfTech\ContactList\Infrastructure\http\ServerResponseFactory $serverResponseFactory
+    ) {
         $this->logger = $logger;
         $this->searchCustomersService = $searchCustomersService;
+        $this->serverResponseFactory = $serverResponseFactory;
     }
 
     /**  Валдирует параматры запроса
-     * @param ServerRequest $request
+     * @param ServerRequestInterface $request
      * @return string|null
      */
-    private function validateQueryParams(ServerRequest $request): ?string
+    private function validateQueryParams(ServerRequestInterface $request): ?string
     {
         $paramValidations = [
             'id_recipient' => 'incorrect id_recipient',
@@ -60,7 +66,7 @@ class GetCustomersCollectionController implements ControllerInterface
     /**
      * @throws Exception
      */
-    public function __invoke(ServerRequest $request): httpResponse
+    public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         $this->logger->info("Ветка customer");
 
@@ -89,7 +95,7 @@ class GetCustomersCollectionController implements ControllerInterface
                 'message' => $resultOfParamValidation
             ];
         }
-        return ServerResponseFactory::createJsonResponse($httpCode, $result);
+        return $this->serverResponseFactory->createJsonResponse($httpCode, $result);
     }
     /** Определяет http code
      * @param array $foundCustomers

@@ -6,7 +6,7 @@ use EfTech\ContactList\Entity\Colleague;
 use EfTech\ContactList\Entity\ContactRepositoryInterface;
 use EfTech\ContactList\Entity\Customer;
 use EfTech\ContactList\Entity\Kinsfolk;
-use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use EfTech\ContactList\Service\SearchContactsService\ColleaguesDto;
 use EfTech\ContactList\Service\SearchContactsService\ContactDto;
 use EfTech\ContactList\Service\SearchContactsService\CustomerDto;

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+           http://symfony.com/schema/dic/services/services-1.0.xsd" >
+<services>
+    <service id="Psr\Log\NullLogger"/>
+
+    <service id="Monolog\Logger">
+        <argument key="$name">web-app</argument>
+
+        <argument key="$handlers" type="collection">
+
+            <argument type="service">
+                <service class="Monolog\Handler\StreamHandler">
+                    <argument key="$stream">%kernel.project_dir%var/log/debug.log</argument>
+                    <argument key="$level" type="constant">Monolog\Logger::DEBUG</argument>
+                </service>
+            </argument>
+
+            <argument type="service">
+                <service class="Monolog\Handler\StreamHandler">
+                    <argument key="$stream">%kernel.project_dir%var/log/error.log</argument>
+                    <argument key="$level" type="constant">Monolog\Logger::ERROR</argument>
+                </service>
+            </argument>
+
+            <argument type="service">
+                <service class="Monolog\Handler\TelegramBotHandler">
+                    <argument key="$apiKey">%monolog.logger.telegram.token%</argument>
+                    <argument key="$channel">%monolog.logger.telegram.channel%</argument>
+                    <argument key="$level" type="constant">Monolog\Logger::ERROR</argument>
+                </service>
+            </argument>
+
+        </argument>
+    </service>
+
+    <service id="Psr\Log\LoggerInterface" alias="Monolog\Logger" public="true"/>
+</services>
+</container>

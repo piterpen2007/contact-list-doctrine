@@ -4,7 +4,7 @@ namespace EfTech\ContactList\Service;
 
 use EfTech\ContactList\Entity\Customer;
 use EfTech\ContactList\Entity\CustomerRepositoryInterface;
-use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
+use Psr\Log\LoggerInterface;
 use EfTech\ContactList\Service\SearchCustomersService\CustomerDto;
 use EfTech\ContactList\Service\SearchCustomersService\SearchCustomersCriteria;
 

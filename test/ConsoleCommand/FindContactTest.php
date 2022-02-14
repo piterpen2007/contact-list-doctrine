@@ -3,17 +3,13 @@
 namespace EfTech\ContactListTest\ConsoleCommand;
 
 use EfTech\ContactList\ConsoleCommand\FindContacts;
-use EfTech\ContactList\ConsoleCommand\FindRecipients;
 use EfTech\ContactList\Infrastructure\Console\Output\BufferOutput;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
-use EfTech\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
-use EfTech\ContactList\Infrastructure\Logger\Logger;
 use EfTech\ContactList\Repository\ContactJsonRepository;
-use EfTech\ContactList\Repository\RecipientJsonFileRepository;
 use EfTech\ContactList\Service\SearchContactsService;
-use EfTech\ContactList\Service\SearchRecipientsService;
 use JsonException;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 
 class FindContactTest extends TestCase
 {
@@ -95,7 +91,7 @@ class FindContactTest extends TestCase
                     __DIR__ . '/../data/colleagues.json',
                     new JsonDataLoader()
                 ),
-                new Logger(new NullAdapter())
+                new NullLogger()
             )
         );
         $findContacts($in['params']);
