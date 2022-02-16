@@ -3,19 +3,11 @@
 namespace EfTech\ContactListTest\Infrastructure\Controller;
 
 use EfTech\ContactList\Config\AppConfig;
-use EfTech\ContactList\Controller\GetCustomersCollectionController;
 use EfTech\ContactList\Controller\GetCustomersController;
-use EfTech\ContactList\Controller\GetRecipientsCollectionController;
 use EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader;
-use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
-use EfTech\ContactList\Infrastructure\Logger\Adapter\NullAdapter;
-use EfTech\ContactList\Infrastructure\Logger\Logger;
-use EfTech\ContactList\Infrastructure\Uri\Uri;
 use EfTech\ContactList\Repository\CustomerJsonFileRepository;
-use EfTech\ContactList\Repository\RecipientJsonFileRepository;
 use EfTech\ContactList\Service\SearchCustomersService;
-use EfTech\ContactList\Service\SearchRecipientsService;
 use Exception;
 use JsonException;
 use Nyholm\Psr7\Factory\Psr17Factory;

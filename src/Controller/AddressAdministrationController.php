@@ -87,11 +87,11 @@ class AddressAdministrationController implements ControllerInterface
                 'contacts' => $dtoContactsCollection
             ];
             $context = array_merge($viewData, $resultCreationAddress);
-            $template = __DIR__ . '/../../templates/address.administration.phtml';
+            $template = 'address.administration.twig';
             $httpCode = 200;
         } catch (Throwable $e) {
             $httpCode = 500;
-            $template = __DIR__ . '/../../templates/errors.phtml';
+            $template = 'errors.twig';
             $context = [
                 'errors' => [
                     $e->getMessage()
@@ -103,7 +103,7 @@ class AddressAdministrationController implements ControllerInterface
             $context
         );
 
-        return $this->serverResponseFactory->createJsonResponse($httpCode, $html);
+        return $this->serverResponseFactory->createHtmlResponse($httpCode, $html);
     }
 
     /** Результат создания адресов

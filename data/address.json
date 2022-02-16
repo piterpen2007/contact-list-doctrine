@@ -394,5 +394,11 @@
         "id_recipient": 11,
         "address": "Это адрес контакта",
         "status": "Домашний"
+    },
+    {
+        "id_address": 63,
+        "id_recipient": 2,
+        "address": "Школьная",
+        "status": "Work"
     }
 ]

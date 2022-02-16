@@ -23,8 +23,6 @@ use EfTech\ContactList\Controller\GetRecipientsController;
 use EfTech\ContactList\Controller\LoginController;
 use EfTech\ContactList\Controller\UpdateMoveToBlacklistContactListController;
 use EfTech\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
-use EfTech\ContactList\Infrastructure\Logger\Logger;
-use EfTech\ContactList\Infrastructure\Logger\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Router\ChainRouters;
 use EfTech\ContactList\Infrastructure\Router\DefaultRouter;
 use EfTech\ContactList\Infrastructure\Router\RegExpRouter;

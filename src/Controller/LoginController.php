@@ -5,10 +5,7 @@ namespace EfTech\ContactList\Controller;
 use EfTech\ContactList\Exception\RuntimeException;
 use EfTech\ContactList\Infrastructure\Auth\HttpAuthProvider;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
-use EfTech\ContactList\Infrastructure\http\httpResponse;
-use EfTech\ContactList\Infrastructure\http\ServerRequest;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
-use EfTech\ContactList\Infrastructure\Uri\Uri;
 use EfTech\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -74,7 +71,7 @@ class LoginController implements ControllerInterface
             ]
         ];
         $html = $this->template->render(
-            __DIR__ . '/../../templates/errors.phtml',
+            'errors.twig',
             $contex
         );
         return $this->serverResponseFactory->createHtmlResponse($httpCode, $html);
@@ -104,7 +101,7 @@ class LoginController implements ControllerInterface
 //            }
         }
         if (null === $response) {
-            $html = $this->template->render(__DIR__ . '/../../templates/login.phtml', $contex);
+            $html = $this->template->render('login.twig', $contex);
             $response = $this->serverResponseFactory->createHtmlResponse(200, $html);
         }
         return $response;
