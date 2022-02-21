@@ -24,7 +24,7 @@
     "ext-json": "*",
     "psr/container": "^1.1.2",
     "psr/container-implementation": "1.1",
-    "eff-tech/framework-home" : "dev-home_work_16-02-2022",
+    "eff-tech/framework-home" : "dev-form",
     "psr/http-message": "^1.0",
     "nyholm/psr7": "^1.5",
     "nyholm/psr7-server": "^1.0",
