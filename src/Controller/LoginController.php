@@ -3,6 +3,8 @@
 namespace EfTech\ContactList\Controller;
 
 use EfTech\ContactList\Exception\RuntimeException;
+use EfTech\ContactList\Form\Login;
+use EfTech\ContactList\Form\LoginType;
 use EfTech\ContactList\Infrastructure\Auth\HttpAuthProvider;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
@@ -10,6 +12,7 @@ use EfTech\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\UriFactoryInterface;
+use Symfony\Component\Form\FormFactory;
 use Throwable;
 
 class LoginController implements ControllerInterface
@@ -26,21 +29,32 @@ class LoginController implements ControllerInterface
     private ViewTemplateInterface $template;
 
     /**
+     * Фабрика создания форм для twig
+     *
+     * @var FormFactory
+     */
+    private FormFactory $formFactory;
+
+
+    /**
      * @param ViewTemplateInterface $template
      * @param HttpAuthProvider $authProvider
      * @param ServerResponseFactory $serverResponseFactory
      * @param UriFactoryInterface $uriFactory
+     * @param FormFactory $formFactory
      */
     public function __construct(
         ViewTemplateInterface $template,
         HttpAuthProvider $authProvider,
         \EfTech\ContactList\Infrastructure\http\ServerResponseFactory $serverResponseFactory,
-        \Psr\Http\Message\UriFactoryInterface $uriFactory
+        \Psr\Http\Message\UriFactoryInterface $uriFactory,
+        \Symfony\Component\Form\FormFactory $formFactory
     ) {
         $this->template = $template;
         $this->authProvider = $authProvider;
         $this->serverResponseFactory = $serverResponseFactory;
         $this->uriFactory = $uriFactory;
+        $this->formFactory = $formFactory;
     }
 
 
@@ -84,7 +98,7 @@ class LoginController implements ControllerInterface
         if ('POST' === $request->getMethod()) {
             $authData = [];
             parse_str($request->getBody(), $authData);
-
+            $authData = $authData['login'];
             $this->validateAuthData($authData);
             if ($this->isAuth($authData['login'], $authData['password'])) {
                 $queryParams = $request->getQueryParams();
@@ -101,6 +115,11 @@ class LoginController implements ControllerInterface
 //            }
         }
         if (null === $response) {
+            $login = new Login();
+
+            $form = $this->formFactory->create(LoginType::class, $login);
+            $contex['form'] = $form->createView();
+
             $html = $this->template->render('login.twig', $contex);
             $response = $this->serverResponseFactory->createHtmlResponse(200, $html);
         }

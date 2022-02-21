@@ -140,5 +140,26 @@
 
 
 
+
+
+
+    <service id="Symfony\Component\Form\FormFactory">
+        <argument key="$registry" type="service" id="Symfony\Component\Form\FormRegistryInterface"/>
+    </service>
+
+    <service id="Symfony\Component\Form\FormRegistryInterface" alias="Symfony\Component\Form\FormRegistry"/>
+
+    <service id="Symfony\Component\Form\FormRegistry">
+        <argument key="$extensions" type="collection"/>
+        <argument key="$resolvedTypeFactory" type="service" id="Symfony\Component\Form\ResolvedFormTypeFactoryInterface"/>
+    </service>
+
+    <service id="Symfony\Component\Form\ResolvedFormTypeFactoryInterface" alias="Symfony\Component\Form\ResolvedFormTypeFactory"/>
+
+    <service id="Symfony\Component\Form\ResolvedFormTypeFactory"/>
+
+
+
+
 </services>
 </container>

@@ -400,5 +400,11 @@
         "id_recipient": 2,
         "address": "Школьная",
         "status": "Work"
+    },
+    {
+        "id_address": 64,
+        "id_recipient": 2,
+        "address": "Школьная",
+        "status": "Home"
     }
 ]
