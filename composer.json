@@ -35,7 +35,8 @@
     "symfony/twig-bundle": "^6.0",
     "symfony/twig-bridge": "^6.0",
     "symfony/config": "^5.4",
-    "symfony/validator": "^5.4"
+    "symfony/validator": "^5.4",
+    "ext-pdo": "*"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
