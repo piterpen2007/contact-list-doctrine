@@ -30,7 +30,7 @@ final class Kinsfolk extends Recipient
         string $full_name,
         string $birthday,
         string $profession,
-        array $balance,
+        Balance $balance,
         string $status,
         string $ringtone,
         string $hotkey

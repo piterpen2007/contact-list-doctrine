@@ -123,6 +123,10 @@ class GetRecipientsCollectionController implements ControllerInterface
             'full_name' => $recipientDto->getFullName(),
             'birthday' => $recipientDto->getBirthday(),
             'profession' => $recipientDto->getProfession(),
+            'balance' => [
+                'amount' => $recipientDto->getBalance()->getMoney()->getAmount(),
+                'currency' => $recipientDto->getBalance()->getMoney()->getCurrency()->getName()
+            ]
         ];
     }
 }

@@ -42,6 +42,7 @@ class SearchRecipientsService
             $recipient->getFullName(),
             $recipient->getBirthday(),
             $recipient->getProfession(),
+            $recipient->getBalance()
         );
     }
 

@@ -2,6 +2,8 @@
 
 namespace EfTech\ContactList\Service\SearchRecipientsService;
 
+use EfTech\ContactList\ValueObject\Balance;
+
 /**
  *  Структура информации о получателях
  */
@@ -11,6 +13,7 @@ class RecipientDto
     protected string $fullName;
     protected string $birthday;
     protected string $profession;
+    protected Balance $balance;
 
 
     /**
@@ -18,17 +21,20 @@ class RecipientDto
      * @param string $fullName
      * @param string $birthday
      * @param string $profession
+     * @param Balance $balance
      */
     public function __construct(
         int $id_recipient,
         string $fullName,
         string $birthday,
-        string $profession
+        string $profession,
+        Balance $balance
     ) {
         $this->id_recipient = $id_recipient;
         $this->fullName = $fullName;
         $this->birthday = $birthday;
         $this->profession = $profession;
+        $this->balance = $balance;
     }
 
     /**
@@ -62,4 +68,13 @@ class RecipientDto
     {
         return $this->profession;
     }
+
+    /**
+     * @return Balance
+     */
+    public function getBalance(): Balance
+    {
+        return $this->balance;
+    }
+
 }

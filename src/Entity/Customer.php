@@ -3,6 +3,7 @@
 namespace EfTech\ContactList\Entity;
 
 use EfTech\ContactList\Exception;
+use EfTech\ContactList\ValueObject\Balance;
 
 final class Customer extends Recipient
 {
@@ -24,6 +25,11 @@ final class Customer extends Recipient
     private string $timeToCall;
 
     /**
+     * @param int $id_recipient
+     * @param string $full_name
+     * @param string $birthday
+     * @param string $profession
+     * @param Balance $balance
      * @param string $contractNumber
      * @param int $averageTransactionAmount
      * @param string $discount
@@ -34,7 +40,7 @@ final class Customer extends Recipient
         string $full_name,
         string $birthday,
         string $profession,
-        array $balance,
+        Balance $balance,
         string $contractNumber,
         int $averageTransactionAmount,
         string $discount,
@@ -105,7 +111,7 @@ final class Customer extends Recipient
     /** Возвращает время беспокоиства
      * @return string
      */
-    final public function getTimeToCall(): string
+    public function getTimeToCall(): string
     {
         return $this->timeToCall;
     }

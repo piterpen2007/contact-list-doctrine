@@ -25,7 +25,7 @@ final class Colleague extends Recipient
      * @param string $full_name
      * @param string $birthday
      * @param string $profession
-     * @param array $balance
+     * @param Balance $balance
      * @param string $department
      * @param string $position
      * @param string $roomNumber
@@ -35,7 +35,7 @@ final class Colleague extends Recipient
         string $full_name,
         string $birthday,
         string $profession,
-        array $balance,
+        Balance $balance,
         string $department,
         string $position,
         string $roomNumber

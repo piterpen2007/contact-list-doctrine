@@ -10,9 +10,9 @@ use JsonSerializable;
 class Recipient
 {
     /** баланс контакта
-     * @var Balance[]
+     * @var Balance
      */
-    private array $balances;
+    private Balance $balances;
     /**
      * @var int id Получателя
      */
@@ -35,30 +35,26 @@ class Recipient
      * @param string $full_name
      * @param string $birthday
      * @param string $profession
+     * @param Balance $balances
      */
     public function __construct(
         int $id_recipient,
         string $full_name,
         string $birthday,
         string $profession,
-        array $balances
+        Balance $balances
     ) {
         $this->id_recipient = $id_recipient;
         $this->full_name = $full_name;
         $this->birthday = $birthday;
         $this->profession = $profession;
-        foreach ($balances as $balance) {
-            if (!$balance instanceof Balance) {
-                throw new DomainException('Некорректный формат данных по балансу');
-            }
-        }
         $this->balances = $balances;
     }
 
     /** Возвращает данные о балансе
-     * @return array
+     * @return Balance
      */
-    public function getBalance(): array
+    public function getBalance(): Balance
     {
         return $this->balances;
     }

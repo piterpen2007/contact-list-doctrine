@@ -80,7 +80,7 @@ class RecipientJsonFileRepository implements RecipientRepositoryInterface
     }
 
 
-    private function createBalanceData($balances): Balance
+    private function createBalanceData(array $balances): Balance
     {
         if (false === is_array($balances)) {
             throw new InvalidDataStructureException('Данные о балансе имеют невалидный формат');
@@ -110,9 +110,9 @@ class RecipientJsonFileRepository implements RecipientRepositoryInterface
      *
      * @param array $recipients
      *
-     * @return Balance[]
+     * @return Balance
      */
-    private function createBalancesData(array $recipients): array
+    private function createBalancesData(array $recipients): Balance
     {
         if (false === array_key_exists('balance', $recipients)) {
             throw new InvalidDataStructureException('Нет данных о балансе');
@@ -120,10 +120,6 @@ class RecipientJsonFileRepository implements RecipientRepositoryInterface
         if (false === is_array($recipients['balance'])) {
             throw new InvalidDataStructureException('Данные о балансе имею неверный формат');
         }
-        $balancesData = [];
-        foreach ($recipients['balance'] as $balanceData) {
-            $balancesData[] = $this->createBalanceData($balanceData);
-        }
-        return $balancesData;
+        return $this->createBalanceData($recipients['balance']);
     }
 }

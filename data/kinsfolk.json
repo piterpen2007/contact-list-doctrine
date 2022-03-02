@@ -7,6 +7,9 @@
 	"status": "Дед",
 	"ringtone": "Bells",
 	"hotkey": "1",
-	"balance" : []
+	"balance" : {
+		"amount": 3555,
+		"currency": "RUB"
+	}
 }
 	]
