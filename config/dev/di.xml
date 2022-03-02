@@ -61,7 +61,7 @@
     <prototype namespace="EfTech\ContactList\" resource="./../../src"/>
     <prototype namespace="EfTech\ContactList\Infrastructure\"
                resource="./../../vendor/eff-tech/framework-home/src"
-               exclude="./../../vendor/eff-tech/framework-home/src/{Router,http}"
+               exclude="./../../vendor/eff-tech/framework-home/src/{Router,http,Db}"
     />
 
     <instanceof id="EfTech\ContactList\Infrastructure\Controller\ControllerInterface" public="true"/>
@@ -97,7 +97,7 @@
 
     <service
             id="EfTech\ContactList\Infrastructure\Auth\UserDataStorageInterface"
-            class="EfTech\ContactList\Repository\UserJsonFileRepository">
+            class="EfTech\ContactList\Repository\UserDbRepository">
     </service>
     <service id="EfTech\ContactList\Infrastructure\Session\SessionInterface">
         <factory class="EfTech\ContactList\Infrastructure\Session\SessionNative" method="create"/>
