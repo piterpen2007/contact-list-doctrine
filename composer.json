@@ -36,7 +36,8 @@
     "symfony/twig-bridge": "^6.0",
     "symfony/config": "^5.4",
     "symfony/validator": "^5.4",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "ext-pgsql": "*"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
