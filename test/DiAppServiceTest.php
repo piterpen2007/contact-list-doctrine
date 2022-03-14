@@ -4,7 +4,6 @@ namespace EfTech\ContactListTest;
 
 use EfTech\ContactList\Config\AppConfig;
 use EfTech\ContactList\Config\ContainerExtensions;
-use EfTech\ContactList\ConsoleCommand\FindContacts;
 use EfTech\ContactList\ConsoleCommand\FindCustomers;
 use EfTech\ContactList\ConsoleCommand\FindRecipients;
 use EfTech\ContactList\ConsoleCommand\HashStr;
@@ -12,8 +11,6 @@ use EfTech\ContactList\Controller\AddressAdministrationController;
 use EfTech\ContactList\Controller\CreateAddressController;
 use EfTech\ContactList\Controller\GetAddressCollectionController;
 use EfTech\ContactList\Controller\GetAddressController;
-use EfTech\ContactList\Controller\GetContactCollectionController;
-use EfTech\ContactList\Controller\GetContactController;
 use EfTech\ContactList\Controller\GetContactListCollectionController;
 use EfTech\ContactList\Controller\GetContactListController;
 use EfTech\ContactList\Controller\GetCustomersCollectionController;
