@@ -4,14 +4,14 @@ namespace EfTech\ContactList\Service\SearchCustomersService;
 
 class SearchCustomersCriteria
 {
-    private ?int $idRecipient;
-    private ?string $fullName;
-    private ?string $birthday;
-    private ?string $profession;
-    private ?string $contactNumber;
-    private ?int $averageTransactionAmount;
-    private ?string $discount;
-    private ?string $timeToCall;
+    private ?int $idRecipient = null;
+    private ?string $fullName = null;
+    private ?string $birthday = null;
+    private ?string $profession = null;
+    private ?string $contactNumber = null;
+    private ?int $averageTransactionAmount = null;
+    private ?string $discount = null;
+    private ?string $timeToCall = null;
 
     /**
      * @return int|null

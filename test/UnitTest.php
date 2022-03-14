@@ -77,7 +77,11 @@ class UnitTest extends TestCase
                             'id_recipient' => 1,
                             'full_name' => 'Осипов Геннадий Иванович',
                             'birthday' => '15.06.1985',
-                            'profession' => 'Системный администратор'
+                            'profession' => 'Системный администратор',
+                            "balance" => [
+                                "amount" => 2220,
+                                "currency" => "рубль"
+                            ]
                         ],
                     ],
                 ]
@@ -97,7 +101,11 @@ class UnitTest extends TestCase
                             'id_recipient' => 3,
                             'full_name' => 'Дамир Авто',
                             'birthday' => '01.12.1990',
-                            'profession' => 'Автомеханик'
+                            'profession' => 'Автомеханик',
+                            "balance" => [
+                                "amount" => 4566,
+                                "currency" => "рубль"
+                            ]
                         ],
                     ],
                 ]
@@ -117,7 +125,11 @@ class UnitTest extends TestCase
                             'id_recipient' => 3,
                             'full_name' => 'Дамир Авто',
                             'birthday' => '01.12.1990',
-                            'profession' => 'Автомеханик'
+                            'profession' => 'Автомеханик',
+                            "balance" => [
+                                "amount" => 4566,
+                                "currency" => "рубль"
+                            ]
                         ],
                     ],
                 ]
@@ -170,80 +182,6 @@ class UnitTest extends TestCase
                     ],
                 ]
             ],
-            'Тестирование поиска контактов по категории colleagues' => [
-                'in' => [
-                    'uri' => '/contact?category=colleagues',
-                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
-                        $c->compile();
-                        return $c;
-                    })(self::createDiContainer())
-                ],
-                'out' => [
-                    'httpCode' => 200,
-                    'result' => [
-                        [
-                            "id_recipient" => 10,
-                            "full_name" => "Шатов Александр Иванович",
-                            "birthday" => "02.12.1971",
-                            "profession" => "",
-                            "department" => "Дирекция",
-                            "position" => "Директор",
-                            "room_number" => "405"
-                        ],
-                        [
-                            "id_recipient" => 11,
-                            "full_name" => "Наташа",
-                            "birthday" => "10.05.1984",
-                            "profession" => "",
-                            "department" => "Дирекция",
-                            "position" => "Секретарь",
-                            "room_number" => "404"
-                        ]
-                    ],
-                ]
-            ],
-            'Тестирование поиска контактов по категории kinsfolk' => [
-                'in' => [
-                    'uri' => '/contact?category=kinsfolk',
-                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
-                        $c->compile();
-                        return $c;
-                    })(self::createDiContainer())
-                ],
-                'out' => [
-                    'httpCode' => 200,
-                    'result' => [
-                        [
-                            "id_recipient" => 6,
-                            "full_name" => "Дед",
-                            "birthday" => "04.06.1945",
-                            "profession" => "Столяр",
-                            "status" => "Дед",
-                            "ringtone" => "Bells",
-                            "hotkey" => "1"
-                        ]
-                    ],
-                ]
-            ],
-            'Тестирование ситуации когда данные о получателях не кореектны. Нет поля birthday' => [
-                'in' => [
-                    'uri' => '/recipients?full_name=Осипов Геннадий Иванович',
-                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
-                        $appConfigParams = $c->getParameter('app.configs');
-                        $appConfigParams['pathToRecipients'] = __DIR__ . '/data/broken.recipient.json';
-                        $c->setParameter('app.configs', $appConfigParams);
-                        $c->compile();
-                        return $c;
-                    })(self::createDiContainer())
-                ],
-                'out' => [
-                    'httpCode' => 503,
-                    'result' => [
-                        'status' => 'fail',
-                        'message' => 'Отсутствуют обязательные элементы: birthday'
-                    ]
-                ]
-            ],
             'Тестирование ситуации с некорректным  данными конфига приложения' => [
                 'in' => [
                     'uri' => '/recipient?id_recipient=1',
@@ -258,44 +196,6 @@ class UnitTest extends TestCase
                     'result' => [
                         'status' => 'fail',
                         'message' => 'system error'
-                    ]
-                ]
-            ],
-            'Тестирование ситуации с некорректным путем до файла получателями' => [
-                'in' => [
-                    'uri' =>  '/recipient?id_recipient=1',
-                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
-                        $appConfigParams = $c->getParameter('app.configs');
-                        $appConfigParams['pathToRecipients'] = __DIR__ . '/data/unknown.recipients.json';
-                        $c->setParameter('app.configs', $appConfigParams);
-                        $c->compile();
-                        return $c;
-                    })(self::createDiContainer())
-                ],
-                'out' => [
-                    'httpCode' => 500,
-                    'result' => [
-                        'status' => 'fail',
-                        'message' => 'Некорректный путь до файла с данными'
-                    ]
-                ]
-            ],
-            'Тестирование ситуации когда данные о клиентах некорректны. Нет поля id_recipient' => [
-                'in' => [
-                    'uri' => '/customers?full_name=Калинин Пётр Александрович',
-                    'diContainer' => (static function (ContainerBuilder $c): ContainerBuilder {
-                        $appConfigParams = $c->getParameter('app.configs');
-                        $appConfigParams['pathToCustomers'] = __DIR__ . '/data/broken.customers.json';
-                        $c->setParameter('app.configs', $appConfigParams);
-                        $c->compile();
-                        return $c;
-                    })(self::createDiContainer())
-                ],
-                'out' => [
-                    'httpCode' => 503,
-                    'result' => [
-                        'status' => 'fail',
-                        'message' => 'Отсутствуют обязательные элементы: id_recipient'
                     ]
                 ]
             ]

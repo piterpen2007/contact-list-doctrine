@@ -4,10 +4,10 @@ namespace EfTech\ContactList\Service\SearchRecipientsService;
 
 class SearchRecipientsCriteria
 {
-    private ?int $idRecipient;
-    private ?string $fullName;
-    private ?string $birthday;
-    private ?string $profession;
+    private ?int $idRecipient = null;
+    private ?string $fullName = null;
+    private ?string $birthday = null;
+    private ?string $profession = null;
 
     /**
      * @return int|null

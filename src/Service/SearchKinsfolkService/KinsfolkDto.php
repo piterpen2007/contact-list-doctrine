@@ -1,16 +1,22 @@
 <?php
 
-namespace EfTech\ContactList\Service\SearchContactsService;
+namespace EfTech\ContactList\Service\SearchKinsfolkService;
 
+use EfTech\ContactList\ValueObject\Balance;
+
+/**
+ *  Структура информации о получателях
+ */
 class KinsfolkDto
 {
-    private int $id_recipient;
-    private string $fullName;
-    private string $birthday;
-    private string $profession;
-    private string $status;
-    private string $ringtone;
-    private string $hotkey;
+    protected int $id_recipient;
+    protected string $fullName;
+    protected string $birthday;
+    protected string $profession;
+    protected string $status;
+    protected string $ringtone;
+    protected string $hotkey;
+    protected Balance $balance;
 
     /**
      * @param int $id_recipient
@@ -20,6 +26,7 @@ class KinsfolkDto
      * @param string $status
      * @param string $ringtone
      * @param string $hotkey
+     * @param Balance $balance
      */
     public function __construct(
         int $id_recipient,
@@ -28,7 +35,8 @@ class KinsfolkDto
         string $profession,
         string $status,
         string $ringtone,
-        string $hotkey
+        string $hotkey,
+        Balance $balance
     ) {
         $this->id_recipient = $id_recipient;
         $this->fullName = $fullName;
@@ -37,6 +45,7 @@ class KinsfolkDto
         $this->status = $status;
         $this->ringtone = $ringtone;
         $this->hotkey = $hotkey;
+        $this->balance = $balance;
     }
 
     /**
@@ -93,5 +102,13 @@ class KinsfolkDto
     public function getHotkey(): string
     {
         return $this->hotkey;
+    }
+
+    /**
+     * @return Balance
+     */
+    public function getBalance(): Balance
+    {
+        return $this->balance;
     }
 }

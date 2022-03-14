@@ -32,6 +32,7 @@ final class ContainerExtensions
         return [
             new DiRouterExt(),
             //new DiLoggerExt(),
+            new DiHttpExt(),
             new DiDbExt()
         ];
     }

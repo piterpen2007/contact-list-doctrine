@@ -59,7 +59,7 @@ class GetAddressCollectionController implements ControllerInterface
 
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
-        $this->logger->info("Ветка contact-list");
+        $this->logger->info("Ветка address");
         $resultOfParamValidation = $this->validateQueryParams($request);
 
         if (null === $resultOfParamValidation) {

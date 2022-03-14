@@ -86,10 +86,6 @@ class DiAppServiceTest extends TestCase
                 'serviceId' => GetContactListController::class,
                 'expectedServiceClass' => GetContactListController::class
             ],
-            GetContactCollectionController::class => [
-                'serviceId' => GetContactCollectionController::class,
-                'expectedServiceClass' => GetContactCollectionController::class
-            ],
             GetRecipientsController::class => [
                 'serviceId' => GetRecipientsController::class,
                 'expectedServiceClass' => GetRecipientsController::class
@@ -106,10 +102,6 @@ class DiAppServiceTest extends TestCase
                 'serviceId' => GetCustomersController::class,
                 'expectedServiceClass' => GetCustomersController::class
             ],
-            GetContactController::class => [
-                'serviceId' => GetContactController::class,
-                'expectedServiceClass' => GetContactController::class
-            ],
             FindCustomers::class => [
                 'serviceId' => FindCustomers::class,
                 'expectedServiceClass' => FindCustomers::class
@@ -117,10 +109,6 @@ class DiAppServiceTest extends TestCase
             FindRecipients::class => [
                 'serviceId' => FindRecipients::class,
                 'expectedServiceClass' => FindRecipients::class
-            ],
-            FindContacts::class => [
-                'serviceId' => FindContacts::class,
-                'expectedServiceClass' => FindContacts::class
             ],
             DefaultRouter::class => [
                 'serviceId' => DefaultRouter::class,

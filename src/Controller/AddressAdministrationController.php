@@ -6,14 +6,20 @@ use EfTech\ContactList\Infrastructure\Auth\HttpAuthProvider;
 use EfTech\ContactList\Exception\RuntimeException;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
+use EfTech\ContactList\Service\SearchColleagueService;
+use EfTech\ContactList\Service\SearchColleagueService\SearchColleagueCriteria;
+use EfTech\ContactList\Service\SearchCustomersService;
+use EfTech\ContactList\Service\SearchCustomersService\SearchCustomersCriteria;
+use EfTech\ContactList\Service\SearchKinsfolkService;
+use EfTech\ContactList\Service\SearchKinsfolkService\SearchKinsfolkCriteria;
+use EfTech\ContactList\Service\SearchRecipientsService;
+use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsCriteria;
 use Psr\Log\LoggerInterface;
 use EfTech\ContactList\Infrastructure\ViewTemplate\ViewTemplateInterface;
 use EfTech\ContactList\Service\ArrivalAddressService;
 use EfTech\ContactList\Service\ArrivalNewAddressService\NewAddressDto;
 use EfTech\ContactList\Service\SearchAddressService;
 use EfTech\ContactList\Service\SearchAddressService\SearchAddressCriteria;
-use EfTech\ContactList\Service\SearchContactsService;
-use EfTech\ContactList\Service\SearchContactsService\SearchContactsCriteria;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
@@ -38,33 +44,46 @@ class AddressAdministrationController implements ControllerInterface
      * @var LoggerInterface
      */
     private LoggerInterface $logger;
-    private SearchContactsService $searchContactsService;
+    private SearchColleagueService $searchColleagueService;
+    private SearchKinsfolkService $searchKinsfolkService;
+    private SearchRecipientsService $searchRecipientsService;
+    private SearchCustomersService $searchCustomersService;
 
     /**
      * @param ArrivalAddressService $arrivalAddressService
      * @param SearchAddressService $addressService
      * @param ViewTemplateInterface $viewTemplate
      * @param LoggerInterface $logger
-     * @param SearchContactsService $searchContactsService
      * @param HttpAuthProvider $httpAuthProvider
      * @param ServerResponseFactory $serverResponseFactory
+     * @param SearchColleagueService $searchColleagueService
+     * @param SearchKinsfolkService $searchKinsfolkService
+     * @param SearchRecipientsService $searchRecipientsService
+     * @param SearchCustomersService $searchCustomersService
      */
     public function __construct(
         ArrivalAddressService $arrivalAddressService,
         SearchAddressService $addressService,
         ViewTemplateInterface $viewTemplate,
         LoggerInterface $logger,
-        SearchContactsService $searchContactsService,
         HttpAuthProvider $httpAuthProvider,
-        \EfTech\ContactList\Infrastructure\http\ServerResponseFactory $serverResponseFactory
+        \EfTech\ContactList\Infrastructure\http\ServerResponseFactory $serverResponseFactory,
+        \EfTech\ContactList\Service\SearchColleagueService $searchColleagueService,
+        \EfTech\ContactList\Service\SearchKinsfolkService $searchKinsfolkService,
+        \EfTech\ContactList\Service\SearchRecipientsService $searchRecipientsService,
+        \EfTech\ContactList\Service\SearchCustomersService $searchCustomersService
     ) {
         $this->arrivalAddressService = $arrivalAddressService;
         $this->addressService = $addressService;
         $this->viewTemplate = $viewTemplate;
         $this->logger = $logger;
-        $this->searchContactsService = $searchContactsService;
+        //$this->searchContactsService = $searchContactsService;
         $this->httpAuthProvider = $httpAuthProvider;
         $this->serverResponseFactory = $serverResponseFactory;
+        $this->searchColleagueService = $searchColleagueService;
+        $this->searchKinsfolkService = $searchKinsfolkService;
+        $this->searchRecipientsService = $searchRecipientsService;
+        $this->searchCustomersService = $searchCustomersService;
     }
 
 
@@ -81,7 +100,11 @@ class AddressAdministrationController implements ControllerInterface
                 $resultCreationAddress = $this->creationOfAddress($request);
             }
             $dtoAddressesCollection = $this->addressService->search(new SearchAddressCriteria());
-            $dtoContactsCollection = $this->searchContactsService->search(new SearchContactsCriteria());
+            $recipients = $this->searchRecipientsService->search(new SearchRecipientsCriteria());
+            $colleagues = $this->searchColleagueService->search(new SearchColleagueCriteria());
+            $customers = $this->searchCustomersService->search(new SearchCustomersCriteria());
+            $kinsfolk = $this->searchKinsfolkService->search(new SearchKinsfolkCriteria());
+            $dtoContactsCollection = array_merge($recipients, $colleagues, $customers, $kinsfolk);
             $viewData = [
                 'Addresses' => $dtoAddressesCollection,
                 'contacts' => $dtoContactsCollection

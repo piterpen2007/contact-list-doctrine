@@ -1,16 +1,22 @@
 <?php
 
-namespace EfTech\ContactList\Service\SearchContactsService;
+namespace EfTech\ContactList\Service\SearchColleagueService;
 
-class ColleaguesDto
+use EfTech\ContactList\ValueObject\Balance;
+
+/**
+ *  Структура информации о получателях
+ */
+class ColleagueDto
 {
-    private int $id_recipient;
-    private string $fullName;
-    private string $birthday;
-    private string $profession;
-    private string $department;
-    private string $position;
-    private string $room_number;
+    protected int $id_recipient;
+    protected string $fullName;
+    protected string $birthday;
+    protected string $profession;
+    protected string $department;
+    protected string $position;
+    protected string $room_number;
+    protected Balance $balance;
 
     /**
      * @param int $id_recipient
@@ -20,6 +26,7 @@ class ColleaguesDto
      * @param string $department
      * @param string $position
      * @param string $room_number
+     * @param Balance $balance
      */
     public function __construct(
         int $id_recipient,
@@ -28,7 +35,8 @@ class ColleaguesDto
         string $profession,
         string $department,
         string $position,
-        string $room_number
+        string $room_number,
+        Balance $balance
     ) {
         $this->id_recipient = $id_recipient;
         $this->fullName = $fullName;
@@ -37,6 +45,7 @@ class ColleaguesDto
         $this->department = $department;
         $this->position = $position;
         $this->room_number = $room_number;
+        $this->balance = $balance;
     }
 
     /**
@@ -94,4 +103,14 @@ class ColleaguesDto
     {
         return $this->room_number;
     }
+
+    /**
+     * @return Balance
+     */
+    public function getBalance(): Balance
+    {
+        return $this->balance;
+    }
+
+
 }

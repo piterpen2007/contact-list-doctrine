@@ -107,28 +107,40 @@
          class="EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader"/>
 
 
-    <service id="EfTech\ContactList\Entity\ContactRepositoryInterface"
-             class="EfTech\ContactList\Repository\ContactJsonRepository"
-    >
-    </service>
 
 
     <service id="EfTech\ContactList\Entity\ContactListRepositoryInterface"
-             class="EfTech\ContactList\Repository\ContactListJsonRepository"
+             class="EfTech\ContactList\Repository\ContactListDbRepository"
     >
     </service>
 
 
     <service id="EfTech\ContactList\Entity\CustomerRepositoryInterface"
-             class="EfTech\ContactList\Repository\CustomerJsonFileRepository"
+             class="EfTech\ContactList\Repository\CustomerDbRepository"
     >
     </service>
 
 
 
     <service id="EfTech\ContactList\Entity\RecipientRepositoryInterface"
-             class="EfTech\ContactList\Repository\RecipientJsonFileRepository"
+             class="EfTech\ContactList\Repository\RecipientDbRepository"
     >
+    </service>
+
+    <service id="EfTech\ContactList\Entity\AddressRepositoryInterface"
+             class="EfTech\ContactList\Repository\AddressDbRepository"
+    >
+    </service>
+    <service id="EfTech\ContactList\Entity\KinsfolkRepositoryInterface"
+             class="EfTech\ContactList\Repository\KinsfolkDbRepository"
+
+    />
+
+    <service id="EfTech\ContactList\Entity\ColleagueRepositoryInterface"
+             class="EfTech\ContactList\Repository\ColleagueDbRepository"
+
+    >
+
     </service>
 
 
