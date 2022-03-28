@@ -5,6 +5,7 @@ namespace EfTech\ContactList\Controller;
 use EfTech\ContactList\Infrastructure\Auth\HttpAuthProvider;
 use EfTech\ContactList\Exception\RuntimeException;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
+use EfTech\ContactList\Infrastructure\Db\ConnectionInterface;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Service\SearchColleagueService;
 use EfTech\ContactList\Service\SearchColleagueService\SearchColleagueCriteria;
@@ -48,6 +49,13 @@ class AddressAdministrationController implements ControllerInterface
     private SearchKinsfolkService $searchKinsfolkService;
     private SearchRecipientsService $searchRecipientsService;
     private SearchCustomersService $searchCustomersService;
+    /**
+     * Соединение с БД
+     *
+     * @var ConnectionInterface
+     */
+    private ConnectionInterface $connection;
+
 
     /**
      * @param ArrivalAddressService $arrivalAddressService
@@ -60,6 +68,7 @@ class AddressAdministrationController implements ControllerInterface
      * @param SearchKinsfolkService $searchKinsfolkService
      * @param SearchRecipientsService $searchRecipientsService
      * @param SearchCustomersService $searchCustomersService
+     * @param ConnectionInterface $connection
      */
     public function __construct(
         ArrivalAddressService $arrivalAddressService,
@@ -71,7 +80,8 @@ class AddressAdministrationController implements ControllerInterface
         \EfTech\ContactList\Service\SearchColleagueService $searchColleagueService,
         \EfTech\ContactList\Service\SearchKinsfolkService $searchKinsfolkService,
         \EfTech\ContactList\Service\SearchRecipientsService $searchRecipientsService,
-        \EfTech\ContactList\Service\SearchCustomersService $searchCustomersService
+        \EfTech\ContactList\Service\SearchCustomersService $searchCustomersService,
+        \EfTech\ContactList\Infrastructure\Db\ConnectionInterface $connection
     ) {
         $this->arrivalAddressService = $arrivalAddressService;
         $this->addressService = $addressService;
@@ -84,6 +94,7 @@ class AddressAdministrationController implements ControllerInterface
         $this->searchKinsfolkService = $searchKinsfolkService;
         $this->searchRecipientsService = $searchRecipientsService;
         $this->searchCustomersService = $searchCustomersService;
+        $this->connection = $connection;
     }
 
 
@@ -247,12 +258,25 @@ class AddressAdministrationController implements ControllerInterface
      */
     private function createAddress(array $dataToCreate): void
     {
-        $this->arrivalAddressService->registerAddress(
-            new NewAddressDto(
-                $dataToCreate['id_recipient'],
-                $dataToCreate['address'],
-                $dataToCreate['status']
-            )
-        );
+        try {
+            $this->connection->beginTransaction();
+
+            $this->arrivalAddressService->registerAddress(
+                new NewAddressDto(
+                    $dataToCreate['id_recipient'],
+                    $dataToCreate['address'],
+                    $dataToCreate['status']
+                )
+            );
+            $this->connection->commit();
+        } catch (Throwable $e) {
+            $this->connection->rollback();
+
+            throw new RuntimeException(
+                'Ошибка при добавлении нового адреса: ' . $e->getMessage(),
+                $e->getCode(),
+                $e
+            );
+        }
     }
 }

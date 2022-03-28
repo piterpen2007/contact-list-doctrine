@@ -3,6 +3,7 @@
 namespace EfTech\ContactList\Controller;
 
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
+use EfTech\ContactList\Infrastructure\Db\ConnectionInterface;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Service\ArrivalAddressService;
 use EfTech\ContactList\Service\ArrivalNewAddressService\NewAddressDto;
@@ -14,23 +15,34 @@ class CreateAddressController implements ControllerInterface
 {
     private ServerResponseFactory $serverResponseFactory;
     private ArrivalAddressService $addressService;
+    /**
+     * Соединение с БД
+     *
+     * @var ConnectionInterface
+     */
+    private ConnectionInterface $connection;
+
 
     /**
      * @param ArrivalAddressService $addressService
      * @param ServerResponseFactory $serverResponseFactory
+     * @param ConnectionInterface $connection
      */
     public function __construct(
         ArrivalAddressService $addressService,
-        \EfTech\ContactList\Infrastructure\http\ServerResponseFactory $serverResponseFactory
+        \EfTech\ContactList\Infrastructure\http\ServerResponseFactory $serverResponseFactory,
+        \EfTech\ContactList\Infrastructure\Db\ConnectionInterface $connection
     ) {
         $this->addressService = $addressService;
         $this->serverResponseFactory = $serverResponseFactory;
+        $this->connection = $connection;
     }
 
 
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         try {
+            $this->connection->beginTransaction();
             $requestData = json_decode($request->getBody(), true, 512, JSON_THROW_ON_ERROR);
             $validationResult = $this->validateData($requestData);
 
@@ -43,7 +55,9 @@ class CreateAddressController implements ControllerInterface
                 $httpCode = 400;
                 $jsonData = ['status' => 'fail','message' => implode('.', $validationResult)];
             }
+            $this->connection->commit();
         } catch (\Throwable $e) {
+            $this->connection->rollback();
             $httpCode = 500;
             $jsonData = ['status' => 'fail','message' => $e->getMessage()];
         }
@@ -72,7 +86,7 @@ class CreateAddressController implements ControllerInterface
             'id_address' => $responseDto->getIdAddress(),
             'id_recipient' => $responseDto->getIdRecipient(),
             'address' => $responseDto->getAddress(),
-            'status' => $responseDto->getStatus()->getName()
+            'status' => $responseDto->getStatus()
         ];
     }
 
