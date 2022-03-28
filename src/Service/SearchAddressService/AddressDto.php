@@ -4,18 +4,18 @@ namespace EfTech\ContactList\Service\SearchAddressService;
 
 class AddressDto
 {
-    private ?int $id_recipient;
+    private ?array $id_recipient;
     private ?int $id_address;
     private ?string $address;
     private ?string $status;
 
     /**
-     * @param int|null $id_recipient
+     * @param array|null $id_recipient
      * @param int|null $id_address
      * @param string|null $address
      * @param string|null $status
      */
-    public function __construct(?int $id_address, ?int $id_recipient, ?string $address, ?string $status)
+    public function __construct(?int $id_address, ?array $id_recipient, ?string $address, ?string $status)
     {
         $this->id_address = $id_address;
         $this->id_recipient = $id_recipient;
@@ -24,9 +24,9 @@ class AddressDto
     }
 
     /**
-     * @return int|null
+     * @return array|null
      */
-    public function getIdRecipient(): ?int
+    public function getIdRecipient(): ?array
     {
         return $this->id_recipient;
     }

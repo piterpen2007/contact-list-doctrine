@@ -3,6 +3,7 @@
 namespace EfTech\ContactList\Service;
 
 use EfTech\ContactList\Entity\Address;
+use EfTech\ContactList\Entity\Address\Status;
 use EfTech\ContactList\Entity\AddressRepositoryInterface;
 use EfTech\ContactList\Service\ArrivalNewAddressService\NewAddressDto;
 use EfTech\ContactList\Service\ArrivalNewAddressService\ResultRegisterNewAddressDto;
@@ -42,7 +43,7 @@ class ArrivalAddressService
             $this->addressRepository->nextId(),
             $addressDto->getIdRecipient(),
             $addressDto->getAddress(),
-            $addressDto->getStatus()
+            new Status($addressDto->getStatus())
         );
 
         $this->addressRepository->add($entity);
@@ -52,7 +53,7 @@ class ArrivalAddressService
             $entity->getIdAddress(),
             $entity->getIdRecipient(),
             $entity->getAddress(),
-            $entity->getStatus()
+            $entity->getStatus()->getName()
         );
     }
 }

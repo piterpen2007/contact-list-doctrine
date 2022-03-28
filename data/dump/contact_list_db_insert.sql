@@ -17,6 +17,61 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Data for Name: address_status; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.address_status (id, name) VALUES (1, 'Work');
+INSERT INTO public.address_status (id, name) VALUES (2, 'Home');
+
+
+--
+-- Data for Name: address; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.address (id_address, address, status_id) VALUES (24, 'Улица спида', 1);
+INSERT INTO public.address (id_address, address, status_id) VALUES (12, 'Школьная', 1);
+INSERT INTO public.address (id_address, address, status_id) VALUES (9, 'Школьная', 1);
+INSERT INTO public.address (id_address, address, status_id) VALUES (5, '', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (4, '', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (3, '', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (2, '', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (1, '', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (28, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (27, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (26, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (25, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (23, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (22, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (21, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (19, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (16, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (14, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (11, 'Крутая', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (10, 'Крутая', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (8, 'Школьная', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (7, 'Школьная', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (6, 'Школьная', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (40, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (41, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (42, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (43, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (44, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (45, 'dhdfh', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (46, 'dhdfh', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (47, 'dhdfh', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (48, 'dhdfh', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (49, 'dhdfh', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (50, 'dhdfh', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (51, 'dhdfh', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (52, 'dhdfh', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (53, 'dhdfh', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (54, 'dhdfh', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (55, 'минина', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (56, 'Ждановский, ул.Школьная, д30', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (57, 'Это адрес контакта', 2);
+
+
+--
 -- Data for Name: recipients; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -34,32 +89,62 @@ INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, am
 
 
 --
--- Data for Name: address; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: address_to_recipients; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (1, 1, '', '');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (2, 1, '', '');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (3, 2, '', '');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (4, 3, '', '');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (5, 4, '', '');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (6, 7, 'Школьная', 'Home');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (7, 7, 'Школьная', 'Home');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (8, 7, 'Школьная', 'Home');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (9, 8, 'Школьная', 'Work');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (10, 4, 'Крутая', 'Home');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (11, 4, 'Крутая', 'Home');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (12, 10, 'Школьная', 'Work');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (14, 11, 'Это адрес контакта', 'Home');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (16, 11, 'Это адрес контакта', 'Home');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (19, 11, 'Это адрес контакта', 'Home');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (21, 11, 'Это адрес контакта', 'Home');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (22, 11, 'Это адрес контакта', 'Home');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (23, 11, 'Это адрес контакта', 'Home');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (24, 10, 'Улица спида', 'Work');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (25, 11, 'Это адрес контакта', 'Home');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (26, 11, 'Это адрес контакта', 'Home');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (27, 11, 'Это адрес контакта', 'Home');
-INSERT INTO public.address (id_address, id_recipient, address, status) VALUES (28, 11, 'Это адрес контакта', 'Home');
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (1, 1, 1);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (2, 2, 1);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (3, 3, 2);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (4, 4, 3);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (5, 5, 4);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (6, 6, 7);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (7, 7, 7);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (8, 8, 7);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (9, 9, 8);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (10, 10, 4);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (11, 11, 4);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (12, 12, 10);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (13, 14, 11);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (14, 16, 11);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (15, 19, 11);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (16, 21, 11);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (17, 22, 11);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (18, 23, 11);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (19, 24, 10);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (20, 25, 11);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (21, 26, 11);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (22, 27, 11);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (23, 28, 11);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (24, 10, 2);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (25, 10, 3);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (26, 10, 4);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (27, 48, 5);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (28, 48, 4);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (29, 49, 5);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (30, 49, 4);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (31, 50, 5);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (32, 50, 4);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (33, 52, 5);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (34, 52, 4);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (35, 53, 5);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (36, 53, 4);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (37, 54, 5);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (38, 54, 4);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (39, 55, 9);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (40, 55, 6);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (41, 56, 3);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (42, 56, 2);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (43, 56, 5);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (44, 56, 4);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (45, 56, 1);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (46, 56, 11);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (47, 56, 10);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (48, 56, 8);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (49, 56, 9);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (50, 56, 7);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (51, 56, 6);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (52, 57, 10);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (53, 57, 2);
 
 
 --
@@ -97,6 +182,15 @@ INSERT INTO public.customers (id_recipient, contract_number, average_transaction
 
 
 --
+-- Data for Name: email; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO public.email (id, type_email, email, recipient_id) VALUES (1, 'Yandex', 'pipetka@yandex.ru', 8);
+INSERT INTO public.email (id, type_email, email, recipient_id) VALUES (2, 'Google', 'kuku@gmail.com', 3);
+INSERT INTO public.email (id, type_email, email, recipient_id) VALUES (3, 'Rambler', 'pochta@rambler.com', 3);
+
+
+--
 -- Data for Name: kinsfolk; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -114,7 +208,21 @@ INSERT INTO public.users (id, login, password) VALUES (1, 'admin', '$2y$10$wvtXi
 -- Name: address_id_address_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.address_id_address_seq', 28, true);
+SELECT pg_catalog.setval('public.address_id_address_seq', 57, true);
+
+
+--
+-- Name: address_status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.address_status_id_seq', 2, true);
+
+
+--
+-- Name: address_to_recipients_address_to_recipients_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.address_to_recipients_address_to_recipients_id_seq', 53, true);
 
 
 --
@@ -122,6 +230,13 @@ SELECT pg_catalog.setval('public.address_id_address_seq', 28, true);
 --
 
 SELECT pg_catalog.setval('public.contact_list_id_entry_seq', 11, true);
+
+
+--
+-- Name: email_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.email_id_seq', 3, true);
 
 
 --

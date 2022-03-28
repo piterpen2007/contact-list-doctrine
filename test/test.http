@@ -237,7 +237,7 @@ POST http://localhost:8082/address/register
 Content-Type: application/json
 
 {
-  "id_recipient" : 11,
+  "id_recipient" : [10,2],
   "address": "Это адрес контакта",
   "status" : "Home"
 }
@@ -385,3 +385,6 @@ GET http://localhost:8082/colleagues?position=Секретарь
    client.assert(response.body[0]['room_number'] === "404", "hotkey не корректна");
  });
  %}
+
+###
+GET http://localhost:8082/address

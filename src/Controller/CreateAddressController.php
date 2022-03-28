@@ -72,7 +72,7 @@ class CreateAddressController implements ControllerInterface
             'id_address' => $responseDto->getIdAddress(),
             'id_recipient' => $responseDto->getIdRecipient(),
             'address' => $responseDto->getAddress(),
-            'status' => $responseDto->getStatus()
+            'status' => $responseDto->getStatus()->getName()
         ];
     }
 
@@ -104,10 +104,6 @@ class CreateAddressController implements ControllerInterface
 
             if (false === array_key_exists('id_recipient', $requestData)) {
                 $err[] = 'Отсутствует информация о id контакта';
-            } elseif (false === is_int($requestData['id_recipient'])) {
-                $err[] = 'id контакта должен быть целым числом';
-            } elseif ($requestData['id_recipient'] <= 0) {
-                $err[] = 'id контакта не может быть меньше или равен нуля';
             }
         }
 

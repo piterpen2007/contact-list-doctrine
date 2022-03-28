@@ -2,8 +2,10 @@
 
 namespace EfTech\ContactList\Entity;
 
+use DateTimeImmutable;
 use EfTech\ContactList\Exception;
 use EfTech\ContactList\ValueObject\Balance;
+use EfTech\ContactList\ValueObject\Email;
 
 final class Customer extends Recipient
 {
@@ -27,9 +29,9 @@ final class Customer extends Recipient
     /**
      * @param int $id_recipient
      * @param string $full_name
-     * @param string $birthday
+     * @param DateTimeImmutable $birthday
      * @param string $profession
-     * @param Balance $balance
+     * @param array $emails
      * @param string $contractNumber
      * @param int $averageTransactionAmount
      * @param string $discount
@@ -38,15 +40,15 @@ final class Customer extends Recipient
     public function __construct(
         int $id_recipient,
         string $full_name,
-        string $birthday,
+        DateTimeImmutable $birthday,
         string $profession,
-        Balance $balance,
+        array $emails,
         string $contractNumber,
         int $averageTransactionAmount,
         string $discount,
         string $timeToCall
     ) {
-        parent::__construct($id_recipient, $full_name, $birthday, $profession, $balance);
+        parent::__construct($id_recipient, $full_name, $birthday, $profession, $emails);
         $this->contractNumber = $contractNumber;
         $this->averageTransactionAmount = $averageTransactionAmount;
         $this->discount = $discount;

@@ -5,6 +5,7 @@ namespace EfTech\ContactList\Controller;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
 use EfTech\ContactList\Infrastructure\Validator\Assert;
+use EfTech\ContactList\ValueObject\Email;
 use Psr\Log\LoggerInterface;
 use EfTech\ContactList\Service\SearchRecipientsService\RecipientDto;
 use EfTech\ContactList\Service\SearchRecipientsService\SearchRecipientsCriteria;
@@ -118,15 +119,20 @@ class GetRecipientsCollectionController implements ControllerInterface
      */
     final protected function serializeRecipient(RecipientDto $recipientDto): array
     {
-        return [
+        $jsonData = [
             'id_recipient' => $recipientDto->getIdRecipient(),
             'full_name' => $recipientDto->getFullName(),
-            'birthday' => $recipientDto->getBirthday(),
-            'profession' => $recipientDto->getProfession(),
-            'balance' => [
-                'amount' => $recipientDto->getBalance()->getMoney()->getAmount(),
-                'currency' => $recipientDto->getBalance()->getMoney()->getCurrency()->getName()
-            ]
+            'birthday' => $recipientDto->getBirthday()->format('d.m.Y'),
+            'profession' => $recipientDto->getProfession()
         ];
+        $jsonData['emails'] = array_values(
+            array_map(static function (Email $email) {
+                return [
+                    'email' => $email->getEmail(),
+                    'type_email' => $email->getTypeEmail(),
+                ];
+            }, $recipientDto->getEmails())
+        );
+        return $jsonData;
     }
 }

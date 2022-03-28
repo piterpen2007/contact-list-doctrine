@@ -46,7 +46,7 @@ class SearchColleagueService
             $colleague->getDepartment(),
             $colleague->getPosition(),
             $colleague->getRoomNumber(),
-            $colleague->getBalance()
+            $colleague->getEmails()
         );
     }
 

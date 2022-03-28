@@ -2,17 +2,19 @@
 
 namespace EfTech\ContactList\Entity;
 
+use DateTimeImmutable;
 use EfTech\ContactList\Exception;
 use EfTech\ContactList\Exception\DomainException;
 use EfTech\ContactList\ValueObject\Balance;
+use EfTech\ContactList\ValueObject\Email;
 use JsonSerializable;
 
 class Recipient
 {
-    /** баланс контакта
-     * @var Balance
+    /** Email контакта
+     * @var array
      */
-    private Balance $balances;
+    private array $emails;
     /**
      * @var int id Получателя
      */
@@ -22,9 +24,9 @@ class Recipient
      */
     private string $full_name;
     /**
-     * @var string Дата рождения получателя
+     * @var DateTimeImmutable Дата рождения получателя
      */
-    private string $birthday;
+    private DateTimeImmutable $birthday;
     /**
      * @var string Профессия получателя
      */
@@ -33,30 +35,30 @@ class Recipient
     /** Конструктор класса
      * @param int $id_recipient
      * @param string $full_name
-     * @param string $birthday
+     * @param DateTimeImmutable $birthday
      * @param string $profession
-     * @param Balance $balances
+     * @param array $emails
      */
     public function __construct(
         int $id_recipient,
         string $full_name,
-        string $birthday,
+        DateTimeImmutable $birthday,
         string $profession,
-        Balance $balances
+        array $emails
     ) {
         $this->id_recipient = $id_recipient;
         $this->full_name = $full_name;
         $this->birthday = $birthday;
         $this->profession = $profession;
-        $this->balances = $balances;
+        $this->emails = $emails;
     }
 
-    /** Возвращает данные о балансе
-     * @return Balance
+    /** Возвращает данные о почте
+     * @return array
      */
-    public function getBalance(): Balance
+    public function getEmails(): array
     {
-        return $this->balances;
+        return $this->emails;
     }
 
     /**
@@ -96,18 +98,18 @@ class Recipient
     }
 
     /** Возвращает дату рождения получателя
-     * @return string
+     * @return DateTimeImmutable
      */
-    final public function getBirthday(): string
+    final public function getBirthday(): DateTimeImmutable
     {
         return $this->birthday;
     }
 
     /** Устанавливает дату рождения получателя
-     * @param string $birthday
+     * @param DateTimeImmutable $birthday
      * @return Recipient
      */
-    public function setBirthday(string $birthday): Recipient
+    public function setBirthday(DateTimeImmutable $birthday): Recipient
     {
         $this->birthday = $birthday;
         return $this;

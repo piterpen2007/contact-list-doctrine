@@ -46,7 +46,7 @@ class SearchKinsfolkService
             $kinsfolk->getStatus(),
             $kinsfolk->getRingtone(),
             $kinsfolk->getHotkey(),
-            $kinsfolk->getBalance()
+            $kinsfolk->getEmails()
         );
     }
 

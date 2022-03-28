@@ -47,7 +47,8 @@ class SearchCustomersService
             $customer->getContractNumber(),
             $customer->getAverageTransactionAmount(),
             $customer->getDiscount(),
-            $customer->getTimeToCall()
+            $customer->getTimeToCall(),
+            $customer->getEmails()
         );
     }
 

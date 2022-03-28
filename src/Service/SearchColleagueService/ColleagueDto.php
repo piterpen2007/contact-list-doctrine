@@ -2,6 +2,7 @@
 
 namespace EfTech\ContactList\Service\SearchColleagueService;
 
+use DateTimeImmutable;
 use EfTech\ContactList\ValueObject\Balance;
 
 /**
@@ -11,12 +12,12 @@ class ColleagueDto
 {
     protected int $id_recipient;
     protected string $fullName;
-    protected string $birthday;
+    protected DateTimeImmutable $birthday;
     protected string $profession;
     protected string $department;
     protected string $position;
     protected string $room_number;
-    protected Balance $balance;
+    protected array $emails;
 
     /**
      * @param int $id_recipient
@@ -26,17 +27,17 @@ class ColleagueDto
      * @param string $department
      * @param string $position
      * @param string $room_number
-     * @param Balance $balance
+     * @param array $emails
      */
     public function __construct(
         int $id_recipient,
         string $fullName,
-        string $birthday,
+        DateTimeImmutable $birthday,
         string $profession,
         string $department,
         string $position,
         string $room_number,
-        Balance $balance
+        array $emails
     ) {
         $this->id_recipient = $id_recipient;
         $this->fullName = $fullName;
@@ -45,7 +46,7 @@ class ColleagueDto
         $this->department = $department;
         $this->position = $position;
         $this->room_number = $room_number;
-        $this->balance = $balance;
+        $this->emails = $emails;
     }
 
     /**
@@ -65,9 +66,9 @@ class ColleagueDto
     }
 
     /**
-     * @return string
+     * @return DateTimeImmutable
      */
-    public function getBirthday(): string
+    public function getBirthday(): DateTimeImmutable
     {
         return $this->birthday;
     }
@@ -105,11 +106,11 @@ class ColleagueDto
     }
 
     /**
-     * @return Balance
+     * @return array
      */
-    public function getBalance(): Balance
+    public function getEmails(): array
     {
-        return $this->balance;
+        return $this->emails;
     }
 
 

@@ -2,45 +2,39 @@
 
 namespace EfTech\ContactList\Entity;
 
+use EfTech\ContactList\Entity\Address\Status;
 use EfTech\ContactList\Exception\InvalidDataStructureException;
 
 class Address
 {
-//    /**
-//     * константа статуса
-//     */
-//    public const STATUS_HOME = 'home';
-//    /**
-//     * константа статуса
-//     */
-//    public const STATUS_WORK = 'work';
     /**
      * @var int id адреса
      */
-    private int $id_address;
+    private int $idAddress;
     /**
-     * @var int id получателя
+     * @var int[] id получателей
      */
-    private int $id_recipient;
+    private array $idRecipient;
     /**
      * @var string адрес
      */
     private string $address;
     /** статус адреса (дом\работа)
-     * @var string
+     *
+     * @var Status
      */
-    private string $status;
+    private Status $status;
 
     /**
-     * @param int $id_address
-     * @param int $id_recipient
+     * @param int $idAddress
+     * @param array $idRecipient
      * @param string $address
-     * @param string $status
+     * @param Status $status
      */
-    public function __construct(int $id_address, int $id_recipient, string $address, string $status)
+    public function __construct(int $idAddress, array $idRecipient, string $address, Status $status)
     {
-        $this->id_address = $id_address;
-        $this->id_recipient = $id_recipient;
+        $this->idAddress = $idAddress;
+        $this->idRecipient = $idRecipient;
         $this->address = $address;
         $this->status = $status;
     }
@@ -50,34 +44,34 @@ class Address
      */
     public function getIdAddress(): int
     {
-        return $this->id_address;
+        return $this->idAddress;
     }
 
     /**
-     * @param int $id_address
+     * @param int $idAddress
      * @return Address
      */
-    public function setIdAddress(int $id_address): Address
+    public function setIdAddress(int $idAddress): Address
     {
-        $this->id_address = $id_address;
+        $this->idAddress = $idAddress;
         return $this;
     }
 
     /**
-     * @return int
+     * @return array
      */
-    public function getIdRecipient(): int
+    public function getIdRecipient(): array
     {
-        return $this->id_recipient;
+        return $this->idRecipient;
     }
 
     /**
-     * @param int $id_recipient
+     * @param array $idRecipient
      * @return Address
      */
-    public function setIdRecipient(int $id_recipient): Address
+    public function setIdRecipient(array $idRecipient): Address
     {
-        $this->id_recipient = $id_recipient;
+        $this->idRecipient = $idRecipient;
         return $this;
     }
 
@@ -100,18 +94,18 @@ class Address
     }
 
     /**
-     * @return string
+     * @return Status
      */
-    public function getStatus(): string
+    public function getStatus(): Status
     {
         return $this->status;
     }
 
     /**
-     * @param string $status
+     * @param Status $status
      * @return Address
      */
-    public function setStatus(string $status): Address
+    public function setStatus(Status $status): Address
     {
         $this->status = $status;
         return $this;

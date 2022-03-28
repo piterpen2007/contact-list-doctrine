@@ -2,8 +2,10 @@
 
 namespace EfTech\ContactList\Entity;
 
+use DateTimeImmutable;
 use EfTech\ContactList\Exception;
 use EfTech\ContactList\ValueObject\Balance;
+use EfTech\ContactList\ValueObject\Email;
 
 final class Kinsfolk extends Recipient
 {
@@ -21,6 +23,11 @@ final class Kinsfolk extends Recipient
     private string $hotkey;
 
     /**
+     * @param int $id_recipient
+     * @param string $full_name
+     * @param DateTimeImmutable $birthday
+     * @param string $profession
+     * @param array $emails
      * @param string $status
      * @param string $ringtone
      * @param string $hotkey
@@ -28,14 +35,14 @@ final class Kinsfolk extends Recipient
     public function __construct(
         int $id_recipient,
         string $full_name,
-        string $birthday,
+        DateTimeImmutable $birthday,
         string $profession,
-        Balance $balance,
+        array $emails,
         string $status,
         string $ringtone,
         string $hotkey
     ) {
-        parent::__construct($id_recipient, $full_name, $birthday, $profession, $balance);
+        parent::__construct($id_recipient, $full_name, $birthday, $profession, $emails);
         $this->status = $status;
         $this->ringtone = $ringtone;
         $this->hotkey = $hotkey;

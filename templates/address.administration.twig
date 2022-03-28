@@ -31,9 +31,11 @@ use EfTech\ContactList;
             <td>{{ loop.index }}</td>
             <td>
                 {% for contact in contacts %}
-                    {% if contact.getIdRecipient() == Address.getIdRecipient() %}
-                        {{ contact.getFullName() }} {{ Address.getIdRecipient() }}
-                    {% endif %}
+                    {% for addressIdRecipient in Address.getIdRecipient() %}
+                        {% if contact.getIdRecipient() == addressIdRecipient %}
+                            ({{ contact.getFullName()}} : {{ addressIdRecipient }})
+                        {% endif %}
+                    {% endfor %}
                 {% endfor %}
             </td>
             <td>
@@ -53,7 +55,7 @@ use EfTech\ContactList;
     <form method="post">
         <div>
             <label for="address_id_recipient" class="form-label" >Информация о контакте</label>
-            <select name="id_recipient" id="address_id_recipient" class="form-select" aria-label="Default select example" style="width: 300px" >
+            <select name="id_recipient[]" id="address_id_recipient" class="form-select" aria-label="Default select example" style="width: 300px" multiple >
                 {% for contact in contacts %}
                         <option {% if addressData.id_recipient == contact.getIdRecipient() %}selected{% endif %} value="{{ contact.getIdRecipient() }}">
                             {{ contact.getFullName }} {{ contact.getIdRecipient }}

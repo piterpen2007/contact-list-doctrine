@@ -2,13 +2,15 @@
 
 namespace EfTech\ContactList\Service\SearchCustomersService;
 
+use DateTimeImmutable;
 use EfTech\ContactList\Service\SearchRecipientsService\RecipientDto;
 
 class CustomerDto
 {
     private int $id_recipient;
     private string $fullName;
-    private string $birthday;
+    private DateTimeImmutable $birthday;
+    private array $emails;
     private string $profession;
     private string $contactNumber;
     private int $averageTransactionAmount;
@@ -17,12 +19,13 @@ class CustomerDto
     public function __construct(
         int $id_recipient,
         string $fullName,
-        string $birthday,
+        DateTimeImmutable $birthday,
         string $profession,
         string $contactNumber,
         int $averageTransactionAmount,
         string $discount,
-        string $timeToCall
+        string $timeToCall,
+        array $emails
     ) {
         $this->id_recipient = $id_recipient;
         $this->fullName = $fullName;
@@ -32,7 +35,17 @@ class CustomerDto
         $this->averageTransactionAmount = $averageTransactionAmount;
         $this->discount = $discount;
         $this->timeToCall = $timeToCall;
+        $this->emails = $emails;
     }
+
+    /**
+     * @return array
+     */
+    public function getEmails(): array
+    {
+        return $this->emails;
+    }
+
 
     /**
      * @return int
@@ -51,9 +64,9 @@ class CustomerDto
     }
 
     /**
-     * @return string
+     * @return DateTimeImmutable
      */
-    public function getBirthday(): string
+    public function getBirthday(): DateTimeImmutable
     {
         return $this->birthday;
     }

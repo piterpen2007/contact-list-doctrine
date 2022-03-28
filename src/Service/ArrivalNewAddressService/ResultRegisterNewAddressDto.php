@@ -2,20 +2,22 @@
 
 namespace EfTech\ContactList\Service\ArrivalNewAddressService;
 
+use EfTech\ContactList\Entity\Address\Status;
+
 class ResultRegisterNewAddressDto
 {
     private int $id_address;
-    private int $id_recipient;
+    private array $id_recipient;
     private string $address;
     private string $status;
 
     /**
      * @param int $id_address
-     * @param int $id_recipient
+     * @param array $id_recipient
      * @param string $address
      * @param string $status
      */
-    public function __construct(int $id_address, int $id_recipient, string $address, string $status)
+    public function __construct(int $id_address, array $id_recipient, string $address, string $status)
     {
         $this->id_address = $id_address;
         $this->id_recipient = $id_recipient;
@@ -32,9 +34,9 @@ class ResultRegisterNewAddressDto
     }
 
     /**
-     * @return int
+     * @return array
      */
-    public function getIdRecipient(): int
+    public function getIdRecipient(): array
     {
         return $this->id_recipient;
     }

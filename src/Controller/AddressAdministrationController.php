@@ -166,12 +166,7 @@ class AddressAdministrationController implements ControllerInterface
         if (count($errAddress) > 0) {
             $errs = array_merge($errs, $errAddress);
         }
-
-        $errIdRecipient = $this->validateIdRecipient($dataToCreate);
-        if (count($errIdRecipient) > 0) {
-            $errs = array_merge($errs, $errIdRecipient);
-        }
-
+        $this->validateIdRecipient($dataToCreate);
         $errStatus = $this->validateStatus($dataToCreate);
         if (count($errStatus) > 0) {
             $errs = array_merge($errs, $errStatus);
@@ -209,26 +204,13 @@ class AddressAdministrationController implements ControllerInterface
     }
 
 
-    private function validateIdRecipient(array $dataToCreate): array
+    private function validateIdRecipient(array $dataToCreate): void
     {
-        $errs = [];
         if (false === array_key_exists('id_recipient', $dataToCreate)) {
             throw new RuntimeException('Нет данных о id контакта');
-        } elseif (false === is_string($dataToCreate['id_recipient'])) {
-            throw new RuntimeException('Данные о id контакта должны быть строкой');
-        } else {
-            $idRecipientNumber = trim($dataToCreate['id_recipient']);
-            $idRecipientIsValid = 1 === preg_match('/^\d+$/', $idRecipientNumber);
-
-            $errsIdRecipient = [];
-            if (false === $idRecipientIsValid) {
-                $errsIdRecipient[] = 'id контакта должен быть числом';
-            }
-            if (0 !== count($errsIdRecipient)) {
-                $errs['id_recipient'] = $errsIdRecipient;
-            }
+        } elseif (false === is_array($dataToCreate['id_recipient'])) {
+            throw new RuntimeException('Данные о коонтактах должны быть массивом');
         }
-        return $errs;
     }
 
     /** Валидация статуса
@@ -267,7 +249,7 @@ class AddressAdministrationController implements ControllerInterface
     {
         $this->arrivalAddressService->registerAddress(
             new NewAddressDto(
-                (int)$dataToCreate['id_recipient'],
+                $dataToCreate['id_recipient'],
                 $dataToCreate['address'],
                 $dataToCreate['status']
             )

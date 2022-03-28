@@ -5,6 +5,7 @@ namespace EfTech\ContactList\Controller;
 use EfTech\ContactList\Entity\Customer;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
+use EfTech\ContactList\ValueObject\Email;
 use Psr\Log\LoggerInterface;
 use EfTech\ContactList\Infrastructure\Validator\Assert;
 use EfTech\ContactList\Service\SearchCustomersService\CustomerDto;
@@ -126,15 +127,25 @@ class GetCustomersCollectionController implements ControllerInterface
      */
     final protected function serializeCustomer(CustomerDto $customerDto): array
     {
-        return [
+        $jsonData =  [
             'id_recipient' => $customerDto->getIdRecipient(),
             'full_name' => $customerDto->getFullName(),
-            'birthday' => $customerDto->getBirthday(),
+            'birthday' => $customerDto->getBirthday()->format('d.m.Y'),
             'profession' => $customerDto->getProfession(),
             'contract_number' => $customerDto->getContactNumber(),
             'average_transaction_amount' => $customerDto->getAverageTransactionAmount(),
             'discount' => $customerDto->getDiscount(),
             'time_to_call' => $customerDto->getTimeToCall(),
         ];
+
+        $jsonData['emails'] = array_values(
+            array_map(static function (Email $email) {
+                return [
+                    'email' => $email->getEmail(),
+                    'type_email' => $email->getTypeEmail(),
+                ];
+            }, $customerDto->getEmails())
+        );
+        return $jsonData;
     }
 }

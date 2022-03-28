@@ -11,6 +11,7 @@ use EfTech\ContactList\Exception\RuntimeException;
 use EfTech\ContactList\Infrastructure\Db\ConnectionInterface;
 use EfTech\ContactList\ValueObject\Balance;
 use EfTech\ContactList\ValueObject\Currency;
+use EfTech\ContactList\ValueObject\Email;
 use EfTech\ContactList\ValueObject\Money;
 
 class KinsfolkDbRepository implements KinsfolkRepositoryInterface
@@ -64,6 +65,23 @@ class KinsfolkDbRepository implements KinsfolkRepositoryInterface
     {
         $this->validateCriteria($searchCriteria);
 
+        $sql = <<<EOF
+SELECT
+       r.id_recipient as id_recipient, 
+       r.full_name as full_name,
+       r.birthday as birthday, 
+       r.profession as profession, 
+       k.status as status, 
+       k.ringtone as ringtone, 
+       k.hotkey as hotkey,  
+       e.id as id_email,
+       e.email as email,
+       e.type_email as type_email 
+FROM recipients as r
+JOIN kinsfolk k on r.id_recipient = k.id_recipient
+LEFT JOIN email e on k.id_recipient = e.recipient_id
+WHERE r.type = 'kinsfolk'
+EOF;
         $whereParts = [];
         $whereParams = [];
 
@@ -74,21 +92,7 @@ class KinsfolkDbRepository implements KinsfolkRepositoryInterface
             $whereParams[$criteriaName] = $criteriaValue;
         }
 
-        $sql = <<<EOF
-SELECT
-       r.id_recipient as id_recipient, 
-       r.full_name as full_name,
-       r.birthday as birthday, 
-       r.profession as profession, 
-       k.status as status, 
-       k.ringtone as ringtone, 
-       k.hotkey as hotkey,  
-       r.amount as amount, 
-       r.currency as currency
-FROM recipients as r
-JOIN kinsfolk k on r.id_recipient = k.id_recipient
-WHERE r.type = 'kinsfolk'
-EOF;
+
 
         if (0 < count($whereParts)) {
             $sql .= ' and ' . implode(' and ', $whereParts);
@@ -100,41 +104,48 @@ EOF;
 
         $foundKinsfolk = [];
 
-        foreach ($kinsfolkData as $kinsfolkItem) {
-            $balance['currency'] = $kinsfolkItem['currency'];
-            $balance['amount'] = $kinsfolkItem['amount'];
-            $kinsfolkItem['balance'] = $this->createBalanceData($balance);
-            unset($kinsfolkItem['currency'], $kinsfolkItem['amount']);
-            $kinsfolkObj = Kinsfolk::createFromArray($kinsfolkItem);
-            $foundKinsfolk[$kinsfolkObj->getIdRecipient()] = $kinsfolkObj;
+        foreach ($kinsfolkData as $row) {
+            if (false === array_key_exists($row['id_recipient'], $foundKinsfolk)) {
+                $birthdayRecipient = DateTimeImmutable::createFromFormat('Y-m-d', $row['birthday']);
+
+                $foundKinsfolk[$row['id_recipient']] = [
+                    'id_recipient' => $row['id_recipient'],
+                    'full_name' => $row['full_name'],
+                    'birthday' => $birthdayRecipient,
+                    'profession' => $row['profession'],
+                    'status' => $row['status'],
+                    'ringtone' => $row['ringtone'],
+                    'hotkey' => $row['hotkey'],
+                    'emails' => [],
+                ];
+            }
+            if (
+                null !== $row['id_email']
+                &&
+                false === array_key_exists($row['id_email'], $foundKinsfolk[$row['id_recipient']]['emails'])
+            ) {
+                $obj = new Email(
+                    $row['type_email'],
+                    $row['email']
+                );
+                $foundKinsfolk[$row['id_recipient']]['emails'][$row['id_email']] = $obj;
+            }
         }
-        return $foundKinsfolk;
+        $recipientEntities = [];
+        foreach ($foundKinsfolk as $item) {
+            $recipientEntities[] = new Kinsfolk(
+                $item['id_recipient'],
+                $item['full_name'],
+                $item['birthday'],
+                $item['profession'],
+                $item['emails'],
+                $item['status'],
+                $item['ringtone'],
+                $item['hotkey']
+            );
+        }
+        return $recipientEntities;
     }
 
 
-    private function createBalanceData(array $balances): Balance
-    {
-        if (false === is_array($balances)) {
-            throw new InvalidDataStructureException('Данные о балансе имеют невалидный формат');
-        }
-        if (false === array_key_exists('amount', $balances)) {
-            throw new InvalidDataStructureException('Отсутствуют данные о деньгах на балансе');
-        }
-        if (false === is_int($balances['amount'])) {
-            throw new InvalidDataStructureException('Данные о самом балансе имеют неверный формат');
-        }
-        if (false === array_key_exists('currency', $balances)) {
-            throw new InvalidDataStructureException('Отсутствуют данные о валюте');
-        }
-        if (false === is_string($balances['currency'])) {
-            throw new InvalidDataStructureException('Данные о валюте имеют не верный формат');
-        }
-        $currencyName = 'RUB' === $balances['currency'] ? 'рубль' : 'неизвестно';
-        return new Balance(
-            new Money(
-                $balances['amount'],
-                new Currency($balances['currency'], $currencyName)
-            )
-        );
-    }
 }

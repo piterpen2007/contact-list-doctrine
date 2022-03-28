@@ -40,7 +40,7 @@ class SearchAddressService
             $address->getIdAddress(),
             $address->getIdRecipient(),
             $address->getAddress(),
-            $address->getStatus()
+            $address->getStatus()->getName()
         );
     }
 

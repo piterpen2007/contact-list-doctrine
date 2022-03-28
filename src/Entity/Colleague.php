@@ -2,8 +2,10 @@
 
 namespace EfTech\ContactList\Entity;
 
+use DateTimeImmutable;
 use EfTech\ContactList\ValueObject\Balance;
 use EfTech\ContactList\Exception;
+use EfTech\ContactList\ValueObject\Email;
 
 final class Colleague extends Recipient
 {
@@ -23,9 +25,9 @@ final class Colleague extends Recipient
     /**
      * @param int $id_recipient
      * @param string $full_name
-     * @param string $birthday
+     * @param DateTimeImmutable $birthday
      * @param string $profession
-     * @param Balance $balance
+     * @param array $emails
      * @param string $department
      * @param string $position
      * @param string $roomNumber
@@ -33,14 +35,14 @@ final class Colleague extends Recipient
     public function __construct(
         int $id_recipient,
         string $full_name,
-        string $birthday,
+        DateTimeImmutable $birthday,
         string $profession,
-        Balance $balance,
+        array $emails,
         string $department,
         string $position,
         string $roomNumber
     ) {
-        parent::__construct($id_recipient, $full_name, $birthday, $profession, $balance);
+        parent::__construct($id_recipient, $full_name, $birthday, $profession, $emails);
         $this->department = $department;
         $this->position = $position;
         $this->roomNumber = $roomNumber;

@@ -2,7 +2,8 @@
 
 namespace EfTech\ContactList\Service\SearchRecipientsService;
 
-use EfTech\ContactList\ValueObject\Balance;
+use DateTimeImmutable;
+use EfTech\ContactList\ValueObject\Email;
 
 /**
  *  Структура информации о получателях
@@ -11,30 +12,30 @@ class RecipientDto
 {
     protected int $id_recipient;
     protected string $fullName;
-    protected string $birthday;
+    protected DateTimeImmutable $birthday;
     protected string $profession;
-    protected Balance $balance;
+    protected array $emails;
 
 
     /**
      * @param int $id_recipient
      * @param string $fullName
-     * @param string $birthday
+     * @param DateTimeImmutable $birthday
      * @param string $profession
-     * @param Balance $balance
+     * @param array $emails
      */
     public function __construct(
         int $id_recipient,
         string $fullName,
-        string $birthday,
+        DateTimeImmutable $birthday,
         string $profession,
-        Balance $balance
+        array $emails
     ) {
         $this->id_recipient = $id_recipient;
         $this->fullName = $fullName;
         $this->birthday = $birthday;
         $this->profession = $profession;
-        $this->balance = $balance;
+        $this->emails = $emails;
     }
 
     /**
@@ -54,9 +55,9 @@ class RecipientDto
     }
 
     /**
-     * @return string
+     * @return DateTimeImmutable
      */
-    public function getBirthday(): string
+    public function getBirthday(): DateTimeImmutable
     {
         return $this->birthday;
     }
@@ -70,11 +71,11 @@ class RecipientDto
     }
 
     /**
-     * @return Balance
+     * @return Email[]
      */
-    public function getBalance(): Balance
+    public function getEmails(): array
     {
-        return $this->balance;
+        return $this->emails;
     }
 
 }

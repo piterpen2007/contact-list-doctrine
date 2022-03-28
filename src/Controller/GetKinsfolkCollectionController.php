@@ -8,6 +8,7 @@ use EfTech\ContactList\Infrastructure\Validator\Assert;
 use EfTech\ContactList\Service\SearchKinsfolkService;
 
 use EfTech\ContactList\Service\SearchKinsfolkService\KinsfolkDto;
+use EfTech\ContactList\ValueObject\Email;
 use Psr\Log\LoggerInterface;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
@@ -124,18 +125,23 @@ class GetKinsfolkCollectionController implements ControllerInterface
      */
     final protected function serializeRecipient(KinsfolkDto $kinsfolkDto): array
     {
-        return [
+        $jsonData = [
             'id_recipient' => $kinsfolkDto->getIdRecipient(),
             'full_name' => $kinsfolkDto->getFullName(),
-            'birthday' => $kinsfolkDto->getBirthday(),
+            'birthday' => $kinsfolkDto->getBirthday()->format('Y-m-d'),
             'profession' => $kinsfolkDto->getProfession(),
             'status' => $kinsfolkDto->getStatus(),
             'ringtone' => $kinsfolkDto->getRingtone(),
             'hotkey' => $kinsfolkDto->getHotkey(),
-            'balance' => [
-                'amount' => $kinsfolkDto->getBalance()->getMoney()->getAmount(),
-                'currency' => $kinsfolkDto->getBalance()->getMoney()->getCurrency()->getName()
-            ]
         ];
+        $jsonData['emails'] = array_values(
+            array_map(static function (Email $email) {
+                return [
+                    'email' => $email->getEmail(),
+                    'type_email' => $email->getTypeEmail(),
+                ];
+            }, $kinsfolkDto->getEmails())
+        );
+        return $jsonData;
     }
 }

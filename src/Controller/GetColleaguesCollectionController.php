@@ -8,6 +8,7 @@ use EfTech\ContactList\Infrastructure\Validator\Assert;
 use EfTech\ContactList\Service\SearchColleagueService;
 use EfTech\ContactList\Service\SearchColleagueService\ColleagueDto;
 use EfTech\ContactList\Service\SearchColleagueService\SearchColleagueCriteria;
+use EfTech\ContactList\ValueObject\Email;
 use Psr\Log\LoggerInterface;
 use Exception;
 use Psr\Http\Message\ResponseInterface;
@@ -124,18 +125,23 @@ class GetColleaguesCollectionController implements ControllerInterface
      */
     final protected function serializeRecipient(ColleagueDto $colleagueDto): array
     {
-        return [
+        $jsonData =  [
             'id_recipient' => $colleagueDto->getIdRecipient(),
             'full_name' => $colleagueDto->getFullName(),
-            'birthday' => $colleagueDto->getBirthday(),
+            'birthday' => $colleagueDto->getBirthday()->format('Y-m-d'),
             'profession' => $colleagueDto->getProfession(),
             'department' => $colleagueDto->getDepartment(),
             'position' => $colleagueDto->getPosition(),
-            'room_number' => $colleagueDto->getRoomNumber(),
-            'balance' => [
-                'amount' => $colleagueDto->getBalance()->getMoney()->getAmount(),
-                'currency' => $colleagueDto->getBalance()->getMoney()->getCurrency()->getName()
-            ]
+            'room_number' => $colleagueDto->getRoomNumber()
         ];
+        $jsonData['emails'] = array_values(
+            array_map(static function (Email $email) {
+                return [
+                    'email' => $email->getEmail(),
+                    'type_email' => $email->getTypeEmail(),
+                ];
+            }, $colleagueDto->getEmails())
+        );
+        return $jsonData;
     }
 }

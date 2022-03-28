@@ -5,11 +5,10 @@ namespace EfTech\ContactList\Repository;
 use DateTimeImmutable;
 use EfTech\ContactList\Entity\Recipient;
 use EfTech\ContactList\Entity\RecipientRepositoryInterface;
-use EfTech\ContactList\Exception\InvalidDataStructureException;
 use EfTech\ContactList\Exception\RuntimeException;
 use EfTech\ContactList\Infrastructure\Db\ConnectionInterface;
-use EfTech\ContactList\ValueObject\Balance;
 use EfTech\ContactList\ValueObject\Currency;
+use EfTech\ContactList\ValueObject\Email;
 use EfTech\ContactList\ValueObject\Money;
 
 class RecipientDbRepository implements RecipientRepositoryInterface
@@ -60,6 +59,20 @@ class RecipientDbRepository implements RecipientRepositoryInterface
     {
         $this->validateCriteria($searchCriteria);
 
+
+        $sql = <<<EOF
+SELECT
+       r.id_recipient as id_recipient,
+       r.full_name as full_name,
+       r.birthday as birthday,
+       r.profession as profession,
+       e.id as id_email,
+       e.email as email,
+       e.type_email as type_email 
+FROM recipients as r
+LEFT JOIN email e on r.id_recipient = e.recipient_id
+WHERE type = 'recipient'
+EOF;
         $whereParts = [];
         $whereParams = [];
 
@@ -67,15 +80,6 @@ class RecipientDbRepository implements RecipientRepositoryInterface
                 $whereParts[] = "$criteriaName=:$criteriaName";
                 $whereParams[$criteriaName] = $criteriaValue;
         }
-
-        $sql = <<<EOF
-SELECT
- id_recipient, full_name, birthday, profession, amount, currency
-FROM recipients
-WHERE type = 'recipient'
-EOF;
-
-
         if (0 < count($whereParts)) {
             $sql .= ' and ' . implode(' and ', $whereParts);
         }
@@ -86,43 +90,43 @@ EOF;
 
         $foundRecipients = [];
 
-        foreach ($recipientData as $recipientItem) {
-            $birthdayRecipient = DateTimeImmutable::createFromFormat('Y-m-d', $recipientItem['birthday']);
-            $recipientItem['birthday'] = $birthdayRecipient->format('d.m.Y');
-            $balance['currency'] = $recipientItem['currency'];
-            $balance['amount'] = $recipientItem['amount'];
-            $recipientItem['balance'] = $this->createBalanceData($balance);
-            unset($recipientItem['currency'], $recipientItem['amount']);
-            $recipientObj = Recipient::createFromArray($recipientItem);
-            $foundRecipients[$recipientObj->getIdRecipient()] = $recipientObj;
+        foreach ($recipientData as $row) {
+            if (false === array_key_exists($row['id_recipient'], $foundRecipients)) {
+                $birthdayRecipient = DateTimeImmutable::createFromFormat('Y-m-d', $row['birthday']);
+
+                $foundRecipients[$row['id_recipient']] = [
+                    'id_recipient' => $row['id_recipient'],
+                    'full_name' => $row['full_name'],
+                    'birthday' => $birthdayRecipient,
+                    'profession' => $row['profession'],
+                    'emails' => [],
+                ];
+            }
+            if (
+                null !== $row['id_email']
+                &&
+                false === array_key_exists($row['id_email'], $foundRecipients[$row['id_recipient']]['emails'])
+            ) {
+                $obj = new Email(
+                    $row['type_email'],
+                    $row['email']
+                );
+                $foundRecipients[$row['id_recipient']]['emails'][$row['id_email']] = $obj;
+            }
+
         }
-        return $foundRecipients;
+        $recipientEntities = [];
+        foreach ($foundRecipients as $item) {
+            $recipientEntities[] = new Recipient(
+                $item['id_recipient'],
+                $item['full_name'],
+                $item['birthday'],
+                $item['profession'],
+                $item['emails']
+            );
+        }
+        return $recipientEntities;
     }
 
 
-    private function createBalanceData(array $balances): Balance
-    {
-        if (false === is_array($balances)) {
-            throw new InvalidDataStructureException('Данные о балансе имеют невалидный формат');
-        }
-        if (false === array_key_exists('amount', $balances)) {
-            throw new InvalidDataStructureException('Отсутствуют данные о деньгах на балансе');
-        }
-        if (false === is_int($balances['amount'])) {
-            throw new InvalidDataStructureException('Данные о самом балансе имеют неверный формат');
-        }
-        if (false === array_key_exists('currency', $balances)) {
-            throw new InvalidDataStructureException('Отсутствуют данные о валюте');
-        }
-        if (false === is_string($balances['currency'])) {
-            throw new InvalidDataStructureException('Данные о валюте имеют не верный формат');
-        }
-        $currencyName = 'RUB' === $balances['currency'] ? 'рубль' : 'неизвестно';
-        return new Balance(
-            new Money(
-                $balances['amount'],
-                new Currency($balances['currency'], $currencyName)
-            )
-        );
-    }
 }
