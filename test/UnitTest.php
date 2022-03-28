@@ -78,9 +78,8 @@ class UnitTest extends TestCase
                             'full_name' => 'Осипов Геннадий Иванович',
                             'birthday' => '15.06.1985',
                             'profession' => 'Системный администратор',
-                            "balance" => [
-                                "amount" => 2220,
-                                "currency" => "рубль"
+                            "emails" => [
+
                             ]
                         ],
                     ],
@@ -102,9 +101,15 @@ class UnitTest extends TestCase
                             'full_name' => 'Дамир Авто',
                             'birthday' => '01.12.1990',
                             'profession' => 'Автомеханик',
-                            "balance" => [
-                                "amount" => 4566,
-                                "currency" => "рубль"
+                            "emails" => [
+                                [
+                                    "email" => "kuku@gmail.com",
+                                    "type_email" => "Google"
+                                ],
+                                [
+                                "email" => "pochta@rambler.com",
+                                "type_email" => "Rambler"
+                                ]
                             ]
                         ],
                     ],
@@ -126,9 +131,15 @@ class UnitTest extends TestCase
                             'full_name' => 'Дамир Авто',
                             'birthday' => '01.12.1990',
                             'profession' => 'Автомеханик',
-                            "balance" => [
-                                "amount" => 4566,
-                                "currency" => "рубль"
+                            "emails" => [
+                                [
+                                    "email" => "kuku@gmail.com",
+                                    "type_email" => "Google"
+                                ],
+                                [
+                                    "email" => "pochta@rambler.com",
+                                    "type_email" => "Rambler"
+                                ]
                             ]
                         ],
                     ],
@@ -154,6 +165,9 @@ class UnitTest extends TestCase
                             "average_transaction_amount" => 2500,
                             "discount" => "5%",
                             "time_to_call" => "С 9:00 до 13:00 в будни",
+                            "emails" => [
+
+                            ]
                         ],
                     ],
                 ]
@@ -178,6 +192,9 @@ class UnitTest extends TestCase
                             "average_transaction_amount" => 2500,
                             "discount" => "5%",
                             "time_to_call" => "С 9:00 до 13:00 в будни",
+                            "emails" => [
+
+                            ]
                         ],
                     ],
                 ]
