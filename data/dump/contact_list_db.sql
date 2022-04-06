@@ -26,6 +26,10 @@ ALTER TABLE ONLY public.address_to_recipients DROP CONSTRAINT address_to_recipie
 ALTER TABLE ONLY public.address DROP CONSTRAINT address_address_status_id_fk;
 DROP INDEX public.recipients_profession_index;
 DROP INDEX public.recipients_full_name_index;
+DROP INDEX public.kinsfolk_status_idx;
+DROP INDEX public.customers_time_to_call_idx;
+DROP INDEX public.colleagues_position_idx;
+DROP INDEX public.address_address_idx;
 ALTER TABLE ONLY public.users DROP CONSTRAINT users_pk;
 ALTER TABLE ONLY public.recipients DROP CONSTRAINT recipients_pk;
 ALTER TABLE ONLY public.kinsfolk DROP CONSTRAINT kinsfolk_pk;
@@ -449,6 +453,34 @@ ALTER TABLE ONLY public.recipients
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pk PRIMARY KEY (id);
+
+
+--
+-- Name: address_address_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX address_address_idx ON public.address USING btree (address);
+
+
+--
+-- Name: colleagues_position_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX colleagues_position_idx ON public.colleagues USING btree ("position");
+
+
+--
+-- Name: customers_time_to_call_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX customers_time_to_call_idx ON public.customers USING btree (time_to_call);
+
+
+--
+-- Name: kinsfolk_status_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX kinsfolk_status_idx ON public.kinsfolk USING btree (status);
 
 
 --

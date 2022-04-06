@@ -3,32 +3,57 @@
 namespace EfTech\ContactList\Entity;
 
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+use DomainException;
 use EfTech\ContactList\Exception;
-use EfTech\ContactList\Exception\DomainException;
-use EfTech\ContactList\ValueObject\Balance;
 use EfTech\ContactList\ValueObject\Email;
-use JsonSerializable;
+use Doctrine\Common\Collections\Collection;
 
+/**
+ * @ORM\Entity(repositoryClass=\EfTech\ContactList\Repository\RecipientDoctrineRepository::class)
+ * @ORM\Table(
+ *     name="recipients",
+ *     indexes={
+ *          @ORM\Index(name="recipients_full_name_index", columns={"full_name"}),
+ *          @ORM\Index(name="recipients_profession_index", columns={"profession"})
+ *     }
+ * )
+ */
 class Recipient
 {
     /** Email контакта
-     * @var array
+     * @var Collection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity=\EfTech\ContactList\ValueObject\Email::class,
+     *     mappedBy="recipient"
+     * )
      */
-    private array $emails;
+    private Collection $emails;
     /**
      * @var int id Получателя
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="recipients_id_recipient_seq")
+     * @ORM\Column(type="integer",name="id_recipient",nullable=false)
      */
     private int $id_recipient;
     /**
      * @var string Полное имя получателя
+     * @ORM\Column(type="string",name="full_name", length=100, nullable=false)
      */
     private string $full_name;
     /**
      * @var DateTimeImmutable Дата рождения получателя
+     * @ORM\Column(type="datetime_immutable",name="birthday",nullable=false)
      */
     private DateTimeImmutable $birthday;
     /**
+     *
      * @var string Профессия получателя
+     *
+     * @ORM\Column(type="string",name="profession", length=60, nullable=false)
      */
     private string $profession;
 
@@ -50,15 +75,20 @@ class Recipient
         $this->full_name = $full_name;
         $this->birthday = $birthday;
         $this->profession = $profession;
-        $this->emails = $emails;
+        foreach ($emails as $email) {
+            if (!$email instanceof Email) {
+                throw new DomainException('Некорректный формат данных по закупочной цене');
+            }
+        }
+        $this->emails = new ArrayCollection($emails);
     }
 
     /** Возвращает данные о почте
-     * @return array
+     * @return Email[]
      */
     public function getEmails(): array
     {
-        return $this->emails;
+        return $this->emails->toArray();
     }
 
     /**

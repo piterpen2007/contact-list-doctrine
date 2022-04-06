@@ -12,47 +12,47 @@
     </parameters>
 <services>
     <defaults autowire="true" public="false">
-        <bind key="string $pathToRecipients"
-              type="expression">service(
-            'EfTech\\ContactList\\Config\\AppConfig'
-            ).getPathToRecipients()
-        </bind>
-        <bind key="string $pathToKinsfolk"
-              type="expression">service(
-            'EfTech\\ContactList\\Config\\AppConfig'
-            ).getPathToKinsfolk()
-        </bind>
-        <bind key="string $pathToCustomers"
-              type="expression">service(
-            'EfTech\\ContactList\\Config\\AppConfig'
-            ).getPathToCustomers()
-        </bind>
-        <bind key="string $pathToColleagues"
-              type="expression">service(
-            'EfTech\\ContactList\\Config\\AppConfig'
-            ).getPathToColleagues()
-        </bind>
-        <bind key="string $pathToContactList"
-              type="expression">service(
-            'EfTech\\ContactList\\Config\\AppConfig'
-            ).getPathToContactList()
-        </bind>
-        <bind key="string $pathToAddress"
-              type="expression">service(
-            'EfTech\\ContactList\\Config\\AppConfig'
-            ).getPathToAddresses()
-        </bind>
-        <bind key="string $pathToUsers"
-              type="expression">service(
-            'EfTech\\ContactList\\Config\\AppConfig'
-            ).getPathToUsers()
-        </bind>
+<!--        <bind key="string $pathToRecipients"-->
+<!--              type="expression">service(-->
+<!--            'EfTech\\ContactList\\Config\\AppConfig'-->
+<!--            ).getPathToRecipients()-->
+<!--        </bind>-->
+<!--        <bind key="string $pathToKinsfolk"-->
+<!--              type="expression">service(-->
+<!--            'EfTech\\ContactList\\Config\\AppConfig'-->
+<!--            ).getPathToKinsfolk()-->
+<!--        </bind>-->
+<!--        <bind key="string $pathToCustomers"-->
+<!--              type="expression">service(-->
+<!--            'EfTech\\ContactList\\Config\\AppConfig'-->
+<!--            ).getPathToCustomers()-->
+<!--        </bind>-->
+<!--        <bind key="string $pathToColleagues"-->
+<!--              type="expression">service(-->
+<!--            'EfTech\\ContactList\\Config\\AppConfig'-->
+<!--            ).getPathToColleagues()-->
+<!--        </bind>-->
+<!--        <bind key="string $pathToContactList"-->
+<!--              type="expression">service(-->
+<!--            'EfTech\\ContactList\\Config\\AppConfig'-->
+<!--            ).getPathToContactList()-->
+<!--        </bind>-->
+<!--        <bind key="string $pathToAddress"-->
+<!--              type="expression">service(-->
+<!--            'EfTech\\ContactList\\Config\\AppConfig'-->
+<!--            ).getPathToAddresses()-->
+<!--        </bind>-->
+<!--        <bind key="string $pathToUsers"-->
+<!--              type="expression">service(-->
+<!--            'EfTech\\ContactList\\Config\\AppConfig'-->
+<!--            ).getPathToUsers()-->
+<!--        </bind>-->
         <bind key="string $pathToFile"
               type="expression">service(
             'EfTech\\ContactList\\Config\\AppConfig'
             ).getPathToLogFile()
         </bind>
-        <bind key="string $controllerNs">%controllerNs%</bind>
+<!--        <bind key="string $controllerNs">%controllerNs%</bind>-->
     </defaults>
 
 
@@ -122,9 +122,14 @@
 
 
 
-    <service id="EfTech\ContactList\Entity\RecipientRepositoryInterface"
-             class="EfTech\ContactList\Repository\RecipientDbRepository"
-    >
+<!--    <service id="EfTech\ContactList\Entity\RecipientRepositoryInterface"-->
+<!--             class="EfTech\ContactList\Repository\RecipientDbRepository"-->
+<!--    >-->
+<!--    </service>-->
+
+    <service id="EfTech\ContactList\Entity\RecipientRepositoryInterface">
+        <factory service="Doctrine\ORM\EntityManagerInterface" method="getRepository"/>
+        <argument key="$className">EfTech\ContactList\Entity\Recipient</argument>
     </service>
 
     <service id="EfTech\ContactList\Entity\AddressRepositoryInterface"

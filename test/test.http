@@ -146,10 +146,15 @@ GET http://localhost:8082/recipients/3
    client.test('### Тестирование поиска получателя по id через роутеры', function () {
    client.assert(response.status === 200, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
    client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
-   client.assert(response.body['id_recipient'] === 1, "id получателя не корректен");
-   client.assert(response.body['full_name'] === "Осипов Геннадий Иванович", "полное имя не корректно");
-   client.assert(response.body['birthday'] === "15.06.1985", "день рождения не корректно");
-   client.assert(response.body['profession'] === "Системный администратор", "профессия не корректна");
+   client.assert(response.body['id_recipient'] === 3, "id получателя не корректен");
+   client.assert(response.body['full_name'] === "Дамир Авто", "полное имя не корректно");
+   client.assert(response.body['birthday'] === "01.12.1990", "день рождения не корректно");
+   client.assert(response.body['profession'] === "Автомеханик", "профессия не корректна");
+   client.assert(response.body['birthday'] === "01.12.1990", "день рождения не корректно");
+   client.assert(response.body['emails'][0]['email'] === "kuku@gmail.com", "емаил не корректна");
+   client.assert(response.body['emails'][0]['type_email'] === "Google", "тип емаил не корректна");
+   client.assert(response.body['emails'][1]['email'] === "pochta@rambler.com", "емаил не корректна");
+   client.assert(response.body['emails'][1]['type_email'] === "Rambler", "тип емаил не корректна");
  });
  %}
 
