@@ -6,8 +6,8 @@ interface CustomerRepositoryInterface
 {
     /** Поиск сущностей по заданному критерию
      *
-     * @param array $searchCriteria
-     * @return Customer[]
+     * @param array $criteria
+     * @return array
      */
-    public function findBy(array $searchCriteria): array;
+    public function findBy(array $criteria): array;
 }

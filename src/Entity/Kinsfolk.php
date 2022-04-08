@@ -3,22 +3,35 @@
 namespace EfTech\ContactList\Entity;
 
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping as ORM;
 use EfTech\ContactList\Exception;
-use EfTech\ContactList\ValueObject\Balance;
-use EfTech\ContactList\ValueObject\Email;
 
+/**
+ * Родственники
+ *
+ * @ORM\Entity(repositoryClass=\EfTech\ContactList\Repository\KinsfolkDoctrineRepository::class)
+ * @ORM\Table(
+ *     name="kinsfolk",
+ *     indexes={
+ *          @ORM\Index(name="kinsfolk_status_idx", columns={"status"}),
+ *     }
+ * )
+ */
 final class Kinsfolk extends Recipient
 {
     /**
      * @var string Статус родственника
+     * @ORM\Column(type="string",name="status", length=50, nullable=false)
      */
     private string $status;
     /**
      * @var string Рингтон стоящий на родственнике
+     * @ORM\Column(type="string",name="ringtone", length=50, nullable=false)
      */
     private string $ringtone;
     /**
      * @var string горячая клавиша родственника
+     * @ORM\Column(type="string",name="hotkey", length=3, nullable=false)
      */
     private string $hotkey;
 

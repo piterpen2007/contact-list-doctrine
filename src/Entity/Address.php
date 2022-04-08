@@ -2,39 +2,75 @@
 
 namespace EfTech\ContactList\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use EfTech\ContactList\Entity\Address\Status;
 use EfTech\ContactList\Exception\InvalidDataStructureException;
 
+/**
+ * @ORM\Entity(repositoryClass=\EfTech\ContactList\Repository\AddressDoctrineRepository::class)
+ * @ORM\Table(
+ *     name="address",
+ *     indexes={
+ *          @ORM\Index(name="address_address_idx", columns={"address"})
+ *     }
+ * )
+ */
 class Address
 {
     /**
-     * @var int id адреса
+     * ID адреса
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="address_id_address_seq")
+     * @ORM\Column(type="integer", name="id_address", nullable=false)
+     *
+     * @var int
      */
     private int $idAddress;
     /**
-     * @var int[] id получателей
+     * Массив контактов адреса
+     *
+     * @ORM\ManyToMany(targetEntity=\EfTech\ContactList\Entity\Recipient::class)
+     * @ORM\JoinTable(
+     *     name="address_to_recipients",
+     *     joinColumns={@ORM\JoinColumn(name="id_address", referencedColumnName="id_address")},
+     *     inverseJoinColumns={
+     *          @ORM\JoinColumn(name="id_recipient", referencedColumnName="id_recipient", onDelete="CASCADE")
+     * }
+     * )
+     *
+     * @var Recipient[]|Collection
      */
-    private array $idRecipient;
+    private Collection $recipients;
     /**
      * @var string адрес
+     * @ORM\Column (name="address", type="string", length=255, nullable=false)
      */
     private string $address;
-    /** статус адреса (дом\работа)
+
+    /**
+     * статус адреса (дом\работа)
      *
+     * @ORM\ManyToOne(targetEntity=\EfTech\ContactList\Entity\Address\Status::class, cascade={"persist"}, fetch="EAGER")
+     * @ORM\JoinColumn(name="status_id", referencedColumnName="id")
+
      * @var Status
      */
     private Status $status;
 
     /**
      * @param int $idAddress
-     * @param array $idRecipient
+     * @param array $recipients
      * @param string $address
      * @param Status $status
      */
-    public function __construct(int $idAddress, array $idRecipient, string $address, Status $status)
+    public function __construct(int $idAddress, array $recipients, string $address, Status $status)
     {
         $this->idAddress = $idAddress;
-        $this->idRecipient = $idRecipient;
+        $this->recipients = new ArrayCollection($recipients);
         $this->address = $address;
         $this->status = $status;
     }
@@ -48,31 +84,11 @@ class Address
     }
 
     /**
-     * @param int $idAddress
-     * @return Address
+     * @return Collection|Recipient[]
      */
-    public function setIdAddress(int $idAddress): Address
+    public function getRecipients()
     {
-        $this->idAddress = $idAddress;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getIdRecipient(): array
-    {
-        return $this->idRecipient;
-    }
-
-    /**
-     * @param array $idRecipient
-     * @return Address
-     */
-    public function setIdRecipient(array $idRecipient): Address
-    {
-        $this->idRecipient = $idRecipient;
-        return $this;
+        return $this->recipients->toArray();
     }
 
     /**
@@ -84,16 +100,6 @@ class Address
     }
 
     /**
-     * @param string $address
-     * @return Address
-     */
-    public function setAddress(string $address): Address
-    {
-        $this->address = $address;
-        return $this;
-    }
-
-    /**
      * @return Status
      */
     public function getStatus(): Status
@@ -101,15 +107,7 @@ class Address
         return $this->status;
     }
 
-    /**
-     * @param Status $status
-     * @return Address
-     */
-    public function setStatus(Status $status): Address
-    {
-        $this->status = $status;
-        return $this;
-    }
+
 
     /**
      * @param array $data

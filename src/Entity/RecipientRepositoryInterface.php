@@ -7,7 +7,7 @@ interface RecipientRepositoryInterface
     /** Поиск сущностей по заданному критерию
      *
      * @param array $criteria
-     * @return Recipient[]
+     * @return array
      */
     public function findBy(array $criteria): array;
 }

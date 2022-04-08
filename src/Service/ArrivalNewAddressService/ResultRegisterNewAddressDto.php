@@ -3,6 +3,7 @@
 namespace EfTech\ContactList\Service\ArrivalNewAddressService;
 
 use EfTech\ContactList\Entity\Address\Status;
+use EfTech\ContactList\Entity\Recipient;
 
 class ResultRegisterNewAddressDto
 {
@@ -34,7 +35,7 @@ class ResultRegisterNewAddressDto
     }
 
     /**
-     * @return array
+     * @return Recipient[]
      */
     public function getIdRecipient(): array
     {

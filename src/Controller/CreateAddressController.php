@@ -2,12 +2,14 @@
 
 namespace EfTech\ContactList\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+use EfTech\ContactList\Entity\Recipient;
 use EfTech\ContactList\Infrastructure\Controller\ControllerInterface;
-use EfTech\ContactList\Infrastructure\Db\ConnectionInterface;
 use EfTech\ContactList\Infrastructure\http\ServerResponseFactory;
 use EfTech\ContactList\Service\ArrivalAddressService;
 use EfTech\ContactList\Service\ArrivalNewAddressService\NewAddressDto;
 use EfTech\ContactList\Service\ArrivalNewAddressService\ResultRegisterNewAddressDto;
+use EfTech\ContactList\Service\SearchRecipientsService\RecipientDto;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -16,33 +18,33 @@ class CreateAddressController implements ControllerInterface
     private ServerResponseFactory $serverResponseFactory;
     private ArrivalAddressService $addressService;
     /**
-     * Соединение с БД
+     * Менеджер сущностей
      *
-     * @var ConnectionInterface
+     * @var EntityManagerInterface
      */
-    private ConnectionInterface $connection;
+    private EntityManagerInterface $em;
 
 
     /**
      * @param ArrivalAddressService $addressService
      * @param ServerResponseFactory $serverResponseFactory
-     * @param ConnectionInterface $connection
+     * @param EntityManagerInterface $em
      */
     public function __construct(
         ArrivalAddressService $addressService,
         \EfTech\ContactList\Infrastructure\http\ServerResponseFactory $serverResponseFactory,
-        \EfTech\ContactList\Infrastructure\Db\ConnectionInterface $connection
+        \Doctrine\ORM\EntityManagerInterface $em
     ) {
         $this->addressService = $addressService;
         $this->serverResponseFactory = $serverResponseFactory;
-        $this->connection = $connection;
+        $this->em = $em;
     }
 
 
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
         try {
-            $this->connection->beginTransaction();
+            $this->em->beginTransaction();
             $requestData = json_decode($request->getBody(), true, 512, JSON_THROW_ON_ERROR);
             $validationResult = $this->validateData($requestData);
 
@@ -55,9 +57,10 @@ class CreateAddressController implements ControllerInterface
                 $httpCode = 400;
                 $jsonData = ['status' => 'fail','message' => implode('.', $validationResult)];
             }
-            $this->connection->commit();
+            $this->em->flush();
+            $this->em->commit();
         } catch (\Throwable $e) {
-            $this->connection->rollback();
+            $this->em->rollback();
             $httpCode = 500;
             $jsonData = ['status' => 'fail','message' => $e->getMessage()];
         }
@@ -82,12 +85,25 @@ class CreateAddressController implements ControllerInterface
      */
     private function buildJsonData(ResultRegisterNewAddressDto $responseDto): array
     {
-        return [
+        $jsonDataIdRecipient = array_values(
+            array_map(
+                static function (Recipient $recipient) {
+                    return [
+                    $recipient->getIdRecipient()
+                    ];
+                },
+                $responseDto->getIdRecipient()
+            )
+        );
+
+        $jsonData =  [
             'id_address' => $responseDto->getIdAddress(),
-            'id_recipient' => $responseDto->getIdRecipient(),
+            'id_recipient' => $jsonDataIdRecipient,
             'address' => $responseDto->getAddress(),
             'status' => $responseDto->getStatus()
         ];
+
+            return $jsonData;
     }
 
     /** Валидирует входные данные

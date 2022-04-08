@@ -38,7 +38,7 @@ class SearchAddressService
     {
         return new AddressDto(
             $address->getIdAddress(),
-            $address->getIdRecipient(),
+            $address->getRecipients(),
             $address->getAddress(),
             $address->getStatus()->getName()
         );

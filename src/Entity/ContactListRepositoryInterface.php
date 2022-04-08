@@ -4,15 +4,13 @@ namespace EfTech\ContactList\Entity;
 
 interface ContactListRepositoryInterface
 {
-    /** Поиск сущностей по заданному критерию
+    /**
+     * Поиск контакта в контактном листе
      *
-     * @param array $searchCriteria
-     * @return array
+     * @param int $contactId
+     *
+     * @return Recipient[]
      */
-    public function findBy(array $searchCriteria): array;
-    /** Сохранить сущность в репозитории
-     * @param ContactList $entity
-     * @return ContactList
-     */
-    public function save(ContactList $entity): ContactList;
+    public function findById(int $contactId): array;
+
 }

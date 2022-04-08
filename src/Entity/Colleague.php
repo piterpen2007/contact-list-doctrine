@@ -3,22 +3,37 @@
 namespace EfTech\ContactList\Entity;
 
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping as ORM;
 use EfTech\ContactList\ValueObject\Balance;
 use EfTech\ContactList\Exception;
 use EfTech\ContactList\ValueObject\Email;
 
+/**
+ * Коллеги
+ *
+ * @ORM\Entity(repositoryClass=\EfTech\ContactList\Repository\ColleagueDoctrineRepository::class)
+ * @ORM\Table(
+ *     name="colleagues",
+ *     indexes={
+ *          @ORM\Index(name="colleagues_position_idx", columns={"position"}),
+ *     }
+ * )
+ */
 final class Colleague extends Recipient
 {
     /**
      * @var string Отдел коллеги
+     * @ORM\Column(type="string",name="department", length=50, nullable=false)
      */
     private string $department;
     /**
      * @var string Должность коллеги
+     * @ORM\Column(type="string",name="position", length=50, nullable=false)
      */
     private string $position;
     /**
      * @var string Номер кабинета
+     * @ORM\Column(type="string",name="room_number", length=3, nullable=false)
      */
     private string $roomNumber;
 

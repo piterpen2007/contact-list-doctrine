@@ -19,6 +19,15 @@ use Doctrine\Common\Collections\Collection;
  *          @ORM\Index(name="recipients_profession_index", columns={"profession"})
  *     }
  * )
+ *
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\DiscriminatorColumn(name="type",type="string",length=30)
+ * @ORM\DiscriminatorMap({
+ *          "recipient" = \EfTech\ContactList\Entity\Recipient::class,
+ *          "customer" = \EfTech\ContactList\Entity\Customer::class,
+ *          "colleague" = \EfTech\ContactList\Entity\Colleague::class,
+ *          "kinsfolk" = \EfTech\ContactList\Entity\Kinsfolk::class
+ *     })
  */
 class Recipient
 {
@@ -56,6 +65,7 @@ class Recipient
      * @ORM\Column(type="string",name="profession", length=60, nullable=false)
      */
     private string $profession;
+
 
     /** Конструктор класса
      * @param int $id_recipient

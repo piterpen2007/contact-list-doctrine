@@ -106,46 +106,33 @@
 <service id="EfTech\ContactList\Infrastructure\DataLoader\DataLoaderInterface"
          class="EfTech\ContactList\Infrastructure\DataLoader\JsonDataLoader"/>
 
-
-
-
-    <service id="EfTech\ContactList\Entity\ContactListRepositoryInterface"
-             class="EfTech\ContactList\Repository\ContactListDbRepository"
-    >
-    </service>
-
-
-    <service id="EfTech\ContactList\Entity\CustomerRepositoryInterface"
-             class="EfTech\ContactList\Repository\CustomerDbRepository"
-    >
-    </service>
-
-
-
-<!--    <service id="EfTech\ContactList\Entity\RecipientRepositoryInterface"-->
-<!--             class="EfTech\ContactList\Repository\RecipientDbRepository"-->
-<!--    >-->
-<!--    </service>-->
-
     <service id="EfTech\ContactList\Entity\RecipientRepositoryInterface">
         <factory service="Doctrine\ORM\EntityManagerInterface" method="getRepository"/>
         <argument key="$className">EfTech\ContactList\Entity\Recipient</argument>
     </service>
 
-    <service id="EfTech\ContactList\Entity\AddressRepositoryInterface"
-             class="EfTech\ContactList\Repository\AddressDbRepository"
-    >
+    <service id="EfTech\ContactList\Entity\CustomerRepositoryInterface">
+        <factory service="Doctrine\ORM\EntityManagerInterface" method="getRepository"/>
+        <argument key="$className">EfTech\ContactList\Entity\Customer</argument>
     </service>
-    <service id="EfTech\ContactList\Entity\KinsfolkRepositoryInterface"
-             class="EfTech\ContactList\Repository\KinsfolkDbRepository"
+    <service id="EfTech\ContactList\Entity\ColleagueRepositoryInterface">
+        <factory service="Doctrine\ORM\EntityManagerInterface" method="getRepository"/>
+        <argument key="$className">EfTech\ContactList\Entity\Colleague</argument>
+    </service>
 
-    />
+    <service id="EfTech\ContactList\Entity\KinsfolkRepositoryInterface">
+        <factory service="Doctrine\ORM\EntityManagerInterface" method="getRepository"/>
+        <argument key="$className">EfTech\ContactList\Entity\Kinsfolk</argument>
+    </service>
 
-    <service id="EfTech\ContactList\Entity\ColleagueRepositoryInterface"
-             class="EfTech\ContactList\Repository\ColleagueDbRepository"
+    <service id="EfTech\ContactList\Entity\ContactListRepositoryInterface">
+        <factory service="Doctrine\ORM\EntityManagerInterface" method="getRepository"/>
+        <argument key="$className">EfTech\ContactList\Entity\ContactList</argument>
+    </service>
 
-    >
-
+    <service id="EfTech\ContactList\Entity\AddressRepositoryInterface">
+        <factory service="Doctrine\ORM\EntityManagerInterface" method="getRepository"/>
+        <argument key="$className">EfTech\ContactList\Entity\Address</argument>
     </service>
 
 
@@ -154,8 +141,6 @@
              class="EfTech\ContactList\Infrastructure\View\DefaultRender"
              public="true"
     />
-
-
 
 
 

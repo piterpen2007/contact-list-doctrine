@@ -28,7 +28,7 @@ class MoveToBlacklistContactListService
      */
     public function move(int $contactListId): MoveToBlacklistDto
     {
-        $entities = $this->contactListRepository->findBy(['id_recipient' => $contactListId]);
+        $entities = $this->contactListRepository->findById($contactListId);
         if (1 !== count($entities)) {
             throw new ContactListNotFoundException(
                 "Не удалось отправить контакт в чёрный список. Запись с id='$contactListId' не найден."
@@ -36,9 +36,8 @@ class MoveToBlacklistContactListService
         }
         /** @var $entity ContactList */
         $entity = current($entities);
-        $entity->moveToBlacklist();
 
-        $this->contactListRepository->save($entity);
+        $entity->moveToBlacklist();
 
         return new MoveToBlacklistDto($entity->isBlackList());
     }

@@ -2,13 +2,31 @@
 
 namespace EfTech\ContactList\Entity\Address;
 
+use Doctrine\ORM\Mapping as ORM;
 use EfTech\ContactList\Exception;
 
 /**
- * Статус
+ * Статус адреса
+ *
+ * @ORM\Entity
+ * @ORM\Table(
+ *     name="address_status"
+ *
+ * )
  */
+
 final class Status
 {
+    /**
+     * Теневой id
+     *
+     * @ORM\Id
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="address_status_id_seq")
+     */
+    private int $id = -1;
+
     /**
      * Домашний статус адреса
      */
@@ -29,6 +47,8 @@ final class Status
 
     /**
      * Статус
+     *
+     * @ORM\Column(name="name", type="string", length=20, nullable=false)
      *
      * @var string
      */
@@ -76,7 +96,4 @@ final class Status
     {
         return $this->name;
     }
-
-
-
 }

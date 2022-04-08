@@ -1,14 +1,18 @@
 <?php
 
-namespace EfTech\BookLibraryTest;
+namespace EfTech\ContactListTest;
 
 use Doctrine\ORM\EntityManagerInterface;
 use EfTech\ContactList\Config\ContainerExtensions;
+use EfTech\ContactList\Entity\Recipient;
 use EfTech\ContactList\Infrastructure\DI\SymfonyDiContainerInit;
 use PHPUnit\Framework\TestCase;
 
-class TestDoctrineCurrency extends TestCase
+class TestDoctrineRecipient extends TestCase
 {
+    /**
+     * @throws \Exception
+     */
     public function testGetCurrency(): void
     {
         //Arrange
@@ -25,8 +29,8 @@ class TestDoctrineCurrency extends TestCase
         /** @var EntityManagerInterface $em */
         $em = $diContainer->get(EntityManagerInterface::class);
 
-        $currency = $em->getRepository(Currency::class)->findOneBy(['name' => 'RUB']);
+        $recipient = $em->getRepository(Recipient::class)->findOneBy(['full_name' => 'Калинин Пётр Александрович']);
 
-        $this->assertEquals('Рубль', $currency->getDescription(), 'Некорректная валюта');
+        $this->assertInstanceOf(Recipient::class, $recipient, 'Некорректный объект');
     }
 }

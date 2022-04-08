@@ -283,8 +283,6 @@ CREATE TABLE public.recipients (
     full_name character varying(100),
     birthday date,
     profession character varying(60),
-    amount integer,
-    currency character varying(3),
     type character varying(10) NOT NULL
 );
 

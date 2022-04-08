@@ -73,23 +73,29 @@ INSERT INTO public.address (id_address, address, status_id) VALUES (58, 'Это 
 INSERT INTO public.address (id_address, address, status_id) VALUES (59, 'Это адрес контакта', 2);
 INSERT INTO public.address (id_address, address, status_id) VALUES (60, 'Это адрес контакта', 2);
 INSERT INTO public.address (id_address, address, status_id) VALUES (61, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (62, 'Это адрес контакта', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (94, 'Это адрес контакта для теста доктрины', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (104, 'Это адрес контакта для теста доктрины', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (106, 'Это адрес контакта для теста доктрины', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (111, 'Это адрес контакта для теста доктрины', 2);
+INSERT INTO public.address (id_address, address, status_id) VALUES (113, 'Это адрес контакта для теста доктрины', 2);
 
 
 --
 -- Data for Name: recipients; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, amount, currency, type) VALUES (1, 'Осипов Геннадий Иванович', '1985-06-15', 'Системный администратор', 2220, 'RUB', 'recipient');
-INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, amount, currency, type) VALUES (2, 'Тамара', '1990-06-06', '', 2220, 'RUB', 'recipient');
-INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, amount, currency, type) VALUES (3, 'Дамир Авто', '1990-12-01', 'Автомеханик', 4566, 'RUB', 'recipient');
-INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, amount, currency, type) VALUES (4, 'Катя', '1989-03-08', '', 1999, 'RUB', 'recipient');
-INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, amount, currency, type) VALUES (5, 'Шипенко Леонид Иосифович', '1969-02-07', 'Слесарь', 3543, 'RUB', 'recipient');
-INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, amount, currency, type) VALUES (6, 'Дед', '1945-06-04', 'Столяр', 3555, 'RUB', 'kinsfolk');
-INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, amount, currency, type) VALUES (7, 'Калинин Пётр Александрович', '1983-06-04', 'Фитнес тренер', 3453, 'RUB', 'customer');
-INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, amount, currency, type) VALUES (8, 'Васин Роман Александрович', '1977-01-04', 'Фитнес тренер', 4626, 'RUB', 'customer');
-INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, amount, currency, type) VALUES (9, 'Стрелецкая Анастасия Виктоовна', '1980-12-30', 'Админимстратор фитнес центра', 2627, 'RUB', 'customer');
-INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, amount, currency, type) VALUES (10, 'Шатов Александр Иванович', '1971-12-02', '', 1111, 'RUB', 'colleague');
-INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, amount, currency, type) VALUES (11, 'Наташа', '1984-05-10', '', 9999, 'RUB', 'colleague');
+INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, type) VALUES (1, 'Осипов Геннадий Иванович', '1985-06-15', 'Системный администратор', 'recipient');
+INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, type) VALUES (2, 'Тамара', '1990-06-06', '', 'recipient');
+INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, type) VALUES (3, 'Дамир Авто', '1990-12-01', 'Автомеханик', 'recipient');
+INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, type) VALUES (4, 'Катя', '1989-03-08', '', 'recipient');
+INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, type) VALUES (5, 'Шипенко Леонид Иосифович', '1969-02-07', 'Слесарь', 'recipient');
+INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, type) VALUES (6, 'Дед', '1945-06-04', 'Столяр', 'kinsfolk');
+INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, type) VALUES (7, 'Калинин Пётр Александрович', '1983-06-04', 'Фитнес тренер', 'customer');
+INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, type) VALUES (8, 'Васин Роман Александрович', '1977-01-04', 'Фитнес тренер', 'customer');
+INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, type) VALUES (9, 'Стрелецкая Анастасия Виктоовна', '1980-12-30', 'Админимстратор фитнес центра', 'customer');
+INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, type) VALUES (10, 'Шатов Александр Иванович', '1971-12-02', '', 'colleague');
+INSERT INTO public.recipients (id_recipient, full_name, birthday, profession, type) VALUES (11, 'Наташа', '1984-05-10', '', 'colleague');
 
 
 --
@@ -157,6 +163,13 @@ INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, 
 INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (59, 60, 2);
 INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (60, 61, 10);
 INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (61, 61, 2);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (62, 62, 10);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (63, 62, 2);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (65, 94, 2);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (66, 104, 2);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (67, 106, 2);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (68, 111, 2);
+INSERT INTO public.address_to_recipients (address_to_recipients_id, id_address, id_recipient) VALUES (69, 113, 2);
 
 
 --
@@ -220,21 +233,21 @@ INSERT INTO public.users (id, login, password) VALUES (1, 'admin', '$2y$10$wvtXi
 -- Name: address_id_address_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.address_id_address_seq', 61, true);
+SELECT pg_catalog.setval('public.address_id_address_seq', 116, true);
 
 
 --
 -- Name: address_status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.address_status_id_seq', 2, true);
+SELECT pg_catalog.setval('public.address_status_id_seq', 25, true);
 
 
 --
 -- Name: address_to_recipients_address_to_recipients_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.address_to_recipients_address_to_recipients_id_seq', 61, true);
+SELECT pg_catalog.setval('public.address_to_recipients_address_to_recipients_id_seq', 69, true);
 
 
 --

@@ -4,6 +4,7 @@ namespace EfTech\ContactList\Service;
 
 use EfTech\ContactList\Entity\Kinsfolk;
 use EfTech\ContactList\Entity\KinsfolkRepositoryInterface;
+use EfTech\ContactList\Entity\RecipientRepositoryInterface;
 use EfTech\ContactList\Service\SearchKinsfolkService\KinsfolkDto;
 use EfTech\ContactList\Service\SearchKinsfolkService\SearchKinsfolkCriteria;
 use Psr\Log\LoggerInterface;

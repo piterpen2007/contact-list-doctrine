@@ -4,6 +4,7 @@ namespace EfTech\ContactList\Service;
 
 use EfTech\ContactList\Entity\Colleague;
 use EfTech\ContactList\Entity\ColleagueRepositoryInterface;
+use EfTech\ContactList\Entity\RecipientRepositoryInterface;
 use EfTech\ContactList\Service\SearchColleagueService\ColleagueDto;
 use EfTech\ContactList\Service\SearchColleagueService\SearchColleagueCriteria;
 use Psr\Log\LoggerInterface;

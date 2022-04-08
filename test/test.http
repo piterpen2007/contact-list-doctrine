@@ -121,6 +121,8 @@ GET http://localhost:8082/recipients?full_name[]=Осипов Геннадий �
      })
  %}
 
+### Тестирование поиска клиента по дисконту
+GET http://localhost:8082/customers?profession=Фитнес тренер
 
 ### Тестирование поиска клиента по дисконту
 GET http://localhost:8082/customers?time_to_call=С 9:00 до 13:00 в будни
@@ -242,8 +244,8 @@ POST http://localhost:8082/address/register
 Content-Type: application/json
 
 {
-  "id_recipient" : [10,2],
-  "address": "Это адрес контакта",
+  "id_recipient" : [2],
+  "address": "Это адрес контакта для теста доктрины",
   "status" : "Home"
 }
 
@@ -372,6 +374,8 @@ GET http://localhost:8082/colleagues?full_name=Наташа
  });
  %}
 
+### Тестирование поиска коллег по position
+GET http://localhost:8082/colleagues?room_number=405
 
 
 ### Тестирование поиска коллег по position
@@ -393,3 +397,7 @@ GET http://localhost:8082/colleagues?position=Секретарь
 
 ###
 GET http://localhost:8082/address
+
+
+### Тестирование поиска коллег по position
+GET http://localhost:8082/customers?discount=5%25

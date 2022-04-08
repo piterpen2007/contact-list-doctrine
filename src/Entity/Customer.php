@@ -3,26 +3,42 @@
 namespace EfTech\ContactList\Entity;
 
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping as ORM;
 use EfTech\ContactList\Exception;
 use EfTech\ContactList\ValueObject\Balance;
 use EfTech\ContactList\ValueObject\Email;
 
+/**
+ * Клиенты
+ *
+ * @ORM\Entity(repositoryClass=\EfTech\ContactList\Repository\CustomerDoctrineRepository::class)
+ * @ORM\Table(
+ *     name="customers",
+ *     indexes={
+ *          @ORM\Index(name="customers_time_to_call_idx", columns={"time_to_call"}),
+ *     }
+ * )
+ */
 final class Customer extends Recipient
 {
     /**
      * @var string Контактный телефон клиента
+     * @ORM\Column(type="string",name="contract_number", length=10, nullable=false)
      */
     private string $contractNumber;
     /**
      * @var int Средняя сумма по транзакциям клиента
+     * @ORM\Column(type="integer",name="average_transaction_amount", nullable=false)
      */
     private int $averageTransactionAmount;
     /**
      * @var string Скидка клиента
+     * @ORM\Column(type="string",name="discount", length=4, nullable=false)
      */
     private string $discount;
     /**
      * @var string Время в которое можно беспокоить клиента
+     * @ORM\Column(type="string",name="time_to_call", length=100, nullable=false)
      */
     private string $timeToCall;
 

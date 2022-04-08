@@ -2,59 +2,77 @@
 
 namespace EfTech\ContactList\Entity;
 
+use Composer\Platform\Runtime;
+use Doctrine\ORM\Mapping as ORM;
 use EfTech\ContactList\Exception\InvalidDataStructureException;
 use EfTech\ContactList\Exception\RuntimeException;
+
+/**
+ * Класс описывающий Список контактов
+ *
+ * @ORM\Entity(repositoryClass=\EfTech\ContactList\Repository\ContactListDoctrineRepository::class)
+ * @ORM\Table(name="contact_list")
+ */
 
 class ContactList
 {
     /**
-     * @var int id Получателя
+     * ID получателя
+     *
+     * @ORM\OneToOne(targetEntity=\EfTech\ContactList\Entity\Recipient::class)
+     * @ORM\JoinColumn(name="id_recipient", referencedColumnName="id_recipient")
+     *
+     * @var Recipient
      */
-    private int $id_recipient;
+
+    private Recipient $recipient;
 
     /**
-     * @var int id записи
+     * ID записи
+     *
+     * @ORM\Id
+     * @ORM\Column(name="id_entry", type="integer", nullable=false)
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="contact_list_id_entry_seq")
+     *
+     * @var int
      */
-    private int $id_entry;
+
+    private int $id;
     /**
      * @var bool наличие в черном списке
+     * * @ORM\Column(name="blacklist", type="boolean", nullable=false)
+     *
      */
     private bool $blackList;
 
     /**
+     * @param Recipient $recipient
+     * @param int $id
+     * @param bool $blackList
+     */
+    public function __construct(Recipient $recipient, int $id, bool $blackList)
+    {
+        $this->recipient = $recipient;
+        $this->id = $id;
+        $this->blackList = $blackList;
+    }
+
+    /**
+     * @return Recipient
+     */
+    public function getRecipient(): Recipient
+    {
+        return $this->recipient;
+    }
+
+
+    /**
      * @return int
      */
-    public function getIdRecipient(): int
+    public function getId(): int
     {
-        return $this->id_recipient;
-    }
-
-    /**
-     * @param int $id_recipient
-     * @return ContactList
-     */
-    public function setIdRecipient(int $id_recipient): ContactList
-    {
-        $this->id_recipient = $id_recipient;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getIdEntry(): int
-    {
-        return $this->id_entry;
-    }
-
-    /**
-     * @param int $id_entry
-     * @return ContactList
-     */
-    public function setIdEntry(int $id_entry): ContactList
-    {
-        $this->id_entry = $id_entry;
-        return $this;
+        return $this->id;
     }
 
     /**
@@ -65,29 +83,6 @@ class ContactList
         return $this->blackList;
     }
 
-    /**
-     * @param bool $blackList
-     * @return ContactList
-     */
-    public function setBlackList(bool $blackList): ContactList
-    {
-        $this->blackList = $blackList;
-        return $this;
-    }
-
-
-
-    /**
-     * @param int $id_recipient
-     * @param int $id_entry
-     * @param bool $blackList
-     */
-    public function __construct(int $id_recipient, int $id_entry, bool $blackList)
-    {
-        $this->id_recipient = $id_recipient;
-        $this->id_entry = $id_entry;
-        $this->blackList = $blackList;
-    }
     /** Перенос контакта в черный список
      * @return $this
      */
@@ -95,7 +90,7 @@ class ContactList
     {
         if (true === $this->blackList) {
             throw new RuntimeException(
-                "Контакт с id {$this->getIdRecipient()} уже находится в черном списке"
+                "Контакт с id {$this->getRecipient()->getIdRecipient()} уже находится в черном списке"
             );
         }
         $this->blackList = true;

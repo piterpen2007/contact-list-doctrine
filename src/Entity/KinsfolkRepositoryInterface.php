@@ -6,8 +6,8 @@ interface KinsfolkRepositoryInterface
 {
     /** Поиск сущностей по заданному критерию
      *
-     * @param array $searchCriteria
-     * @return Kinsfolk[]
+     * @param array $criteria
+     * @return array
      */
-    public function findBy(array $searchCriteria): array;
+    public function findBy(array $criteria): array;
 }

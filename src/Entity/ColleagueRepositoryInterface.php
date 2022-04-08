@@ -6,8 +6,8 @@ interface ColleagueRepositoryInterface
 {
     /** Поиск сущностей по заданному критерию
      *
-     * @param array $searchCriteria
-     * @return Colleague[]
+     * @param array $criteria
+     * @return array
      */
-    public function findBy(array $searchCriteria): array;
+    public function findBy(array $criteria): array;
 }

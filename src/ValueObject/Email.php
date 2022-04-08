@@ -2,25 +2,61 @@
 
 namespace EfTech\ContactList\ValueObject;
 
+use Doctrine\ORM\Mapping as ORM;
+use EfTech\BookLibrary\Entity\AbstractTextDocument;
+use EfTech\ContactList\Entity\Recipient;
 use EfTech\ContactList\Exception\RuntimeException;
 
 /**
  * Email
+ *
+ *
+ * @ORM\Table(name="email")
+ * @ORM\Entity()
  */
 class Email
 {
     /**
+     * Идентификатор почты
+     *
+     * @var int|null
+     *
+     * @ORM\Id()
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="email_id_seq")
+     */
+    private ?int $id = null;
+    /**
      * Тип почты(пример - гугл)
      *
      * @var ?string
+     * @ORM\Column(name="type_email", type="string",length=50, nullable=false)
      */
     private ?string $typeEmail;
     /**
      * Сам адрес почты
      *
      * @var string
+     * @ORM\Column(name="email", type="string",length=100, nullable=false)
      */
     private string $email;
+
+
+    /**
+     * Получатель
+     *
+     * @var Recipient|null
+     *
+     * @ORM\ManyToOne(
+     *     targetEntity=\EfTech\ContactList\Entity\Recipient::class,
+     *     inversedBy="emails"
+     *     )
+     * @ORM\JoinColumn(name="recipient_id", referencedColumnName="id_recipient")
+     */
+    private ?Recipient $recipient = null;
+
+
 
     /**
      * @param string $typeEmail Тип почты(пример - гугл)
