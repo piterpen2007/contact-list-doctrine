@@ -107,8 +107,6 @@ class Address
         return $this->status;
     }
 
-
-
     /**
      * @param array $data
      * @return Address

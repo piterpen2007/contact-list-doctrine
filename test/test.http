@@ -214,37 +214,13 @@ PUT http://localhost:8082/contactList/6/moveToBlacklist
  });
  %}
 
-### Поиск по списку контактов с информацией о черном списке
-GET http://localhost:8082/contactList/11
-
-> {%
-   client.test('Отправка контакта в черный список', function () {
-   client.assert(response.status === 200, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
-   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
-   client.assert(response.body['id_entry'] === 11, "id записи не корректен");
-   client.assert(response.body['id_recipient'] === 11, "id контакта не корректен");
-   client.assert(response.body['blacklist'] === false, "статус черного списка не корректен");
- });
- %}
-
-### Поиск по списку контактов с информацией о черном списке
-GET http://localhost:8082/contactList
-
-> {%
-   client.test('### Поиск по списку контактов с информацией о черном списке', function () {
-   client.assert(response.status === 200, 'Проверяю код ответа. Фактическое знаение: ' + response.status);
-   client.assert(response.contentType.mimeType === "application/json", 'Проверяю application/json. Фактическое знаение: ' + response.contentType.mimeType);
-   client.assert(response.body.hasOwnProperty('length') && response.body.length === 11, "В ответе есть 5 элемента");
- });
- %}
-
 
 ### Регистрация нового адреса
 POST http://localhost:8082/address/register
 Content-Type: application/json
 
 {
-  "id_recipient" : [2],
+  "id_recipient" : [2,5,10,11],
   "address": "Это адрес контакта для теста доктрины",
   "status" : "Home"
 }

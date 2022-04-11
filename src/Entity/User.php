@@ -2,21 +2,36 @@
 
 namespace EfTech\ContactList\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
- * Пользователь системы
+ * Класс, реализующий логику создания пользователя
+ *
+ * @ORM\MappedSuperclass()
  */
 class User
 {
-    /** id пользователя
+    /**
+     * Идентификатор пользователя
+     *
      * @var int
+     *
+     * @ORM\Id()
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="users_id_seq")
      */
     private int $id;
 
     /** Логин пользователя в системе
      * @var string
+     * @ORM\Column(name="login", type="string", nullable=false, length=50)
      */
     private string $login;
     /** Пароль пользователя
+     *
+     *
+     * @ORM\Column(name="password", type="string", nullable=false, length=100)
      * @var string
      */
     private string $password;

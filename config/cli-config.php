@@ -17,7 +17,7 @@ $container = (new SymfonyDiContainerInit(
     ),
     new SymfonyDiContainerInit\CacheParams(
         'DEV' !== getenv('ENV_TYPE'),
-        __DIR__ . '/../var/cache/di-symfony/EfTechBookLibraryCachedContainer.php'
+        __DIR__ . '/../var/cache/di-symfony/EfTechContactListCachedContainer.php'
     )
 ))();
 

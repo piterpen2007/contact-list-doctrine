@@ -95,10 +95,15 @@
         </argument>
 </service>
 
-    <service
-            id="EfTech\ContactList\Infrastructure\Auth\UserDataStorageInterface"
-            class="EfTech\ContactList\Repository\UserDbRepository">
+    <service id="EfTech\ContactList\Infrastructure\Auth\UserDataStorageInterface">
+        <factory service="Doctrine\ORM\EntityManagerInterface" method ="getRepository"/>
+        <argument key ="$className">EfTech\ContactList\Repository\UserRepository\UserDataProvider</argument>
     </service>
+
+
+
+
+
     <service id="EfTech\ContactList\Infrastructure\Session\SessionInterface">
         <factory class="EfTech\ContactList\Infrastructure\Session\SessionNative" method="create"/>
     </service>

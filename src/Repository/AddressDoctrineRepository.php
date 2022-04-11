@@ -16,7 +16,6 @@ class AddressDoctrineRepository extends EntityRepository implements AddressRepos
 
     public function nextId(): int
     {
-        $r = 0;
         return $this->getClassMetadata()->idGenerator->generateId($this->getEntityManager(), null);
     }
 

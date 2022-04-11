@@ -2,7 +2,7 @@
 use EfTech\ContactList;
 /**
  * @var ContactList\Service\SearchAddressService\AddressDto[] $Addresses;
- * @var ContactList\Service\SearchContactsService\ContactDto[] $contacts
+ * @var $contacts
  * @var array $formValidationResults
  * @var array $addressData
  */
@@ -30,13 +30,9 @@ use EfTech\ContactList;
         <tr>
             <td>{{ loop.index }}</td>
             <td>
-                {% for contact in contacts %}
                     {% for addressIdRecipient in Address.getIdRecipient() %}
-                        {% if contact.getIdRecipient() == addressIdRecipient %}
-                            ({{ contact.getFullName()}} : {{ addressIdRecipient }})
-                        {% endif %}
+                        ({{ addressIdRecipient.getFullName() }} : {{ addressIdRecipient.getIdRecipient() }})
                     {% endfor %}
-                {% endfor %}
             </td>
             <td>
                 {{ Address.getAddress() }}

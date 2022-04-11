@@ -3,7 +3,6 @@
 namespace EfTech\ContactList\ValueObject;
 
 use Doctrine\ORM\Mapping as ORM;
-use EfTech\BookLibrary\Entity\AbstractTextDocument;
 use EfTech\ContactList\Entity\Recipient;
 use EfTech\ContactList\Exception\RuntimeException;
 

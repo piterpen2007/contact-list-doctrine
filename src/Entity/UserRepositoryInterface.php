@@ -2,6 +2,8 @@
 
 namespace EfTech\ContactList\Entity;
 
+use EfTech\ContactList\Repository\UserRepository\UserDataProvider;
+
 /**
  * Интерфейс репозитория для сущности юзер
  */
@@ -15,7 +17,7 @@ interface UserRepositoryInterface
 
     /** Поиск пользователя по логину
      * @param string $login
-     * @return User|null
+     * @return UserDataProvider|null
      */
-    public function findUserByLogin(string $login): ?User;
+    public function findUserByLogin(string $login): ?UserDataProvider;
 }

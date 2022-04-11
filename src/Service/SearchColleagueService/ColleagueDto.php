@@ -22,7 +22,7 @@ class ColleagueDto
     /**
      * @param int $id_recipient
      * @param string $fullName
-     * @param string $birthday
+     * @param DateTimeImmutable $birthday
      * @param string $profession
      * @param string $department
      * @param string $position

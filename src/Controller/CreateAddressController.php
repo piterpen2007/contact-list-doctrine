@@ -88,9 +88,7 @@ class CreateAddressController implements ControllerInterface
         $jsonDataIdRecipient = array_values(
             array_map(
                 static function (Recipient $recipient) {
-                    return [
-                    $recipient->getIdRecipient()
-                    ];
+                    return $recipient->getIdRecipient();
                 },
                 $responseDto->getIdRecipient()
             )

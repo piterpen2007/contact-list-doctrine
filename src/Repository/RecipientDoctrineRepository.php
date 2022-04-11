@@ -16,7 +16,8 @@ class RecipientDoctrineRepository extends EntityRepository implements RecipientR
         'id_recipient' => 'r.id_recipient',
         'full_name' => 'r.full_name',
         'birthday' => 'r.birthday',
-        'profession' => 'r.profession'
+        'profession' => 'r.profession',
+        'id_recipient_list' => 'id_recipient'
     ];
 
 
@@ -24,10 +25,19 @@ class RecipientDoctrineRepository extends EntityRepository implements RecipientR
     {
         $criteriaForDefinitionsType = $this->prepareCriteria($criteria);
 
-        $recipientsData = [];
-        foreach ($criteriaForDefinitionsType as $name => $value) {
-            $recipientsData = $this->loadRecipient($criteria, $name);
+        if (array_key_exists('id_recipient_list', $criteria)) {
+            return parent::findBy($criteriaForDefinitionsType, $orderBy, $limit, $offset);
         }
+
+        $recipientsData = [];
+        if (0 === count($criteriaForDefinitionsType)) {
+            $recipientsData = $this->loadRecipient($criteria);
+        } else {
+            foreach ($criteriaForDefinitionsType as $name => $value) {
+                $recipientsData = $this->loadRecipient($criteria, $name);
+            }
+        }
+
         return $recipientsData;
     }
 
@@ -70,9 +80,9 @@ class RecipientDoctrineRepository extends EntityRepository implements RecipientR
 
     private function buildWhere(array $preparedCriteria, QueryBuilder $queryBuilder, ?string $alias): void
     {
-        if (0 === count($preparedCriteria)) {
-            return;
-        }
+//        if (0 === count($preparedCriteria)) {
+//            return;
+//        }
 
         $whereExprAnd = $queryBuilder->expr()->andX();
         foreach ($preparedCriteria as $name => $value) {
@@ -87,8 +97,4 @@ class RecipientDoctrineRepository extends EntityRepository implements RecipientR
         $queryBuilder->where($whereExprAnd);
         $queryBuilder->setParameters($preparedCriteria);
     }
-
-
-
-
 }

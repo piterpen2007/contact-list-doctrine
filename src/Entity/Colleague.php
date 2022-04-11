@@ -72,15 +72,6 @@ final class Colleague extends Recipient
         return $this->department;
     }
 
-    /** Устанавливает отдел
-     * @param string $department
-     * @return Colleague
-     */
-    public function setDepartment(string $department): Colleague
-    {
-        $this->department = $department;
-        return $this;
-    }
 
     /** Возвращает должность
      * @return string
@@ -90,15 +81,6 @@ final class Colleague extends Recipient
         return $this->position;
     }
 
-    /** Устанавливает должность
-     * @param string $position
-     * @return Colleague
-     */
-    public function setPosition(string $position): Colleague
-    {
-        $this->position = $position;
-        return $this;
-    }
 
     /** Возвращает номер кабинета
      * @return string
@@ -108,15 +90,6 @@ final class Colleague extends Recipient
         return $this->roomNumber;
     }
 
-    /** Устанавливает номер кабинета
-     * @param string $roomNumber
-     * @return Colleague
-     */
-    public function setRoomNumber(string $roomNumber): Colleague
-    {
-        $this->roomNumber = $roomNumber;
-        return $this;
-    }
     public static function createFromArray(array $data): Colleague
     {
 
